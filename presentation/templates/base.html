@@ -244,14 +244,21 @@
                 const response = await fetch('/get_user_info');
                 const result = await response.json();
                 
+                console.log('Respuesta de versión:', result);
+                
                 if (result.success && result.version && result.version.version) {
                     const versionElement = document.getElementById('appVersion');
                     if (versionElement) {
                         versionElement.textContent = 'v' + result.version.version;
+                        console.log('Versión actualizada a:', result.version.version);
+                    } else {
+                        console.error('Elemento appVersion no encontrado');
                     }
+                } else {
+                    console.error('No se encontró información de versión en la respuesta');
                 }
             } catch (error) {
-                // Error silencioso
+                console.error('Error al cargar versión:', error);
             }
         }
         

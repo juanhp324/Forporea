@@ -7,12 +7,23 @@ async function cargarInformacionUsuario() {
         const response = await fetch('/get_user_info');
         const result = await response.json();
         
+        console.log('Inicio.js - Respuesta completa:', result);
+        
         if (result.success) {
             document.getElementById('userName').textContent = result.nombre;
             document.getElementById('userEmail').textContent = result.user;
             document.getElementById('userRol').textContent = result.rol;
+            
+            // Actualizar versión en el navbar
+            if (result.version && result.version.version) {
+                const versionElement = document.getElementById('appVersion');
+                if (versionElement) {
+                    versionElement.textContent = 'v' + result.version.version;
+                    console.log('Inicio.js - Versión actualizada a:', result.version.version);
+                }
+            }
         }
     } catch (error) {
-        // Error silencioso
+        console.error('Inicio.js - Error:', error);
     }
 }
