@@ -1,9 +1,7 @@
-from pymongo import MongoClient
 from bson import ObjectId
+from infrasture.db import db
 
-#* CONEXIÓN A LA BASE DE DATOS
-cluster = MongoClient("mongodb://localhost:27017/", serverSelectionTimeoutMS=5000, connectTimeoutMS=5000)
-db = cluster["Forporea"]
+#* COLECCIONES
 productos = db["productos"]
 proveedores = db["proveedores"]
 

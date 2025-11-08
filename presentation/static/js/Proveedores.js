@@ -14,23 +14,43 @@ async function cargarPermisos() {
         const result = await response.json();
         if (result.success) {
             permisos = result.permisos.proveedores || [];
+            
+            // Actualizar versión en el navbar
+            if (result.version && result.version.version) {
+                const versionElement = document.getElementById('appVersion');
+                if (versionElement) {
+                    versionElement.textContent = 'v' + result.version.version;
+                }
+            }
         }
     } catch (error) {
-        // Error silencioso
+        console.error('Error al cargar permisos:', error);
     }
 }
 
 async function cargarProveedores() {
+    const tbody = document.getElementById('tablaProveedores');
+    tbody.innerHTML = '<tr><td colspan="6" class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Cargando...</span></div></td></tr>';
+    
     try {
         const response = await fetch('/get_proveedores');
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const result = await response.json();
         
         if (result.success) {
             proveedores = result.proveedores;
             mostrarProveedores();
+        } else {
+            throw new Error(result.message || 'Error desconocido');
         }
     } catch (error) {
-        mostrarMensaje('Error al cargar proveedores', 'error');
+        console.error('Error al cargar proveedores:', error);
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center text-danger">Error al cargar proveedores. <button class="btn btn-sm btn-primary ms-2" onclick="cargarProveedores()">Reintentar</button></td></tr>';
+        mostrarMensaje('Error al cargar proveedores. Por favor, intenta de nuevo.', 'error');
     }
 }
 

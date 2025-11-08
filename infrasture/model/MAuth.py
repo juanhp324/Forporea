@@ -1,8 +1,6 @@
-from pymongo import MongoClient
+from infrasture.db import db
 
-#* CONEXIÓN A LA BASE DE DATOS
-cluster = MongoClient("mongodb://localhost:27017/")
-db = cluster["Forporea"]
+#* COLECCIÓN DE USUARIOS
 usuarios = db["usuarios"]
 
 def getUserByEmail(email):

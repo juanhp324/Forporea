@@ -16,23 +16,43 @@ async function cargarPermisos() {
         const result = await response.json();
         if (result.success) {
             permisos = result.permisos.productos || [];
+            
+            // Actualizar versión en el navbar
+            if (result.version && result.version.version) {
+                const versionElement = document.getElementById('appVersion');
+                if (versionElement) {
+                    versionElement.textContent = 'v' + result.version.version;
+                }
+            }
         }
     } catch (error) {
-        // Error silencioso
+        console.error('Error al cargar permisos:', error);
     }
 }
 
 async function cargarProductos() {
+    const tbody = document.getElementById('tablaProductos');
+    tbody.innerHTML = '<tr><td colspan="6" class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Cargando...</span></div></td></tr>';
+    
     try {
         const response = await fetch('/get_productos');
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const result = await response.json();
         
         if (result.success) {
             productos = result.productos;
             mostrarProductos();
+        } else {
+            throw new Error(result.message || 'Error desconocido');
         }
     } catch (error) {
-        mostrarMensaje('Error al cargar productos', 'error');
+        console.error('Error al cargar productos:', error);
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center text-danger">Error al cargar productos. <button class="btn btn-sm btn-primary ms-2" onclick="cargarProductos()">Reintentar</button></td></tr>';
+        mostrarMensaje('Error al cargar productos. Por favor, intenta de nuevo.', 'error');
     }
 }
 

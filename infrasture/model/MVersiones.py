@@ -1,10 +1,8 @@
-from pymongo import MongoClient
 from datetime import datetime
 from bson import ObjectId
+from infrasture.db import db
 
-#* CONEXIÓN A LA BASE DE DATOS
-cluster = MongoClient("mongodb://localhost:27017/", serverSelectionTimeoutMS=5000, connectTimeoutMS=5000)
-db = cluster["Forporea"]
+#* COLECCIÓN DE VERSIONES
 versiones = db["versiones"]
 
 def createVersion(version_data):
