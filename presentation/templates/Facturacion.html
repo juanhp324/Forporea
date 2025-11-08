@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facturación - Forporea</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/Facturacion.css') }}">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/inicio">
+                <i class="fas fa-drumstick-bite me-2"></i>
+                Forporea
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/inicio">
+                            <i class="fas fa-home me-1"></i>Inicio
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/productos">
+                            <i class="fas fa-box me-1"></i>Productos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/proveedores">
+                            <i class="fas fa-truck me-1"></i>Proveedores
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/facturacion">
+                            <i class="fas fa-file-invoice me-1"></i>Facturación
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">
+                            <i class="fas fa-sign-out-alt me-1"></i>Cerrar Sesión
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <div class="container mt-4">
+        <h2 class="mb-4"><i class="fas fa-file-invoice me-2"></i>Facturación</h2>
+
+        <div class="row">
+            <!-- Formulario de Nueva Factura -->
+            <div class="col-lg-7 mb-4">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Nueva Factura</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="formFactura">
+                            <div class="mb-3">
+                                <label for="clienteNombre" class="form-label">Cliente *</label>
+                                <input type="text" class="form-control" id="clienteNombre" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Productos</label>
+                                <div class="input-group mb-2">
+                                    <select class="form-select" id="productoSelect">
+                                        <option value="">Seleccione un producto</option>
+                                    </select>
+                                    <input type="number" class="form-control" id="productoCantidad" placeholder="Cantidad" min="1" value="1">
+                                    <button type="button" class="btn btn-success" onclick="agregarProducto()">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Productos Agregados</label>
+                                <div class="table-responsive">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Producto</th>
+                                                <th>Cantidad</th>
+                                                <th>Precio</th>
+                                                <th>Subtotal</th>
+                                                <th>Acción</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="productosAgregados">
+                                            <tr>
+                                                <td colspan="5" class="text-center text-muted">No hay productos agregados</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h4>Total: $<span id="totalFactura">0.00</span></h4>
+                                <button type="button" class="btn btn-primary btn-lg" onclick="crearFactura()">
+                                    <i class="fas fa-save me-2"></i>Crear Factura
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de Facturas -->
+            <div class="col-lg-5">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="fas fa-list me-2"></i>Facturas Recientes</h5>
+                    </div>
+                    <div class="card-body" style="max-height: 600px; overflow-y: auto;">
+                        <div id="listaFacturas">
+                            <p class="text-center text-muted">Cargando facturas...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/Facturacion.js') }}"></script>
+</body>
+</html>

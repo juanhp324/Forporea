@@ -1,0 +1,62 @@
+:root {
+    --primary-color: #d35400;
+    --secondary-color: #2c3e50;
+    --success-color: #27ae60;
+}
+
+body {
+    background: linear-gradient(160deg, #fff5f0 0%, #ffe4d4 45%, #fff9f5 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+}
+
+.card {
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border: none;
+}
+
+.card-header {
+    border-radius: 12px 12px 0 0 !important;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.table-sm {
+    font-size: 0.9rem;
+}
+
+.factura-item {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.factura-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.factura-item h6 {
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.factura-item small {
+    color: #6c757d;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+#totalFactura {
+    color: var(--success-color);
+    font-weight: 700;
+}
