@@ -1,10 +1,11 @@
 """
 Script para crear una nueva versión en la base de datos
-Este script debe ejecutarse después de hacer un commit
+Uso: python create_version.py <version> [descripcion]
+Ejemplo: python create_version.py 1.0.0 "Primera versión estable"
 """
 import subprocess
 import sys
-from infrasture.model.MVersiones import createVersion
+from infrasture.model.MVersiones import createVersion, getLatestVersion
 
 def get_git_info():
     """Obtiene información del último commit de Git"""
@@ -50,6 +51,16 @@ def get_git_info():
         print("Git no está instalado o no está en el PATH")
         return None
 
+def increment_version(version_str):
+    """Incrementa automáticamente el número de versión patch (x.x.X)"""
+    try:
+        parts = version_str.replace('v', '').split('.')
+        major, minor, patch = int(parts[0]), int(parts[1]), int(parts[2])
+        patch += 1
+        return f"{major}.{minor}.{patch}"
+    except:
+        return "0.0.1"
+
 def create_new_version(version_number=None, description=None):
     """Crea una nueva versión en la base de datos"""
     git_info = get_git_info()
@@ -58,9 +69,13 @@ def create_new_version(version_number=None, description=None):
         print("No se pudo obtener información de Git")
         return False
     
-    # Si no se proporciona número de versión, usar el hash corto
+    # Si no se proporciona número de versión, incrementar automáticamente
     if not version_number:
-        version_number = f"v-{git_info['commit_hash_short']}"
+        latest = getLatestVersion()
+        if latest and latest.get('version'):
+            version_number = increment_version(latest.get('version'))
+        else:
+            version_number = "0.0.1"
     
     # Si no se proporciona descripción, usar el mensaje del commit
     if not description:
@@ -82,7 +97,7 @@ def create_new_version(version_number=None, description=None):
     
     try:
         result = createVersion(version_data)
-        print(f"✅ Versión creada exitosamente: {version_number}")
+        print(f"✅ Versión creada exitosamente: v{version_number}")
         print(f"   Commit: {git_info['commit_hash_short']}")
         print(f"   Mensaje: {git_info['commit_message']}")
         print(f"   Autor: {git_info['commit_author']}")
@@ -96,5 +111,8 @@ if __name__ == "__main__":
     # Permitir pasar versión y descripción como argumentos
     version = sys.argv[1] if len(sys.argv) > 1 else None
     description = sys.argv[2] if len(sys.argv) > 2 else None
+    
+    if not version:
+        print("⚠️  No se especificó versión. Se incrementará automáticamente.")
     
     create_new_version(version, description)
