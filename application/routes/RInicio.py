@@ -1,12 +1,13 @@
 from flask import render_template, Blueprint, session, jsonify
 import infrasture.model.MInicio as MInicio
+import infrasture.model.MVersiones as MVersiones
 from domain.VPermisos import obtener_permisos_usuario
 
 bp = Blueprint('RInicio', __name__)
 
 @bp.route('/inicio')
 def inicio():
-    return render_template('Inicio.html')
+    return render_template('Inicio.html', active_page='inicio')
 
 @bp.route('/get_user_info', methods=['GET'])
 def get_user_info():
@@ -19,13 +20,20 @@ def get_user_info():
         
         permisos = obtener_permisos_usuario()
         
+        # Obtener última versión
+        latest_version = MVersiones.getLatestVersion()
+        version_info = {
+            'version': latest_version.get('version', '0.0.0') if latest_version else '0.0.0'
+        }
+        
         return jsonify({
             "success": True,
             "nombre": user_data.get('nombre', 'Usuario'),
             "email": user_data.get('email', ''),
             "user": user_data.get('user', ''),
             "rol": user_data.get('rol', 'usuario'),
-            "permisos": permisos
+            "permisos": permisos,
+            "version": version_info
         })
     except Exception as exc:
         return jsonify({"success": False, "message": str(exc)}), 500

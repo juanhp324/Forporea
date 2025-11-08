@@ -7,7 +7,7 @@ bp = Blueprint('RProveedores', __name__)
 
 @bp.route('/proveedores')
 def proveedores():
-    return render_template('Proveedores.html')
+    return render_template('Proveedores.html', active_page='proveedores')
 
 @bp.route('/get_proveedores', methods=['GET'])
 def get_proveedores():

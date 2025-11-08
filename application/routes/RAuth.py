@@ -1,5 +1,6 @@
 from flask import render_template, request, Blueprint, jsonify, redirect, url_for, session
 import infrasture.model.MAuth as MAuth
+import infrasture.model.MVersiones as MVersiones
 import domain.VAuth as VAuth
 
 bp = Blueprint('RAuth', __name__)
@@ -33,3 +34,20 @@ def Login():
 def logout():
     session.clear()
     return redirect(url_for('RAuth.show_login_form'))
+
+@bp.route('/get_latest_version', methods=['GET'])
+def get_latest_version():
+    """Obtiene la última versión registrada (endpoint público)"""
+    try:
+        version_data = MVersiones.getLatestVersion()
+        
+        if not version_data:
+            return jsonify({"success": True, "version": {"version": "0.0.0"}})
+        
+        version = {
+            'version': version_data.get('version', '0.0.0')
+        }
+        
+        return jsonify({"success": True, "version": version})
+    except Exception as exc:
+        return jsonify({"success": False, "message": str(exc)}), 500

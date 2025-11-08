@@ -8,7 +8,7 @@ bp = Blueprint('RProductos', __name__)
 
 @bp.route('/productos')
 def productos():
-    return render_template('Productos.html')
+    return render_template('Productos.html', active_page='productos')
 
 @bp.route('/get_productos', methods=['GET'])
 def get_productos():

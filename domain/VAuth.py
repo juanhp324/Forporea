@@ -8,7 +8,7 @@ class authValidator:
         self.app.add_url_rule('/', 'index', self.index)
 
     def verify_authentication(self):
-        RUTAS_ENDPOINTS_PUBLICOS = ['RAuth.show_login_form', 'RAuth.Login', 'RAuth.logout']
+        RUTAS_ENDPOINTS_PUBLICOS = ['RAuth.show_login_form', 'RAuth.Login', 'RAuth.logout', 'RAuth.get_latest_version']
         RUTAS_ENDPOINTS_PROTEGIDOS = [
             'RInicio.inicio', 'RInicio.get_user_info',
             'RProductos.productos', 'RProductos.get_productos', 'RProductos.get_producto', 'RProductos.create_producto', 

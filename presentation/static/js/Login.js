@@ -5,6 +5,20 @@ document.addEventListener('DOMContentLoaded', function(){
     function init() {
         hideLoading();
         setupEventListeners();
+        loadVersion();
+    }
+    
+    async function loadVersion() {
+        try {
+            const response = await fetch('/get_latest_version');
+            const result = await response.json();
+            
+            if (result.success && result.version) {
+                document.getElementById('loginVersion').textContent = 'v' + result.version.version;
+            }
+        } catch (error) {
+            // Error silencioso
+        }
     }
     
     function setupEventListeners() {

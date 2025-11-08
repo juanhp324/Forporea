@@ -16,11 +16,11 @@ bp = Blueprint('RFacturacion', __name__)
 
 @bp.route('/facturacion')
 def facturacion():
-    return render_template('Facturacion.html')
+    return render_template('Facturacion.html', active_page='facturacion')
 
 @bp.route('/facturas')
 def facturas():
-    return render_template('Facturas.html')
+    return render_template('Facturas.html', active_page='facturas')
 
 @bp.route('/get_facturas', methods=['GET'])
 def get_facturas():

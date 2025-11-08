@@ -97,14 +97,14 @@ def create_new_version(version_number=None, description=None):
     
     try:
         result = createVersion(version_data)
-        print(f"✅ Versión creada exitosamente: v{version_number}")
-        print(f"   Commit: {git_info['commit_hash_short']}")
-        print(f"   Mensaje: {git_info['commit_message']}")
-        print(f"   Autor: {git_info['commit_author']}")
-        print(f"   Archivos modificados: {len(git_info['files_changed'])}")
+        print(f"Version creada exitosamente: v{version_number}")
+        print(f"Commit: {git_info['commit_hash_short']}")
+        print(f"Mensaje: {git_info['commit_message']}")
+        print(f"Autor: {git_info['commit_author']}")
+        print(f"Archivos modificados: {len(git_info['files_changed'])}")
         return True
     except Exception as e:
-        print(f"❌ Error al crear versión: {e}")
+        print(f"Error al crear version: {e}")
         return False
 
 if __name__ == "__main__":
@@ -113,6 +113,6 @@ if __name__ == "__main__":
     description = sys.argv[2] if len(sys.argv) > 2 else None
     
     if not version:
-        print("⚠️  No se especificó versión. Se incrementará automáticamente.")
+        print("No se especifico version. Se incrementara automaticamente.")
     
     create_new_version(version, description)
