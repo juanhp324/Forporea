@@ -11,6 +11,7 @@ from application.routes.RInicio import bp as RInicio_bp
 from application.routes.RProductos import bp as RProductos_bp
 from application.routes.RProveedores import bp as RProveedores_bp
 from application.routes.RFacturacion import bp as RFacturacion_bp
+from application.routes import RAuth, RInicio, RProductos, RProveedores, RFacturacion, RVersiones
 
 # Importar validador de autenticación
 from domain.VAuth import authValidator
@@ -21,6 +22,7 @@ app.register_blueprint(RInicio_bp)
 app.register_blueprint(RProductos_bp)
 app.register_blueprint(RProveedores_bp)
 app.register_blueprint(RFacturacion_bp)
+app.register_blueprint(RVersiones.bp)
 
 # Validaciones de autenticación
 authValidator(app)

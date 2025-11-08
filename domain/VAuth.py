@@ -16,7 +16,8 @@ class authValidator:
             'RProveedores.proveedores', 'RProveedores.get_proveedores', 'RProveedores.get_proveedor', 'RProveedores.create_proveedor',
             'RProveedores.update_proveedor', 'RProveedores.delete_proveedor',
             'RFacturacion.facturacion', 'RFacturacion.facturas', 'RFacturacion.get_facturas', 'RFacturacion.get_productos_factura', 
-            'RFacturacion.create_factura', 'RFacturacion.descargar_factura'
+            'RFacturacion.create_factura', 'RFacturacion.descargar_factura',
+            'RVersiones.versiones', 'RVersiones.get_versiones', 'RVersiones.get_version', 'RVersiones.get_latest_version'
         ]
   
         if request.path.startswith('/static'):
