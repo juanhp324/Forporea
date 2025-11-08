@@ -1,6 +1,7 @@
 from flask import render_template, request, Blueprint, jsonify
 import infrasture.model.MProveedores as MProveedores
 import domain.VProveedores as VProveedores
+from domain.VPermisos import requiere_permiso
 
 bp = Blueprint('RProveedores', __name__)
 
@@ -15,18 +16,23 @@ def get_proveedores():
         proveedores_list = []
         
         for proveedor in proveedores_cursor:
-            proveedores_list.append({
-                '_id': str(proveedor['_id']),
-                'nombre': proveedor.get('nombre', ''),
-                'contacto': proveedor.get('contacto', ''),
-                'telefono': proveedor.get('telefono', ''),
-                'email': proveedor.get('email', ''),
-                'direccion': proveedor.get('direccion', '')
-            })
+            try:
+                proveedores_list.append({
+                    '_id': str(proveedor['_id']),
+                    'nombre': proveedor.get('nombre', ''),
+                    'contacto': proveedor.get('contacto', ''),
+                    'telefono': proveedor.get('telefono', ''),
+                    'email': proveedor.get('email', ''),
+                    'direccion': proveedor.get('direccion', '')
+                })
+            except Exception as e:
+                print(f"Error procesando proveedor: {e}")
+                continue
         
         return jsonify({"success": True, "proveedores": proveedores_list})
     except Exception as exc:
-        return jsonify({"success": False, "message": str(exc)}), 500
+        print(f"Error en get_proveedores: {exc}")
+        return jsonify({"success": False, "message": "Error al cargar proveedores"}), 500
 
 @bp.route('/get_proveedor/<proveedor_id>', methods=['GET'])
 def get_proveedor(proveedor_id):
@@ -52,6 +58,7 @@ def get_proveedor(proveedor_id):
         return jsonify({"success": False, "message": str(exc)}), 500
 
 @bp.route('/create_proveedor', methods=['POST'])
+@requiere_permiso('proveedores', 'crear')
 def create_proveedor():
     try:
         data = request.get_json(silent=True)
@@ -71,6 +78,7 @@ def create_proveedor():
         return jsonify({"success": False, "message": str(exc)}), 500
 
 @bp.route('/update_proveedor/<proveedor_id>', methods=['PUT'])
+@requiere_permiso('proveedores', 'editar')
 def update_proveedor(proveedor_id):
     try:
         data = request.get_json(silent=True)
@@ -88,6 +96,7 @@ def update_proveedor(proveedor_id):
         return jsonify({"success": False, "message": str(exc)}), 500
 
 @bp.route('/delete_proveedor/<proveedor_id>', methods=['DELETE'])
+@requiere_permiso('proveedores', 'eliminar')
 def delete_proveedor(proveedor_id):
     try:
         result = MProveedores.deleteProveedor(proveedor_id)

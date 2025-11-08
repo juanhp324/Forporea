@@ -7,24 +7,32 @@ cluster = MongoClient("mongodb://localhost:27017/")
 db = cluster["Forporea"]
 
 # ============================================
+# ELIMINAR USUARIOS EXISTENTES
+# ============================================
+db.usuarios.delete_many({})
+
+# ============================================
 # INSERTAR USUARIOS
 # ============================================
 db.usuarios.insert_many([
     {
         "nombre": "Juan Administrador",
         "email": "admin@forporea.com",
+        "user": "admin",
         "password": "admin123",
         "rol": "admin"
     },
     {
         "nombre": "María Vendedora",
         "email": "maria@forporea.com",
+        "user": "maria",
         "password": "maria123",
         "rol": "vendedor"
     },
     {
         "nombre": "Carlos Usuario",
         "email": "carlos@forporea.com",
+        "user": "carlos",
         "password": "carlos123",
         "rol": "usuario"
     }

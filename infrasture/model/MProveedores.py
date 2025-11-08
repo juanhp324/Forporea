@@ -2,13 +2,17 @@ from pymongo import MongoClient
 from bson import ObjectId
 
 #* CONEXIÓN A LA BASE DE DATOS
-cluster = MongoClient("mongodb://localhost:27017/")
+cluster = MongoClient("mongodb://localhost:27017/", serverSelectionTimeoutMS=5000, connectTimeoutMS=5000)
 db = cluster["Forporea"]
 proveedores = db["proveedores"]
 
 def getAllProveedores():
-    result = proveedores.find()
-    return result
+    try:
+        result = proveedores.find()
+        return list(result)
+    except Exception as e:
+        print(f"Error en getAllProveedores: {e}")
+        raise e
 
 def getProveedorById(proveedor_id):
     result = proveedores.find_one({"_id": ObjectId(proveedor_id)})

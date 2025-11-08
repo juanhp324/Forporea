@@ -2,11 +2,25 @@ let productos = [];
 let proveedores = [];
 let modoEdicion = false;
 let productoIdEditar = null;
+let permisos = {};
 
 document.addEventListener('DOMContentLoaded', function() {
+    cargarPermisos();
     cargarProductos();
     cargarProveedores();
 });
+
+async function cargarPermisos() {
+    try {
+        const response = await fetch('/get_user_info');
+        const result = await response.json();
+        if (result.success) {
+            permisos = result.permisos.productos || [];
+        }
+    } catch (error) {
+        // Error silencioso
+    }
+}
 
 async function cargarProductos() {
     try {
@@ -18,7 +32,6 @@ async function cargarProductos() {
             mostrarProductos();
         }
     } catch (error) {
-        console.error('Error:', error);
         mostrarMensaje('Error al cargar productos', 'error');
     }
 }
@@ -33,7 +46,7 @@ async function cargarProveedores() {
             llenarSelectProveedores();
         }
     } catch (error) {
-        console.error('Error:', error);
+        // Error silencioso
     }
 }
 
@@ -57,6 +70,9 @@ function mostrarProductos() {
         return;
     }
     
+    const puedeEditar = permisos.includes('editar');
+    const puedeEliminar = permisos.includes('eliminar');
+    
     tbody.innerHTML = productos.map(producto => `
         <tr>
             <td>${producto.nombre}</td>
@@ -68,15 +84,25 @@ function mostrarProductos() {
                 <button class="btn btn-info btn-sm" onclick="verDetalleProducto('${producto._id}')">
                     <i class="fas fa-eye"></i>
                 </button>
+                ${puedeEditar ? `
                 <button class="btn btn-warning btn-sm" onclick="editarProducto('${producto._id}')">
                     <i class="fas fa-edit"></i>
                 </button>
+                ` : ''}
+                ${puedeEliminar ? `
                 <button class="btn btn-danger btn-sm" onclick="eliminarProducto('${producto._id}')">
                     <i class="fas fa-trash"></i>
                 </button>
+                ` : ''}
             </td>
         </tr>
     `).join('');
+    
+    // Ocultar botón de nuevo producto si no tiene permiso de crear
+    const btnNuevo = document.querySelector('[data-bs-target="#modalProducto"]');
+    if (btnNuevo && !permisos.includes('crear')) {
+        btnNuevo.style.display = 'none';
+    }
 }
 
 function abrirModalNuevo() {
@@ -152,13 +178,21 @@ async function guardarProducto() {
             mostrarMensaje(result.message, 'error');
         }
     } catch (error) {
-        console.error('Error:', error);
         mostrarMensaje('Error al guardar producto', 'error');
     }
 }
 
 async function eliminarProducto(id) {
-    if (!confirm('¿Estás seguro de eliminar este producto?')) return;
+    const confirmed = await showConfirm({
+        title: 'Eliminar Producto',
+        message: '¿Estás seguro de que deseas eliminar este producto? Esta acción no se puede deshacer.',
+        confirmText: 'Sí, eliminar',
+        cancelText: 'Cancelar',
+        type: 'danger',
+        icon: 'fas fa-trash-alt'
+    });
+    
+    if (!confirmed) return;
     
     try {
         const response = await fetch(`/delete_producto/${id}`, {
@@ -174,7 +208,6 @@ async function eliminarProducto(id) {
             mostrarMensaje(result.message, 'error');
         }
     } catch (error) {
-        console.error('Error:', error);
         mostrarMensaje('Error al eliminar producto', 'error');
     }
 }
@@ -201,11 +234,10 @@ async function verDetalleProducto(id) {
             modal.show();
         }
     } catch (error) {
-        console.error('Error:', error);
         mostrarMensaje('Error al cargar detalle del producto', 'error');
     }
 }
 
 function mostrarMensaje(mensaje, tipo) {
-    alert(mensaje);
+    showNotification(mensaje, tipo);
 }

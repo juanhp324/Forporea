@@ -15,7 +15,7 @@ class authValidator:
             'RProductos.update_producto', 'RProductos.delete_producto',
             'RProveedores.proveedores', 'RProveedores.get_proveedores', 'RProveedores.get_proveedor', 'RProveedores.create_proveedor',
             'RProveedores.update_proveedor', 'RProveedores.delete_proveedor',
-            'RFacturacion.facturacion', 'RFacturacion.get_facturas', 'RFacturacion.get_productos_factura', 
+            'RFacturacion.facturacion', 'RFacturacion.facturas', 'RFacturacion.get_facturas', 'RFacturacion.get_productos_factura', 
             'RFacturacion.create_factura', 'RFacturacion.descargar_factura'
         ]
   

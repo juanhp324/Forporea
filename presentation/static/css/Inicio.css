@@ -1,5 +1,5 @@
 :root {
-    --primary-color: #d35400;
+    --primary-color: #0d6efd;
     --secondary-color: #2c3e50;
     --success-color: #27ae60;
     --warning-color: #f39c12;
@@ -7,7 +7,7 @@
 }
 
 body {
-    background: linear-gradient(160deg, #fff5f0 0%, #ffe4d4 45%, #fff9f5 100%);
+    background-color: #f8f9fa;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     min-height: 100vh;
 }

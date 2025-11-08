@@ -1,10 +1,24 @@
 let proveedores = [];
 let modoEdicion = false;
 let proveedorIdEditar = null;
+let permisos = {};
 
 document.addEventListener('DOMContentLoaded', function() {
+    cargarPermisos();
     cargarProveedores();
 });
+
+async function cargarPermisos() {
+    try {
+        const response = await fetch('/get_user_info');
+        const result = await response.json();
+        if (result.success) {
+            permisos = result.permisos.proveedores || [];
+        }
+    } catch (error) {
+        // Error silencioso
+    }
+}
 
 async function cargarProveedores() {
     try {
@@ -16,7 +30,6 @@ async function cargarProveedores() {
             mostrarProveedores();
         }
     } catch (error) {
-        console.error('Error:', error);
         mostrarMensaje('Error al cargar proveedores', 'error');
     }
 }
@@ -29,6 +42,9 @@ function mostrarProveedores() {
         return;
     }
     
+    const puedeEditar = permisos.includes('editar');
+    const puedeEliminar = permisos.includes('eliminar');
+    
     tbody.innerHTML = proveedores.map(proveedor => `
         <tr>
             <td>${proveedor.nombre}</td>
@@ -37,15 +53,28 @@ function mostrarProveedores() {
             <td>${proveedor.email || 'N/A'}</td>
             <td>${proveedor.direccion || 'N/A'}</td>
             <td>
+                <button class="btn btn-info btn-sm" onclick="verDetalleProveedor('${proveedor._id}')">
+                    <i class="fas fa-eye"></i>
+                </button>
+                ${puedeEditar ? `
                 <button class="btn btn-warning btn-sm" onclick="editarProveedor('${proveedor._id}')">
                     <i class="fas fa-edit"></i>
                 </button>
+                ` : ''}
+                ${puedeEliminar ? `
                 <button class="btn btn-danger btn-sm" onclick="eliminarProveedor('${proveedor._id}')">
                     <i class="fas fa-trash"></i>
                 </button>
+                ` : ''}
             </td>
         </tr>
     `).join('');
+    
+    // Ocultar botón de nuevo proveedor si no tiene permiso de crear
+    const btnNuevo = document.querySelector('[data-bs-target="#modalProveedor"]');
+    if (btnNuevo && !permisos.includes('crear')) {
+        btnNuevo.style.display = 'none';
+    }
 }
 
 function abrirModalNuevo() {
@@ -121,13 +150,21 @@ async function guardarProveedor() {
             mostrarMensaje(result.message, 'error');
         }
     } catch (error) {
-        console.error('Error:', error);
         mostrarMensaje('Error al guardar proveedor', 'error');
     }
 }
 
 async function eliminarProveedor(id) {
-    if (!confirm('¿Estás seguro de eliminar este proveedor?')) return;
+    const confirmed = await showConfirm({
+        title: 'Eliminar Proveedor',
+        message: '¿Estás seguro de que deseas eliminar este proveedor? Esta acción no se puede deshacer y puede afectar los productos asociados.',
+        confirmText: 'Sí, eliminar',
+        cancelText: 'Cancelar',
+        type: 'danger',
+        icon: 'fas fa-trash-alt'
+    });
+    
+    if (!confirmed) return;
     
     try {
         const response = await fetch(`/delete_proveedor/${id}`, {
@@ -143,11 +180,32 @@ async function eliminarProveedor(id) {
             mostrarMensaje(result.message, 'error');
         }
     } catch (error) {
-        console.error('Error:', error);
         mostrarMensaje('Error al eliminar proveedor', 'error');
     }
 }
 
+async function verDetalleProveedor(id) {
+    try {
+        const response = await fetch(`/get_proveedor/${id}`);
+        const result = await response.json();
+        
+        if (result.success) {
+            const proveedor = result.proveedor;
+            
+            document.getElementById('detalleProvNombre').textContent = proveedor.nombre;
+            document.getElementById('detalleProvContacto').textContent = proveedor.contacto;
+            document.getElementById('detalleProvTelefono').textContent = proveedor.telefono || 'N/A';
+            document.getElementById('detalleProvEmail').textContent = proveedor.email || 'N/A';
+            document.getElementById('detalleProvDireccion').textContent = proveedor.direccion || 'N/A';
+            
+            const modal = new bootstrap.Modal(document.getElementById('modalDetalleProveedor'));
+            modal.show();
+        }
+    } catch (error) {
+        mostrarMensaje('Error al cargar detalle del proveedor', 'error');
+    }
+}
+
 function mostrarMensaje(mensaje, tipo) {
-    alert(mensaje);
+    showNotification(mensaje, tipo);
 }

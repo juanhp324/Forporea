@@ -2,6 +2,7 @@ from flask import render_template, request, Blueprint, jsonify, session, send_fi
 from datetime import datetime
 import infrasture.model.MFacturacion as MFacturacion
 import domain.VFacturacion as VFacturacion
+from domain.VPermisos import requiere_permiso
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.lib.units import inch
@@ -17,6 +18,10 @@ bp = Blueprint('RFacturacion', __name__)
 def facturacion():
     return render_template('Facturacion.html')
 
+@bp.route('/facturas')
+def facturas():
+    return render_template('Facturas.html')
+
 @bp.route('/get_facturas', methods=['GET'])
 def get_facturas():
     try:
@@ -24,12 +29,23 @@ def get_facturas():
         facturas_list = []
         
         for factura in facturas_cursor:
+            # Convertir ObjectId en productos
+            productos_serializables = []
+            for prod in factura.get('productos', []):
+                productos_serializables.append({
+                    'producto_id': str(prod.get('producto_id')) if prod.get('producto_id') else '',
+                    'nombre': prod.get('nombre', ''),
+                    'cantidad': prod.get('cantidad', 0),
+                    'precio_unitario': prod.get('precio_unitario', 0),
+                    'subtotal': prod.get('subtotal', 0)
+                })
+            
             facturas_list.append({
                 '_id': str(factura['_id']),
                 'cliente': factura.get('cliente', ''),
                 'fecha': factura.get('fecha').strftime('%Y-%m-%d %H:%M') if factura.get('fecha') else '',
                 'total': factura.get('total', 0),
-                'productos': factura.get('productos', [])
+                'productos': productos_serializables
             })
         
         return jsonify({"success": True, "facturas": facturas_list})
@@ -55,6 +71,7 @@ def get_productos_factura():
         return jsonify({"success": False, "message": str(exc)}), 500
 
 @bp.route('/create_factura', methods=['POST'])
+@requiere_permiso('facturacion', 'crear')
 def create_factura():
     try:
         data = request.get_json(silent=True)

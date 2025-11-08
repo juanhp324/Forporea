@@ -1,11 +1,40 @@
 let productos = [];
 let productosAgregados = [];
 let facturas = [];
+let permisos = {};
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+    await cargarPermisos();
     cargarProductos();
-    cargarFacturas();
 });
+
+async function cargarPermisos() {
+    try {
+        const response = await fetch('/get_user_info');
+        const result = await response.json();
+        if (result.success && result.permisos) {
+            permisos = result.permisos.facturacion || [];
+            
+            // Solo deshabilitar si explícitamente NO tiene permiso de crear
+            if (permisos.length > 0 && !permisos.includes('crear')) {
+                setTimeout(() => {
+                    const btnCrear = document.querySelector('button[onclick="crearFactura()"]');
+                    const btnAgregar = document.querySelector('button[onclick="agregarProducto()"]');
+                    if (btnCrear) btnCrear.disabled = true;
+                    if (btnAgregar) btnAgregar.disabled = true;
+                    const clienteInput = document.getElementById('clienteNombre');
+                    const productoSelect = document.getElementById('productoSelect');
+                    const cantidadInput = document.getElementById('productoCantidad');
+                    if (clienteInput) clienteInput.disabled = true;
+                    if (productoSelect) productoSelect.disabled = true;
+                    if (cantidadInput) cantidadInput.disabled = true;
+                }, 100);
+            }
+        }
+    } catch (error) {
+        // Error silencioso - permitir uso por defecto
+    }
+}
 
 async function cargarProductos() {
     try {
@@ -17,7 +46,7 @@ async function cargarProductos() {
             llenarSelectProductos();
         }
     } catch (error) {
-        console.error('Error:', error);
+        // Error silencioso
     }
 }
 
@@ -41,7 +70,7 @@ function agregarProducto() {
     const cantidad = parseInt(document.getElementById('productoCantidad').value);
     
     if (!select.value || !cantidad || cantidad <= 0) {
-        alert('Selecciona un producto y una cantidad válida');
+        showNotification('Selecciona un producto y una cantidad válida', 'warning');
         return;
     }
     
@@ -52,7 +81,7 @@ function agregarProducto() {
     const stock = parseInt(option.dataset.stock);
     
     if (cantidad > stock) {
-        alert('No hay suficiente stock disponible');
+        showNotification('No hay suficiente stock disponible', 'error');
         return;
     }
     
@@ -116,12 +145,12 @@ async function crearFactura() {
     const cliente = document.getElementById('clienteNombre').value;
     
     if (!cliente) {
-        alert('Por favor ingresa el nombre del cliente');
+        showNotification('Por favor ingresa el nombre del cliente', 'warning');
         return;
     }
     
     if (productosAgregados.length === 0) {
-        alert('Debes agregar al menos un producto');
+        showNotification('Debes agregar al menos un producto', 'warning');
         return;
     }
     
@@ -140,7 +169,7 @@ async function crearFactura() {
         const result = await response.json();
         
         if (result.success) {
-            alert(`Factura creada exitosamente. Total: $${result.total.toFixed(2)}`);
+            showNotification(`Factura creada exitosamente. Total: $${result.total.toFixed(2)}`, 'success');
             
             // Descargar PDF automáticamente
             window.open(`/descargar_factura/${result.factura_id}`, '_blank');
@@ -149,56 +178,12 @@ async function crearFactura() {
             productosAgregados = [];
             mostrarProductosAgregados();
             calcularTotal();
-            cargarFacturas();
             cargarProductos(); // Recargar productos para actualizar stock
         } else {
-            alert(result.message);
+            showNotification(result.message, 'error');
         }
     } catch (error) {
-        console.error('Error:', error);
-        alert('Error al crear factura');
+        showNotification('Error al crear factura', 'error');
     }
 }
 
-async function cargarFacturas() {
-    try {
-        const response = await fetch('/get_facturas');
-        const result = await response.json();
-        
-        if (result.success) {
-            facturas = result.facturas;
-            mostrarFacturas();
-        }
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
-
-function mostrarFacturas() {
-    const container = document.getElementById('listaFacturas');
-    
-    if (facturas.length === 0) {
-        container.innerHTML = '<p class="text-center text-muted">No hay facturas registradas</p>';
-        return;
-    }
-    
-    container.innerHTML = facturas.map(factura => `
-        <div class="factura-item">
-            <div class="d-flex justify-content-between align-items-start">
-                <div>
-                    <h6><i class="fas fa-file-invoice me-2"></i>${factura.cliente}</h6>
-                    <small class="d-block"><i class="fas fa-calendar me-1"></i>${factura.fecha}</small>
-                    <small class="d-block"><i class="fas fa-dollar-sign me-1"></i>Total: $${factura.total.toFixed(2)}</small>
-                    <small class="d-block"><i class="fas fa-box me-1"></i>${factura.productos.length} producto(s)</small>
-                </div>
-                <button class="btn btn-sm btn-primary" onclick="descargarFacturaPDF('${factura._id}')" title="Descargar PDF">
-                    <i class="fas fa-download"></i>
-                </button>
-            </div>
-        </div>
-    `).join('');
-}
-
-function descargarFacturaPDF(facturaId) {
-    window.open(`/descargar_factura/${facturaId}`, '_blank');
-}

@@ -2,6 +2,7 @@ from flask import render_template, request, Blueprint, jsonify
 from bson import ObjectId
 import infrasture.model.MProductos as MProductos
 import domain.VProductos as VProductos
+from domain.VPermisos import requiere_permiso
 
 bp = Blueprint('RProductos', __name__)
 
@@ -64,6 +65,7 @@ def get_producto(producto_id):
         return jsonify({"success": False, "message": str(exc)}), 500
 
 @bp.route('/create_producto', methods=['POST'])
+@requiere_permiso('productos', 'crear')
 def create_producto():
     try:
         data = request.get_json(silent=True)
@@ -83,6 +85,7 @@ def create_producto():
         return jsonify({"success": False, "message": str(exc)}), 500
 
 @bp.route('/update_producto/<producto_id>', methods=['PUT'])
+@requiere_permiso('productos', 'editar')
 def update_producto(producto_id):
     try:
         data = request.get_json(silent=True)
@@ -100,6 +103,7 @@ def update_producto(producto_id):
         return jsonify({"success": False, "message": str(exc)}), 500
 
 @bp.route('/delete_producto/<producto_id>', methods=['DELETE'])
+@requiere_permiso('productos', 'eliminar')
 def delete_producto(producto_id):
     try:
         result = MProductos.deleteProducto(producto_id)
