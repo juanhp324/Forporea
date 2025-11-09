@@ -1,23 +1,35 @@
 from bson import ObjectId
-from infrasture.db import db
+from infrasture.db import get_database
 
-#* COLECCIONES
-productos = db["productos"]
-proveedores = db["proveedores"]
+def _get_productos_collection():
+    """Obtiene la colección de productos con conexión activa"""
+    db = get_database()
+    return db["productos"]
+
+def _get_proveedores_collection():
+    """Obtiene la colección de proveedores con conexión activa"""
+    db = get_database()
+    return db["proveedores"]
 
 def getAllProductos():
-    result = productos.find()
+    productos = _get_productos_collection()
+    cursor = productos.find()
+    result = list(cursor)
+    cursor.close()
     return result
 
 def getProductoById(producto_id):
+    productos = _get_productos_collection()
     result = productos.find_one({"_id": ObjectId(producto_id)})
     return result
 
 def createProducto(producto_data):
+    productos = _get_productos_collection()
     result = productos.insert_one(producto_data)
     return result
 
 def updateProducto(producto_id, producto_data):
+    productos = _get_productos_collection()
     result = productos.update_one(
         {"_id": ObjectId(producto_id)},
         {"$set": producto_data}
@@ -25,10 +37,12 @@ def updateProducto(producto_id, producto_data):
     return result
 
 def deleteProducto(producto_id):
+    productos = _get_productos_collection()
     result = productos.delete_one({"_id": ObjectId(producto_id)})
     return result
 
 def getProveedorById(proveedor_id):
+    proveedores = _get_proveedores_collection()
     result = proveedores.find_one({"_id": ObjectId(proveedor_id)})
     return result
 

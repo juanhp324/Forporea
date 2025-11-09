@@ -3,9 +3,9 @@ let modoEdicion = false;
 let proveedorIdEditar = null;
 let permisos = {};
 
-document.addEventListener('DOMContentLoaded', function() {
-    cargarPermisos();
-    cargarProveedores();
+document.addEventListener('DOMContentLoaded', async function() {
+    await cargarPermisos();
+    await cargarProveedores();
 });
 
 async function cargarPermisos() {

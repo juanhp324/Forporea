@@ -4,10 +4,10 @@ let modoEdicion = false;
 let productoIdEditar = null;
 let permisos = {};
 
-document.addEventListener('DOMContentLoaded', function() {
-    cargarPermisos();
-    cargarProductos();
-    cargarProveedores();
+document.addEventListener('DOMContentLoaded', async function() {
+    await cargarPermisos();
+    await cargarProductos();
+    await cargarProveedores();
 });
 
 async function cargarPermisos() {

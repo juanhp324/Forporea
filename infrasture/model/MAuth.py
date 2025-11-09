@@ -1,12 +1,18 @@
-from infrasture.db import db
+from infrasture.db import get_database
 
-#* COLECCIÓN DE USUARIOS
-usuarios = db["usuarios"]
+def _get_usuarios_collection():
+    """Obtiene la colección de usuarios con conexión activa"""
+    db = get_database()
+    return db["usuarios"]
 
 def getUserByEmail(email):
+    usuarios = _get_usuarios_collection()
     result = usuarios.find_one({"email": email}, {"email": 1, "password": 1, "rol": 1, "nombre": 1, "user": 1})
     return result
 
 def getAllUsers():
-    result = usuarios.find()
+    usuarios = _get_usuarios_collection()
+    cursor = usuarios.find()
+    result = list(cursor)
+    cursor.close()
     return result
