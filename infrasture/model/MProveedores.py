@@ -15,8 +15,8 @@ def getAllProveedores():
         try:
             # Obtener colección con conexión activa
             proveedores = _get_collection()
-            # Obtener cursor y convertir a lista inmediatamente
-            cursor = proveedores.find()
+            # Obtener cursor y convertir a lista inmediatamente, ordenado por más reciente
+            cursor = proveedores.find().sort("_id", -1)  # -1 para orden descendente
             result = list(cursor)
             # Cerrar el cursor explícitamente
             cursor.close()

@@ -13,7 +13,7 @@ def _get_proveedores_collection():
 
 def getAllProductos():
     productos = _get_productos_collection()
-    cursor = productos.find()
+    cursor = productos.find().sort("_id", -1)  # -1 para orden descendente (más reciente primero)
     result = list(cursor)
     cursor.close()
     return result

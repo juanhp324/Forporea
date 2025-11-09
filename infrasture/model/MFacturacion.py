@@ -13,7 +13,7 @@ def _get_productos_collection():
 
 def getAllFacturas():
     facturas = _get_facturas_collection()
-    cursor = facturas.find()
+    cursor = facturas.find().sort("fecha", -1)  # -1 para orden descendente (más reciente primero)
     result = list(cursor)
     cursor.close()
     return result
