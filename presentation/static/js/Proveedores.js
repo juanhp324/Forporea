@@ -72,17 +72,17 @@ function mostrarProveedores() {
             <td>${proveedor.telefono || 'N/A'}</td>
             <td>${proveedor.email || 'N/A'}</td>
             <td>${proveedor.direccion || 'N/A'}</td>
-            <td>
-                <button class="btn btn-info btn-sm" onclick="verDetalleProveedor('${proveedor._id}')">
+            <td class="text-center">
+                <button class="btn-action-clean btn-info" onclick="verDetalleProveedor('${proveedor._id}')" title="Ver detalle">
                     <i class="fas fa-eye"></i>
                 </button>
                 ${puedeEditar ? `
-                <button class="btn btn-warning btn-sm" onclick="editarProveedor('${proveedor._id}')">
+                <button class="btn-action-clean btn-warning" onclick="editarProveedor('${proveedor._id}')" title="Editar">
                     <i class="fas fa-edit"></i>
                 </button>
                 ` : ''}
                 ${puedeEliminar ? `
-                <button class="btn btn-danger btn-sm" onclick="eliminarProveedor('${proveedor._id}')">
+                <button class="btn-action-clean btn-danger" onclick="eliminarProveedor('${proveedor._id}')" title="Eliminar">
                     <i class="fas fa-trash"></i>
                 </button>
                 ` : ''}

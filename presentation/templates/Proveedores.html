@@ -3,42 +3,257 @@
 {% block title %}Proveedores - Forporea{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/Proveedores.css') }}">
+<style>
+    /* Contenedor principal sin scroll */
+    .main-container {
+        height: calc(100vh - 140px);
+        overflow: hidden;
+        padding: 1.5rem;
+    }
+    
+    .card-header-custom {
+        background: #0d6efd;
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 12px 12px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .card-header-custom h5 {
+        margin: 0;
+        font-weight: 700;
+        font-size: 1.125rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .btn-primary-custom {
+        background: white;
+        color: #0d6efd;
+        padding: 8px 18px;
+        border-radius: 8px;
+        font-weight: 600;
+        border: none;
+        transition: all 0.3s ease;
+        font-size: 0.875rem;
+    }
+    
+    .btn-primary-custom:hover {
+        background: #f8f9fa;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Card limpio */
+    .card-clean {
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        background: white;
+        overflow: hidden;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* Tabla con scroll interno */
+    .table-container {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: auto;
+    }
+    
+    /* Tabla profesional */
+    .table-professional {
+        margin: 0;
+    }
+    
+    .table-professional thead {
+        background: #f9fafb;
+        border-bottom: 2px solid #e5e7eb;
+    }
+    
+    .table-professional thead th {
+        border: none;
+        padding: 1rem;
+        font-weight: 600;
+        color: #374151;
+        font-size: 0.875rem;
+    }
+    
+    .table-professional thead th i {
+        color: #6b7280;
+        font-size: 0.875rem;
+    }
+    
+    .table-professional tbody tr {
+        border-bottom: 1px solid #f3f4f6;
+        transition: background 0.2s ease;
+    }
+    
+    .table-professional tbody tr:hover {
+        background: #f9fafb;
+    }
+    
+    .table-professional tbody td {
+        padding: 1rem;
+        vertical-align: middle;
+        border: none;
+        color: #374151;
+        font-size: 0.875rem;
+    }
+    
+    /* Botones de acción limpios */
+    .btn-action-clean {
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        transition: all 0.2s ease;
+        margin: 0 2px;
+        font-size: 0.875rem;
+    }
+    
+    .btn-action-clean:hover {
+        transform: translateY(-1px);
+    }
+    
+    .btn-action-clean.btn-info {
+        background: #0dcaf0;
+        color: white;
+    }
+    
+    .btn-action-clean.btn-info:hover {
+        background: #0aa2c0;
+    }
+    
+    .btn-action-clean.btn-warning {
+        background: #ffc107;
+        color: white;
+    }
+    
+    .btn-action-clean.btn-warning:hover {
+        background: #e0a800;
+    }
+    
+    .btn-action-clean.btn-danger {
+        background: #dc3545;
+        color: white;
+    }
+    
+    .btn-action-clean.btn-danger:hover {
+        background: #bb2d3b;
+    }
+    
+    /* Modal limpio */
+    .modal-content {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    }
+    
+    .modal-header {
+        background: #f9fafb;
+        border-bottom: 1px solid #e5e7eb;
+        border-radius: 12px 12px 0 0;
+        padding: 1.25rem 1.5rem;
+    }
+    
+    .modal-title {
+        color: #111827;
+        font-weight: 700;
+        font-size: 1.125rem;
+    }
+    
+    .modal-body {
+        padding: 1.5rem;
+    }
+    
+    .form-label {
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+    }
+    
+    .form-control {
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        padding: 0.625rem 0.875rem;
+        transition: all 0.2s ease;
+        font-size: 0.875rem;
+    }
+    
+    .form-control:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 3rem 2rem;
+        color: #6b7280;
+    }
+    
+    .empty-state i {
+        font-size: 3rem;
+        color: #d1d5db;
+        margin-bottom: 1rem;
+    }
+    
+    .empty-state h5 {
+        color: #374151;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
 
-    <!-- Contenido Principal -->
-    <div class="container mt-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2><i class="fas fa-truck me-2"></i>Gestión de Proveedores</h2>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalProveedor" onclick="abrirModalNuevo()">
-                <i class="fas fa-plus me-2"></i>Nuevo Proveedor
-            </button>
-        </div>
-
-        <!-- Tabla de Proveedores -->
-        <div class="card">
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Contacto</th>
-                                <th>Teléfono</th>
-                                <th>Email</th>
-                                <th>Dirección</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tablaProveedores">
-                            <tr>
-                                <td colspan="6" class="text-center">Cargando proveedores...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+    <!-- Contenedor principal sin scroll -->
+    <div class="main-container">
+        <!-- Card con header y tabla -->
+        <div class="card-clean">
+            <!-- Header del card -->
+            <div class="card-header-custom">
+                <h5>
+                    <i class="fas fa-truck"></i>
+                    Proveedores
+                </h5>
+                <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#modalProveedor" onclick="abrirModalNuevo()">
+                    <i class="fas fa-plus me-2"></i>Nuevo Proveedor
+                </button>
+            </div>
+            
+            <!-- Tabla con scroll -->
+            <div class="table-container">
+                <table class="table table-professional">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-building me-2"></i>Nombre</th>
+                            <th><i class="fas fa-user me-2"></i>Contacto</th>
+                            <th><i class="fas fa-phone me-2"></i>Teléfono</th>
+                            <th><i class="fas fa-envelope me-2"></i>Email</th>
+                            <th><i class="fas fa-map-marker-alt me-2"></i>Dirección</th>
+                            <th class="text-center"><i class="fas fa-cog me-2"></i>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaProveedores">
+                        <tr>
+                            <td colspan="6" class="text-center py-5">
+                                <i class="fas fa-spinner fa-spin fa-2x text-muted mb-3"></i>
+                                <p class="text-muted">Cargando proveedores...</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

@@ -32,6 +32,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <!-- AOS (Animate On Scroll) -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Hover.css - Efectos de hover avanzados -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hover.css/2.3.1/css/hover-min.css">
+    <!-- Particles.js para fondos animados -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <!-- Chart.js para gráficos modernos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- SweetAlert2 para alertas modernas -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Toastify para notificaciones toast -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <!-- Lucide Icons - Iconos modernos -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Notifications CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/notifications.css') }}">
     
@@ -106,6 +119,132 @@
         .card-hover:hover {
             transform: scale(1.02);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Neumorphism effect */
+        .neumorphic {
+            background: #e0e5ec;
+            box-shadow: 9px 9px 16px rgba(163, 177, 198, 0.6),
+                       -9px -9px 16px rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+        }
+        
+        .neumorphic-inset {
+            background: #e0e5ec;
+            box-shadow: inset 6px 6px 12px rgba(163, 177, 198, 0.6),
+                       inset -6px -6px 12px rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+        }
+        
+        /* Glow effect */
+        .glow {
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 10px #0d6efd, 0 0 20px #0d6efd, 0 0 30px #0d6efd;
+            }
+            to {
+                box-shadow: 0 0 20px #0d6efd, 0 0 30px #0d6efd, 0 0 40px #0d6efd;
+            }
+        }
+        
+        /* Pulse animation */
+        .pulse-slow {
+            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: .7;
+            }
+        }
+        
+        /* Floating animation */
+        .float {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        /* Shimmer effect */
+        .shimmer {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+        
+        /* Modern button styles */
+        .btn-modern {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-modern::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .btn-modern:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Card with border gradient */
+        .card-gradient-border {
+            position: relative;
+            background: white;
+            border-radius: 15px;
+        }
+        
+        .card-gradient-border::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 15px;
+            padding: 2px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
         }
     </style>
     
@@ -201,6 +340,8 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <!-- Notifications JS -->
     <script src="{{ url_for('static', filename='js/notifications.js') }}"></script>
+    <!-- UI Utils JS -->
+    <script src="{{ url_for('static', filename='js/ui-utils.js') }}"></script>
     
     <!-- JavaScript específico de cada página -->
     {% block extra_js %}{% endblock %}
@@ -214,6 +355,11 @@
             once: true,
             offset: 100
         });
+        
+        // Inicializar Lucide Icons
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
         
         // Toggle mobile menu
         function toggleMobileMenu() {

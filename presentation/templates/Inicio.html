@@ -3,92 +3,283 @@
 {% block title %}Inicio - Forporea{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/Inicio.css') }}">
+<style>
+    .dashboard-container {
+        padding: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    
+    .welcome-section {
+        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        color: white;
+        padding: 2.5rem;
+        border-radius: 16px;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 20px rgba(13, 110, 253, 0.2);
+    }
+    
+    .welcome-section h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .welcome-section p {
+        font-size: 1rem;
+        opacity: 0.95;
+        margin: 0;
+    }
+    
+    .stats-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 1.5rem;
+        transition: all 0.3s ease;
+        height: 100%;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+    
+    .stats-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .stats-card-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .stats-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: white;
+    }
+    
+    .stats-icon.blue { background: #0d6efd; }
+    .stats-icon.green { background: #198754; }
+    .stats-icon.orange { background: #fd7e14; }
+    .stats-icon.purple { background: #6f42c1; }
+    
+    .stats-card h6 {
+        font-size: 0.875rem;
+        color: #6b7280;
+        font-weight: 600;
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .stats-card .value {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #111827;
+        margin: 0;
+    }
+    
+    .quick-actions {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+    
+    .quick-actions h5 {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 1.5rem;
+    }
+    
+    .action-btn {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 1rem 1.25rem;
+        background: white;
+        border: 2px solid #e5e7eb;
+        border-radius: 10px;
+        text-decoration: none;
+        color: #374151;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        width: 100%;
+        margin-bottom: 0.75rem;
+    }
+    
+    .action-btn:hover {
+        border-color: #0d6efd;
+        background: #f0f7ff;
+        color: #0d6efd;
+        transform: translateX(4px);
+    }
+    
+    .action-btn i {
+        font-size: 1.25rem;
+        width: 24px;
+        text-align: center;
+    }
+    
+    .info-section {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+    
+    .info-section h5 {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 1.25rem;
+    }
+    
+    .info-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.875rem 0;
+        border-bottom: 1px solid #f3f4f6;
+    }
+    
+    .info-item:last-child {
+        border-bottom: none;
+    }
+    
+    .info-label {
+        font-weight: 600;
+        color: #6b7280;
+        font-size: 0.875rem;
+    }
+    
+    .info-value {
+        color: #111827;
+        font-weight: 600;
+        font-size: 0.875rem;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-<!-- Contenido Principal -->
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-12">
-            <div class="welcome-card">
-                <h1 class="display-4">
-                    <i class="fas fa-user-circle me-3"></i>
-                    Bienvenido, <span id="userName">Usuario</span>
-                </h1>
-                <p class="lead">Sistema de Gestión de Embutidos</p>
-            </div>
-        </div>
+<div class="dashboard-container">
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+        <h1>
+            <i class="fas fa-home me-2"></i>
+            Bienvenido, <span id="userName">Usuario</span>
+        </h1>
+        <p>Panel de Control - Sistema de Gestión Forporea</p>
     </div>
-
-    <div class="row mt-4">
-        <div class="col-md-6 col-lg-3 mb-4">
-            <div class="info-card">
-                <div class="card-icon bg-primary">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="card-content">
-                    <h5>Usuario</h5>
-                    <p id="userEmail">email@example.com</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6 col-lg-3 mb-4">
-            <div class="info-card">
-                <div class="card-icon bg-success">
-                    <i class="fas fa-user-tag"></i>
-                </div>
-                <div class="card-content">
-                    <h5>Rol</h5>
-                    <p id="userRol">Usuario</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6 col-lg-3 mb-4">
-            <a href="/productos" class="text-decoration-none">
-                <div class="info-card hover-card">
-                    <div class="card-icon bg-info">
+    
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-md-6 col-lg-3 mb-3">
+            <div class="stats-card">
+                <div class="stats-card-header">
+                    <div class="stats-icon blue">
                         <i class="fas fa-box"></i>
                     </div>
-                    <div class="card-content">
-                        <h5>Productos</h5>
-                        <p>Gestionar productos</p>
-                    </div>
+                    <h6>Productos</h6>
                 </div>
-            </a>
+                <p class="value" id="statsProductos">0</p>
+            </div>
         </div>
-
-        <div class="col-md-6 col-lg-3 mb-4">
-            <a href="/proveedores" class="text-decoration-none">
-                <div class="info-card hover-card">
-                    <div class="card-icon bg-warning">
+        
+        <div class="col-md-6 col-lg-3 mb-3">
+            <div class="stats-card">
+                <div class="stats-card-header">
+                    <div class="stats-icon green">
                         <i class="fas fa-truck"></i>
                     </div>
-                    <div class="card-content">
-                        <h5>Proveedores</h5>
-                        <p>Gestionar proveedores</p>
-                    </div>
+                    <h6>Proveedores</h6>
                 </div>
-            </a>
+                <p class="value" id="statsProveedores">0</p>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3 mb-3">
+            <div class="stats-card">
+                <div class="stats-card-header">
+                    <div class="stats-icon orange">
+                        <i class="fas fa-file-invoice"></i>
+                    </div>
+                    <h6>Facturas Hoy</h6>
+                </div>
+                <p class="value" id="statsFacturas">0</p>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3 mb-3">
+            <div class="stats-card">
+                <div class="stats-card-header">
+                    <div class="stats-icon purple">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <h6>Ventas Hoy</h6>
+                </div>
+                <p class="value" id="statsVentas">$0</p>
+            </div>
         </div>
     </div>
-
-    <div class="row mt-3">
-        <div class="col-12">
-            <div class="action-card">
-                <h3><i class="fas fa-file-invoice me-2"></i>Acciones Rápidas</h3>
-                <div class="d-flex gap-3 flex-wrap mt-3">
-                    <a href="/facturacion" class="btn btn-primary btn-lg">
-                        <i class="fas fa-plus me-2"></i>Nueva Factura
-                    </a>
-                    <a href="/productos" class="btn btn-success btn-lg">
-                        <i class="fas fa-box me-2"></i>Ver Productos
-                    </a>
-                    <a href="/proveedores" class="btn btn-warning btn-lg">
-                        <i class="fas fa-truck me-2"></i>Ver Proveedores
-                    </a>
+    
+    <!-- Quick Actions & User Info -->
+    <div class="row">
+        <div class="col-lg-8 mb-4">
+            <div class="quick-actions">
+                <h5><i class="fas fa-bolt me-2"></i>Acciones Rápidas</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <a href="/facturacion" class="action-btn">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Nueva Factura</span>
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="/productos" class="action-btn">
+                            <i class="fas fa-box"></i>
+                            <span>Ver Productos</span>
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="/proveedores" class="action-btn">
+                            <i class="fas fa-truck"></i>
+                            <span>Ver Proveedores</span>
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="/facturas" class="action-btn">
+                            <i class="fas fa-receipt"></i>
+                            <span>Ver Facturas</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 mb-4">
+            <div class="info-section">
+                <h5><i class="fas fa-user-circle me-2"></i>Mi Información</h5>
+                <div class="info-item">
+                    <span class="info-label">Email</span>
+                    <span class="info-value" id="userEmail">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Rol</span>
+                    <span class="info-value" id="userRol">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Estado</span>
+                    <span class="info-value text-success">Activo</span>
                 </div>
             </div>
         </div>

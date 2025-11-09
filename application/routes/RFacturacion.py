@@ -130,9 +130,19 @@ def descargar_factura(factura_id):
         if not factura:
             return jsonify({"success": False, "message": "Factura no encontrada"}), 404
         
+        # Obtener información del usuario que facturó
+        usuario_nombre = session.get('nombre', 'Usuario')
+        
         # Crear PDF en memoria
         buffer = io.BytesIO()
-        doc = SimpleDocTemplate(buffer, pagesize=letter)
+        doc = SimpleDocTemplate(
+            buffer, 
+            pagesize=letter,
+            rightMargin=50,
+            leftMargin=50,
+            topMargin=50,
+            bottomMargin=50
+        )
         elements = []
         styles = getSampleStyleSheet()
         
@@ -140,79 +150,178 @@ def descargar_factura(factura_id):
         title_style = ParagraphStyle(
             'CustomTitle',
             parent=styles['Heading1'],
-            fontSize=24,
+            fontSize=32,
             textColor=colors.HexColor('#0d6efd'),
-            spaceAfter=30,
-            alignment=TA_CENTER
+            spaceAfter=10,
+            alignment=TA_CENTER,
+            fontName='Helvetica-Bold'
         )
         
-        # Título
-        elements.append(Paragraph("FORPOREA", title_style))
-        elements.append(Paragraph("Factura de Venta", styles['Heading2']))
-        elements.append(Spacer(1, 0.3*inch))
+        subtitle_style = ParagraphStyle(
+            'Subtitle',
+            parent=styles['Normal'],
+            fontSize=14,
+            textColor=colors.HexColor('#6c757d'),
+            spaceAfter=30,
+            alignment=TA_CENTER,
+            fontName='Helvetica'
+        )
         
-        # Información de la factura
+        # Encabezado con logo/nombre
+        elements.append(Paragraph("FORPOREA", title_style))
+        elements.append(Paragraph("Sistema de Gestión de Embutidos", subtitle_style))
+        
+        # Línea separadora decorativa
+        elements.append(Spacer(1, 0.15*inch))
+        line_data = [['']]
+        line_table = Table(line_data, colWidths=[7*inch])
+        line_table.setStyle(TableStyle([
+            ('LINEABOVE', (0, 0), (-1, 0), 3, colors.HexColor('#0d6efd')),
+        ]))
+        elements.append(line_table)
+        elements.append(Spacer(1, 0.35*inch))
+        
+        # Información de la factura con mejor diseño
+        info_style = ParagraphStyle(
+            'InfoLabel',
+            parent=styles['Normal'],
+            fontSize=10,
+            textColor=colors.HexColor('#6c757d'),
+            fontName='Helvetica-Bold'
+        )
+        
+        info_value_style = ParagraphStyle(
+            'InfoValue',
+            parent=styles['Normal'],
+            fontSize=11,
+            textColor=colors.HexColor('#212529'),
+            fontName='Helvetica'
+        )
+        
+        # Crear tabla de información con mejor formato
         info_data = [
-            ['Factura N°:', str(factura['_id'])],
-            ['Cliente:', factura['cliente']],
-            ['Fecha:', factura['fecha'].strftime('%d/%m/%Y %H:%M')],
+            [Paragraph('Factura N°:', info_style), Paragraph(str(factura['_id'])[:20] + '...', info_value_style)],
+            [Paragraph('Cliente:', info_style), Paragraph(factura['cliente'], info_value_style)],
+            [Paragraph('Fecha:', info_style), Paragraph(factura['fecha'].strftime('%d/%m/%Y %H:%M'), info_value_style)],
+            [Paragraph('Facturado por:', info_style), Paragraph(usuario_nombre, info_value_style)],
         ]
         
-        info_table = Table(info_data, colWidths=[2*inch, 4*inch])
+        info_table = Table(info_data, colWidths=[1.5*inch, 5.5*inch])
         info_table.setStyle(TableStyle([
-            ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
-            ('FONTSIZE', (0, 0), (-1, -1), 10),
-            ('BOTTOMPADDING', (0, 0), (-1, -1), 12),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+            ('TOPPADDING', (0, 0), (-1, -1), 6),
+            ('LINEBELOW', (0, 0), (-1, -2), 0.5, colors.HexColor('#e9ecef')),
         ]))
         elements.append(info_table)
         elements.append(Spacer(1, 0.5*inch))
         
-        # Tabla de productos
+        # Título de sección
+        section_style = ParagraphStyle(
+            'SectionTitle',
+            parent=styles['Normal'],
+            fontSize=12,
+            textColor=colors.HexColor('#374151'),
+            spaceAfter=10,
+            fontName='Helvetica-Bold'
+        )
+        elements.append(Paragraph("DETALLE DE PRODUCTOS", section_style))
+        
+        # Tabla de productos con mejor diseño
         productos_data = [['Producto', 'Cantidad', 'Precio Unit.', 'Subtotal']]
         for prod in factura['productos']:
             productos_data.append([
-                prod['nombre'],
+                Paragraph(prod['nombre'], styles['Normal']),
                 str(prod['cantidad']),
                 f"${prod['precio_unitario']:.2f}",
                 f"${prod['subtotal']:.2f}"
             ])
         
-        productos_table = Table(productos_data, colWidths=[3*inch, 1*inch, 1.5*inch, 1.5*inch])
+        productos_table = Table(productos_data, colWidths=[3.5*inch, 1.0*inch, 1.25*inch, 1.25*inch])
         productos_table.setStyle(TableStyle([
+            # Header
             ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#0d6efd')),
-            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ('ALIGN', (0, 0), (0, 0), 'LEFT'),
+            ('ALIGN', (1, 0), (-1, 0), 'CENTER'),
             ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-            ('FONTSIZE', (0, 0), (-1, 0), 12),
+            ('FONTSIZE', (0, 0), (-1, 0), 11),
             ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-            ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-            ('GRID', (0, 0), (-1, -1), 1, colors.black),
+            ('TOPPADDING', (0, 0), (-1, 0), 12),
+            ('LEFTPADDING', (0, 0), (0, 0), 12),
+            # Body
+            ('ALIGN', (0, 1), (0, -1), 'LEFT'),
+            ('ALIGN', (1, 1), (-1, -1), 'CENTER'),
+            ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+            ('FONTSIZE', (0, 1), (-1, -1), 10),
+            ('BOTTOMPADDING', (0, 1), (-1, -1), 10),
+            ('TOPPADDING', (0, 1), (-1, -1), 10),
+            ('LEFTPADDING', (0, 1), (0, -1), 12),
+            ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.HexColor('#f8f9fa')]),
+            # Borders
+            ('BOX', (0, 0), (-1, -1), 1.5, colors.HexColor('#dee2e6')),
+            ('LINEBELOW', (0, 0), (-1, 0), 2, colors.HexColor('#0a58ca')),
+            ('INNERGRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#e9ecef')),
         ]))
         elements.append(productos_table)
-        elements.append(Spacer(1, 0.3*inch))
+        elements.append(Spacer(1, 0.5*inch))
         
-        # Total
-        total_style = ParagraphStyle(
-            'TotalStyle',
+        # Total con diseño mejorado
+        total_style_label = ParagraphStyle(
+            'TotalLabel',
             parent=styles['Normal'],
             fontSize=16,
-            textColor=colors.HexColor('#0d6efd'),
-            alignment=TA_RIGHT,
-            fontName='Helvetica-Bold'
+            textColor=colors.HexColor('#212529'),
+            fontName='Helvetica-Bold',
+            alignment=TA_RIGHT
         )
-        elements.append(Paragraph(f"TOTAL: ${factura['total']:.2f}", total_style))
+        
+        total_style_value = ParagraphStyle(
+            'TotalValue',
+            parent=styles['Normal'],
+            fontSize=18,
+            textColor=colors.HexColor('#0d6efd'),
+            fontName='Helvetica-Bold',
+            alignment=TA_CENTER
+        )
+        
+        total_data = [[
+            Paragraph('TOTAL:', total_style_label),
+            Paragraph(f"${factura['total']:.2f}", total_style_value)
+        ]]
+        
+        total_table = Table(total_data, colWidths=[5.5*inch, 1.5*inch])
+        total_table.setStyle(TableStyle([
+            ('BACKGROUND', (1, 0), (1, 0), colors.HexColor('#e7f1ff')),
+            ('BOX', (1, 0), (1, 0), 2, colors.HexColor('#0d6efd')),
+            ('TOPPADDING', (0, 0), (-1, 0), 12),
+            ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+            ('LEFTPADDING', (1, 0), (1, 0), 15),
+            ('RIGHTPADDING', (1, 0), (1, 0), 15),
+            ('VALIGN', (0, 0), (-1, 0), 'MIDDLE'),
+        ]))
+        elements.append(total_table)
         
         # Pie de página
-        elements.append(Spacer(1, 0.5*inch))
+        elements.append(Spacer(1, 0.8*inch))
         footer_style = ParagraphStyle(
             'Footer',
             parent=styles['Normal'],
-            fontSize=8,
-            textColor=colors.grey,
-            alignment=TA_CENTER
+            fontSize=9,
+            textColor=colors.HexColor('#6c757d'),
+            alignment=TA_CENTER,
+            spaceAfter=5
         )
-        elements.append(Paragraph("Gracias por su compra - Forporea", footer_style))
-        elements.append(Paragraph("Sistema de Gestión de Embutidos", footer_style))
+        elements.append(Paragraph("¡Gracias por su compra!", footer_style))
+        elements.append(Paragraph("FORPOREA - Sistema de Gestión de Embutidos", footer_style))
+        
+        # Línea final
+        elements.append(Spacer(1, 0.2*inch))
+        final_line = Table([['']], colWidths=[7*inch])
+        final_line.setStyle(TableStyle([
+            ('LINEABOVE', (0, 0), (-1, 0), 1, colors.HexColor('#dee2e6')),
+        ]))
+        elements.append(final_line)
         
         # Construir PDF
         doc.build(elements)
