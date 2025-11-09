@@ -27,21 +27,27 @@ function mostrarFacturas() {
     const tbody = document.getElementById('tablaFacturas');
     
     if (facturas.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No hay facturas registradas</td></tr>';
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="5" class="text-center py-5">
+                    <i class="fas fa-inbox fa-2x text-muted mb-3"></i>
+                    <p class="text-muted">No hay facturas registradas</p>
+                </td>
+            </tr>`;
         return;
     }
     
     tbody.innerHTML = facturas.map(factura => `
         <tr>
-            <td>${factura.cliente}</td>
+            <td><strong>${factura.cliente}</strong></td>
             <td>${factura.fecha}</td>
-            <td><strong>$${factura.total.toFixed(2)}</strong></td>
+            <td><span class="badge-total">$${factura.total.toFixed(2)}</span></td>
             <td><span class="badge bg-info">${factura.productos.length} producto(s)</span></td>
-            <td>
-                <button class="btn btn-info btn-sm" onclick="verDetalleFactura('${factura._id}')">
+            <td class="text-center">
+                <button class="btn-action-clean btn-info" onclick="verDetalleFactura('${factura._id}')" title="Ver detalle">
                     <i class="fas fa-eye"></i>
                 </button>
-                <button class="btn btn-success btn-sm" onclick="descargarFacturaPDF('${factura._id}')">
+                <button class="btn-action-clean btn-success" onclick="descargarFacturaPDF('${factura._id}')" title="Descargar PDF">
                     <i class="fas fa-download"></i>
                 </button>
             </td>

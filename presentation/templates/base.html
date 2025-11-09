@@ -260,75 +260,128 @@
     
     <!-- Navbar (solo si no es login) -->
     {% if not is_login %}
-    <nav class="glass sticky top-0 z-50 shadow-lg animate__animated animate__fadeInDown">
+    <nav class="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm animate__animated animate__fadeInDown">
         <div class="container-fluid px-6 py-3">
             <div class="flex items-center justify-between">
                 <!-- Logo y Brand -->
-                <a href="/inicio" class="flex items-center space-x-3 group">
-                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center transform group-hover:scale-110 transition-all duration-300 shadow-lg">
-                        <i class="fas fa-drumstick-bite text-white text-lg"></i>
+                <a href="/inicio" class="flex items-center space-x-3 group no-underline">
+                    <div class="relative">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 rounded-2xl flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-lg group-hover:shadow-xl">
+                            <i class="fas fa-drumstick-bite text-white text-2xl"></i>
+                        </div>
+                        <!-- Efecto de brillo -->
+                        <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 rounded-2xl transition-opacity duration-300"></div>
                     </div>
-                    <span class="text-xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">Forporea</span>
-                    <span class="px-2 py-1 bg-blue-100 text-blue-600 text-xs font-semibold rounded-full" id="appVersion">v0.0.0</span>
+                    <div class="flex flex-col -space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="text-2xl font-extrabold bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 bg-clip-text text-transparent tracking-tight">Forporea</span>
+                            <span class="px-2 py-0.5 bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 text-xs font-bold rounded-md border border-blue-300" id="appVersion">v1.4.0</span>
+                        </div>
+                        <span class="text-xs text-gray-500 font-medium">Sistema de Gestión</span>
+                    </div>
                 </a>
                 
                 <!-- Desktop Menu -->
-                <div class="hidden lg:flex items-center space-x-1">
-                    <a href="/inicio" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 flex items-center space-x-2 {% if active_page == 'inicio' %}bg-blue-50 text-blue-600 font-semibold{% endif %}">
-                        <i class="fas fa-home"></i>
+                <div class="hidden lg:flex items-center space-x-2">
+                    <a href="/inicio" class="nav-link px-4 py-2.5 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 flex items-center space-x-2 font-medium {% if active_page == 'inicio' %}active-nav-link{% endif %}">
+                        <i class="fas fa-home text-lg"></i>
                         <span>Inicio</span>
                     </a>
-                    <a href="/productos" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 flex items-center space-x-2 {% if active_page == 'productos' %}bg-blue-50 text-blue-600 font-semibold{% endif %}">
-                        <i class="fas fa-box"></i>
+                    <a href="/productos" class="nav-link px-4 py-2.5 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 flex items-center space-x-2 font-medium {% if active_page == 'productos' %}active-nav-link{% endif %}">
+                        <i class="fas fa-box text-lg"></i>
                         <span>Productos</span>
                     </a>
-                    <a href="/proveedores" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 flex items-center space-x-2 {% if active_page == 'proveedores' %}bg-blue-50 text-blue-600 font-semibold{% endif %}">
-                        <i class="fas fa-truck"></i>
+                    <a href="/proveedores" class="nav-link px-4 py-2.5 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 flex items-center space-x-2 font-medium {% if active_page == 'proveedores' %}active-nav-link{% endif %}">
+                        <i class="fas fa-truck text-lg"></i>
                         <span>Proveedores</span>
                     </a>
-                    <a href="/facturacion" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 flex items-center space-x-2 {% if active_page == 'facturacion' %}bg-blue-50 text-blue-600 font-semibold{% endif %}">
-                        <i class="fas fa-file-invoice"></i>
+                    <a href="/facturacion" class="nav-link px-4 py-2.5 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 flex items-center space-x-2 font-medium {% if active_page == 'facturacion' %}active-nav-link{% endif %}">
+                        <i class="fas fa-file-invoice text-lg"></i>
                         <span>Facturación</span>
                     </a>
-                    <a href="/facturas" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 flex items-center space-x-2 {% if active_page == 'facturas' %}bg-blue-50 text-blue-600 font-semibold{% endif %}">
-                        <i class="fas fa-receipt"></i>
+                    <a href="/facturas" class="nav-link px-4 py-2.5 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 flex items-center space-x-2 font-medium {% if active_page == 'facturas' %}active-nav-link{% endif %}">
+                        <i class="fas fa-receipt text-lg"></i>
                         <span>Facturas</span>
                     </a>
-                    <a href="/logout" class="ml-4 px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-300 flex items-center space-x-2 shadow-md hover:shadow-lg transform hover:scale-105">
+                    
+                    <!-- Separador -->
+                    <div class="h-8 w-px bg-gray-300 mx-2"></div>
+                    
+                    <!-- Botón de Cerrar Sesión -->
+                    <a href="/logout" class="px-5 py-2.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all duration-300 flex items-center space-x-2 font-medium shadow-sm hover:shadow-md transform hover:scale-105">
                         <i class="fas fa-sign-out-alt"></i>
                         <span>Cerrar Sesión</span>
                     </a>
                 </div>
                 
                 <!-- Mobile Menu Button -->
-                <button class="lg:hidden p-2 rounded-lg hover:bg-gray-100" onclick="toggleMobileMenu()">
+                <button class="lg:hidden p-2.5 rounded-lg hover:bg-gray-100 transition-colors duration-200" onclick="toggleMobileMenu()">
                     <i class="fas fa-bars text-2xl text-gray-700"></i>
                 </button>
             </div>
             
             <!-- Mobile Menu -->
-            <div id="mobileMenu" class="hidden lg:hidden mt-4 space-y-2 animate__animated animate__fadeIn">
-                <a href="/inicio" class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 {% if active_page == 'inicio' %}bg-blue-50 text-blue-600 font-semibold{% endif %}">
-                    <i class="fas fa-home mr-2"></i>Inicio
+            <div id="mobileMenu" class="hidden lg:hidden mt-4 pb-2 space-y-1 animate__animated animate__fadeIn">
+                <a href="/inicio" class="block px-4 py-3 rounded-lg text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 font-medium {% if active_page == 'inicio' %}bg-blue-50 text-blue-600{% endif %}">
+                    <i class="fas fa-home mr-3"></i>Inicio
                 </a>
-                <a href="/productos" class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 {% if active_page == 'productos' %}bg-blue-50 text-blue-600 font-semibold{% endif %}">
-                    <i class="fas fa-box mr-2"></i>Productos
+                <a href="/productos" class="block px-4 py-3 rounded-lg text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 font-medium {% if active_page == 'productos' %}bg-blue-50 text-blue-600{% endif %}">
+                    <i class="fas fa-box mr-3"></i>Productos
                 </a>
-                <a href="/proveedores" class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 {% if active_page == 'proveedores' %}bg-blue-50 text-blue-600 font-semibold{% endif %}">
-                    <i class="fas fa-truck mr-2"></i>Proveedores
+                <a href="/proveedores" class="block px-4 py-3 rounded-lg text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 font-medium {% if active_page == 'proveedores' %}bg-blue-50 text-blue-600{% endif %}">
+                    <i class="fas fa-truck mr-3"></i>Proveedores
                 </a>
-                <a href="/facturacion" class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 {% if active_page == 'facturacion' %}bg-blue-50 text-blue-600 font-semibold{% endif %}">
-                    <i class="fas fa-file-invoice mr-2"></i>Facturación
+                <a href="/facturacion" class="block px-4 py-3 rounded-lg text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 font-medium {% if active_page == 'facturacion' %}bg-blue-50 text-blue-600{% endif %}">
+                    <i class="fas fa-file-invoice mr-3"></i>Facturación
                 </a>
-                <a href="/facturas" class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 {% if active_page == 'facturas' %}bg-blue-50 text-blue-600 font-semibold{% endif %}">
-                    <i class="fas fa-receipt mr-2"></i>Facturas
+                <a href="/facturas" class="block px-4 py-3 rounded-lg text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 font-medium {% if active_page == 'facturas' %}bg-blue-50 text-blue-600{% endif %}">
+                    <i class="fas fa-receipt mr-3"></i>Facturas
                 </a>
-                <a href="/logout" class="block px-4 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-300">
-                    <i class="fas fa-sign-out-alt mr-2"></i>Cerrar Sesión
+                <a href="/logout" class="block px-4 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all duration-300 font-medium mt-2">
+                    <i class="fas fa-sign-out-alt mr-3"></i>Cerrar Sesión
                 </a>
             </div>
         </div>
     </nav>
+    
+    <style>
+        /* Estilos para el navbar activo */
+        .active-nav-link {
+            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+            color: white !important;
+            box-shadow: 0 2px 8px rgba(13, 110, 253, 0.3);
+        }
+        
+        .active-nav-link:hover {
+            background: linear-gradient(135deg, #0a58ca 0%, #084298 100%);
+            color: white !important;
+        }
+        
+        /* Efecto de hover mejorado */
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #0d6efd, #0dcaf0);
+            transform: translateX(-50%);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::before {
+            width: 80%;
+        }
+        
+        .active-nav-link::before {
+            display: none;
+        }
+    </style>
     {% endif %}
     
     <!-- Contenido principal -->

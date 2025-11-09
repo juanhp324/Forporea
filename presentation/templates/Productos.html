@@ -80,6 +80,11 @@
         font-weight: 600;
         color: #374151;
         font-size: 0.875rem;
+        position: sticky;
+        top: 0;
+        background: #f9fafb;
+        z-index: 10;
+        box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
     }
     
     .table-professional thead th i {
@@ -132,11 +137,12 @@
     
     .btn-action-clean.btn-warning {
         background: #ffc107;
-        color: white;
+        color: #000;
     }
     
     .btn-action-clean.btn-warning:hover {
         background: #e0a800;
+        color: #000;
     }
     
     .btn-action-clean.btn-danger {
@@ -168,6 +174,33 @@
     .badge-stock.high {
         background: #d1fae5;
         color: #065f46;
+    }
+    
+    .badge-precio {
+        padding: 0.375rem 0.75rem;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.75rem;
+        background: #d1fae5;
+        color: #065f46;
+    }
+    
+    .badge-stock-display {
+        padding: 0.375rem 0.75rem;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.75rem;
+        background: #cfe2ff;
+        color: #084298;
+    }
+    
+    .badge-proveedor {
+        padding: 0.375rem 0.75rem;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.75rem;
+        background: #fff3cd;
+        color: #856404;
     }
     
     .modal-content {
@@ -260,42 +293,67 @@
 
     <!-- Modal Producto -->
     <div class="modal fade" id="modalProducto" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalProductoTitle">Nuevo Producto</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title fw-bold" id="modalProductoTitle">
+                        <i class="fas fa-box me-2"></i>Nuevo Producto
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body p-4">
                     <form id="formProducto">
                         <input type="hidden" id="productoId">
-                        <div class="mb-3">
-                            <label for="productoNombre" class="form-label">Nombre *</label>
-                            <input type="text" class="form-control" id="productoNombre" required>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="productoNombre" class="form-label fw-semibold">
+                                    <i class="fas fa-tag text-primary me-1"></i>Nombre *
+                                </label>
+                                <input type="text" class="form-control" id="productoNombre" required>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="productoProveedor" class="form-label fw-semibold">
+                                    <i class="fas fa-truck text-primary me-1"></i>Proveedor *
+                                </label>
+                                <select class="form-select" id="productoProveedor" required>
+                                    <option value="">Seleccione un proveedor</option>
+                                </select>
+                            </div>
                         </div>
+                        
                         <div class="mb-3">
-                            <label for="productoDescripcion" class="form-label">Descripción</label>
-                            <textarea class="form-control" id="productoDescripcion" rows="3"></textarea>
+                            <label for="productoDescripcion" class="form-label fw-semibold">
+                                <i class="fas fa-align-left text-primary me-1"></i>Descripción
+                            </label>
+                            <textarea class="form-control" id="productoDescripcion" rows="2"></textarea>
                         </div>
-                        <div class="mb-3">
-                            <label for="productoPrecio" class="form-label">Precio por Libra *</label>
-                            <input type="number" class="form-control" id="productoPrecio" step="0.01" min="0.01" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="productoStock" class="form-label">Stock (Libras) *</label>
-                            <input type="number" class="form-control" id="productoStock" step="0.01" min="0.01" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="productoProveedor" class="form-label">Proveedor *</label>
-                            <select class="form-select" id="productoProveedor" required>
-                                <option value="">Seleccione un proveedor</option>
-                            </select>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="productoPrecio" class="form-label fw-semibold">
+                                    <i class="fas fa-dollar-sign text-success me-1"></i>Precio por Libra *
+                                </label>
+                                <input type="number" class="form-control" id="productoPrecio" step="0.01" min="0.01" required>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="productoStock" class="form-label fw-semibold">
+                                    <i class="fas fa-boxes text-info me-1"></i>Stock (Libras) *
+                                </label>
+                                <input type="number" class="form-control" id="productoStock" step="0.01" min="0.01" required>
+                            </div>
                         </div>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" onclick="guardarProducto()">Guardar</button>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancelar
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="guardarProducto()">
+                        <i class="fas fa-save me-2"></i>Guardar
+                    </button>
                 </div>
             </div>
         </div>
@@ -306,29 +364,69 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title"><i class="fas fa-info-circle me-2"></i>Detalle del Producto</h5>
+                    <h5 class="modal-title"><i class="fas fa-box-open me-2"></i>Detalle del Producto</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h6 class="text-primary">Información del Producto</h6>
-                            <p><strong>Nombre:</strong> <span id="detalleNombre"></span></p>
-                            <p><strong>Descripción:</strong> <span id="detalleDescripcion"></span></p>
-                            <p><strong>Precio por Libra:</strong> $<span id="detallePrecio"></span></p>
-                            <p><strong>Stock:</strong> <span id="detalleStock"></span> libras</p>
+                <div class="modal-body" style="background: #f8f9fa;">
+                    <!-- Card de Información del Producto -->
+                    <div class="card mb-3 border-0 shadow-sm">
+                        <div class="card-body">
+                            <h6 class="text-primary mb-3 fw-bold">
+                                <i class="fas fa-tag me-2"></i>Información del Producto
+                            </h6>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="text-muted small mb-1">Nombre</label>
+                                    <div class="fw-bold" id="detalleNombre"></div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="text-muted small mb-1">Descripción</label>
+                                    <div class="fw-bold" id="detalleDescripcion"></div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="text-muted small mb-1">Precio por Libra</label>
+                                    <div><span class="badge-precio fs-6">$<span id="detallePrecio"></span></span></div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="text-muted small mb-1">Stock Disponible</label>
+                                    <div><span class="badge-stock-display fs-6"><span id="detalleStock"></span> lbs</span></div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <h6 class="text-primary">Información del Proveedor</h6>
-                            <p><strong>Nombre:</strong> <span id="detalleProveedorNombre"></span></p>
-                            <p><strong>Contacto:</strong> <span id="detalleProveedorContacto"></span></p>
-                            <p><strong>Teléfono:</strong> <span id="detalleProveedorTelefono"></span></p>
-                            <p><strong>Email:</strong> <span id="detalleProveedorEmail"></span></p>
-                            <p><strong>Dirección:</strong> <span id="detalleProveedorDireccion"></span></p>
+                    </div>
+                    
+                    <!-- Card de Información del Proveedor -->
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h6 class="text-primary mb-3 fw-bold">
+                                <i class="fas fa-truck me-2"></i>Información del Proveedor
+                            </h6>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="text-muted small mb-1">Empresa</label>
+                                    <div class="fw-bold" id="detalleProveedorNombre"></div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="text-muted small mb-1">Contacto</label>
+                                    <div class="fw-bold" id="detalleProveedorContacto"></div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="text-muted small mb-1"><i class="fas fa-phone me-1"></i>Teléfono</label>
+                                    <div class="fw-bold" id="detalleProveedorTelefono"></div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="text-muted small mb-1"><i class="fas fa-envelope me-1"></i>Email</label>
+                                    <div class="fw-bold" id="detalleProveedorEmail"></div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="text-muted small mb-1"><i class="fas fa-map-marker-alt me-1"></i>Dirección</label>
+                                    <div class="fw-bold" id="detalleProveedorDireccion"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer bg-white">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>

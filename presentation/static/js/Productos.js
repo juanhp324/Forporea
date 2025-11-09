@@ -95,22 +95,22 @@ function mostrarProductos() {
     
     tbody.innerHTML = productos.map(producto => `
         <tr>
-            <td>${producto.nombre}</td>
+            <td><strong>${producto.nombre}</strong></td>
             <td>${producto.descripcion || 'N/A'}</td>
-            <td>$${producto.precio.toFixed(2)}/lb</td>
-            <td>${parseFloat(producto.stock).toFixed(2)} lbs</td>
-            <td>${producto.proveedor_nombre}</td>
-            <td>
-                <button class="btn btn-info btn-sm" onclick="verDetalleProducto('${producto._id}')">
+            <td><span class="badge-precio">$${producto.precio.toFixed(2)}/lb</span></td>
+            <td><span class="badge-stock-display">${parseFloat(producto.stock).toFixed(2)} lbs</span></td>
+            <td><span class="badge-proveedor">${producto.proveedor_nombre}</span></td>
+            <td class="text-center">
+                <button class="btn-action-clean btn-info" onclick="verDetalleProducto('${producto._id}')" title="Ver detalle">
                     <i class="fas fa-eye"></i>
                 </button>
                 ${puedeEditar ? `
-                <button class="btn btn-warning btn-sm" onclick="editarProducto('${producto._id}')">
+                <button class="btn-action-clean btn-warning" onclick="editarProducto('${producto._id}')" title="Editar">
                     <i class="fas fa-edit"></i>
                 </button>
                 ` : ''}
                 ${puedeEliminar ? `
-                <button class="btn btn-danger btn-sm" onclick="eliminarProducto('${producto._id}')">
+                <button class="btn-action-clean btn-danger" onclick="eliminarProducto('${producto._id}')" title="Eliminar">
                     <i class="fas fa-trash"></i>
                 </button>
                 ` : ''}

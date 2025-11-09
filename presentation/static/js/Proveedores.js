@@ -67,11 +67,11 @@ function mostrarProveedores() {
     
     tbody.innerHTML = proveedores.map(proveedor => `
         <tr>
-            <td>${proveedor.nombre}</td>
-            <td>${proveedor.contacto}</td>
-            <td>${proveedor.telefono || 'N/A'}</td>
-            <td>${proveedor.email || 'N/A'}</td>
-            <td>${proveedor.direccion || 'N/A'}</td>
+            <td><strong>${proveedor.nombre}</strong></td>
+            <td><span class="badge-contacto">${proveedor.contacto}</span></td>
+            <td><span class="badge-telefono">${proveedor.telefono || 'N/A'}</span></td>
+            <td><span class="badge-email">${proveedor.email || 'N/A'}</span></td>
+            <td><span class="badge-direccion">${proveedor.direccion || 'N/A'}</span></td>
             <td class="text-center">
                 <button class="btn-action-clean btn-info" onclick="verDetalleProveedor('${proveedor._id}')" title="Ver detalle">
                     <i class="fas fa-eye"></i>

@@ -82,6 +82,11 @@
         font-weight: 600;
         color: #374151;
         font-size: 0.875rem;
+        position: sticky;
+        top: 0;
+        background: #f9fafb;
+        z-index: 10;
+        box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
     }
     
     .table-professional thead th i {
@@ -135,11 +140,12 @@
     
     .btn-action-clean.btn-warning {
         background: #ffc107;
-        color: white;
+        color: #000;
     }
     
     .btn-action-clean.btn-warning:hover {
         background: #e0a800;
+        color: #000;
     }
     
     .btn-action-clean.btn-danger {
@@ -212,6 +218,42 @@
         font-weight: 600;
         margin-bottom: 0.5rem;
     }
+    
+    .badge-contacto {
+        padding: 0.375rem 0.75rem;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.75rem;
+        background: #cfe2ff;
+        color: #084298;
+    }
+    
+    .badge-telefono {
+        padding: 0.375rem 0.75rem;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.75rem;
+        background: #d1fae5;
+        color: #065f46;
+    }
+    
+    .badge-email {
+        padding: 0.375rem 0.75rem;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.75rem;
+        background: #fff3cd;
+        color: #856404;
+    }
+    
+    .badge-direccion {
+        padding: 0.375rem 0.75rem;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.75rem;
+        background: #f8d7da;
+        color: #842029;
+    }
 </style>
 {% endblock %}
 
@@ -260,40 +302,65 @@
 
     <!-- Modal Proveedor -->
     <div class="modal fade" id="modalProveedor" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalProveedorTitle">Nuevo Proveedor</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title fw-bold" id="modalProveedorTitle">
+                        <i class="fas fa-truck me-2"></i>Nuevo Proveedor
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body p-4">
                     <form id="formProveedor">
                         <input type="hidden" id="proveedorId">
-                        <div class="mb-3">
-                            <label for="proveedorNombre" class="form-label">Nombre *</label>
-                            <input type="text" class="form-control" id="proveedorNombre" required>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="proveedorNombre" class="form-label fw-semibold">
+                                    <i class="fas fa-building text-success me-1"></i>Nombre de la Empresa *
+                                </label>
+                                <input type="text" class="form-control" id="proveedorNombre" required>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="proveedorContacto" class="form-label fw-semibold">
+                                    <i class="fas fa-user text-success me-1"></i>Persona de Contacto *
+                                </label>
+                                <input type="text" class="form-control" id="proveedorContacto" required>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="proveedorContacto" class="form-label">Contacto *</label>
-                            <input type="text" class="form-control" id="proveedorContacto" required>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="proveedorTelefono" class="form-label fw-semibold">
+                                    <i class="fas fa-phone text-info me-1"></i>Teléfono
+                                </label>
+                                <input type="tel" class="form-control" id="proveedorTelefono">
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="proveedorEmail" class="form-label fw-semibold">
+                                    <i class="fas fa-envelope text-warning me-1"></i>Email
+                                </label>
+                                <input type="email" class="form-control" id="proveedorEmail">
+                            </div>
                         </div>
+                        
                         <div class="mb-3">
-                            <label for="proveedorTelefono" class="form-label">Teléfono</label>
-                            <input type="tel" class="form-control" id="proveedorTelefono">
-                        </div>
-                        <div class="mb-3">
-                            <label for="proveedorEmail" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="proveedorEmail">
-                        </div>
-                        <div class="mb-3">
-                            <label for="proveedorDireccion" class="form-label">Dirección</label>
+                            <label for="proveedorDireccion" class="form-label fw-semibold">
+                                <i class="fas fa-map-marker-alt text-danger me-1"></i>Dirección
+                            </label>
                             <textarea class="form-control" id="proveedorDireccion" rows="2"></textarea>
                         </div>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" onclick="guardarProveedor()">Guardar</button>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancelar
+                    </button>
+                    <button type="button" class="btn btn-success" onclick="guardarProveedor()">
+                        <i class="fas fa-save me-2"></i>Guardar
+                    </button>
                 </div>
             </div>
         </div>
@@ -304,25 +371,53 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title"><i class="fas fa-info-circle me-2"></i>Detalle del Proveedor</h5>
+                    <h5 class="modal-title"><i class="fas fa-truck me-2"></i>Detalle del Proveedor</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h6 class="text-success">Información General</h6>
-                            <p><strong>Nombre:</strong> <span id="detalleProvNombre"></span></p>
-                            <p><strong>Contacto:</strong> <span id="detalleProvContacto"></span></p>
-                            <p><strong>Teléfono:</strong> <span id="detalleProvTelefono"></span></p>
+                <div class="modal-body" style="background: #f8f9fa;">
+                    <!-- Card de Información General -->
+                    <div class="card mb-3 border-0 shadow-sm">
+                        <div class="card-body">
+                            <h6 class="text-success mb-3 fw-bold">
+                                <i class="fas fa-building me-2"></i>Información General
+                            </h6>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="text-muted small mb-1">Nombre de la Empresa</label>
+                                    <div class="fw-bold" id="detalleProvNombre"></div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="text-muted small mb-1">Persona de Contacto</label>
+                                    <div class="fw-bold" id="detalleProvContacto"></div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <h6 class="text-success">Información de Contacto</h6>
-                            <p><strong>Email:</strong> <span id="detalleProvEmail"></span></p>
-                            <p><strong>Dirección:</strong> <span id="detalleProvDireccion"></span></p>
+                    </div>
+                    
+                    <!-- Card de Información de Contacto -->
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h6 class="text-success mb-3 fw-bold">
+                                <i class="fas fa-address-card me-2"></i>Información de Contacto
+                            </h6>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="text-muted small mb-1"><i class="fas fa-phone me-1"></i>Teléfono</label>
+                                    <div class="fw-bold" id="detalleProvTelefono"></div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="text-muted small mb-1"><i class="fas fa-envelope me-1"></i>Email</label>
+                                    <div class="fw-bold" id="detalleProvEmail"></div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="text-muted small mb-1"><i class="fas fa-map-marker-alt me-1"></i>Dirección</label>
+                                    <div class="fw-bold" id="detalleProvDireccion"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer bg-white">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>

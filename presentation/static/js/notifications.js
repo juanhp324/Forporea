@@ -63,24 +63,26 @@ function showConfirm(options = {}) {
         const modal = document.createElement('div');
         modal.className = 'confirm-modal';
         
-        const typeClass = type === 'danger' ? '' : type;
+        const typeClass = type === 'danger' ? 'danger' : type;
+        const headerColor = type === 'danger' ? 'bg-danger' : type === 'warning' ? 'bg-warning' : 'bg-info';
+        const iconColor = type === 'danger' ? 'text-danger' : type === 'warning' ? 'text-warning' : 'text-info';
         
         modal.innerHTML = `
-            <div class="confirm-modal-header ${typeClass}">
-                <i class="${icon} confirm-modal-icon"></i>
-                <h3 class="confirm-modal-title">${title}</h3>
+            <div class="confirm-modal-header ${headerColor}">
+                <div class="confirm-modal-icon-wrapper">
+                    <i class="${icon} confirm-modal-icon"></i>
+                </div>
             </div>
             <div class="confirm-modal-body">
+                <h4 class="confirm-modal-title">${title}</h4>
                 <p class="confirm-modal-message">${message}</p>
             </div>
             <div class="confirm-modal-footer">
                 <button class="confirm-modal-btn confirm-modal-btn-cancel" data-action="cancel">
-                    <i class="fas fa-times"></i>
-                    ${cancelText}
+                    <i class="fas fa-times me-2"></i>${cancelText}
                 </button>
                 <button class="confirm-modal-btn confirm-modal-btn-confirm ${typeClass}" data-action="confirm">
-                    <i class="fas fa-check"></i>
-                    ${confirmText}
+                    <i class="fas fa-check me-2"></i>${confirmText}
                 </button>
             </div>
         `;
@@ -88,9 +90,16 @@ function showConfirm(options = {}) {
         overlay.appendChild(modal);
         document.body.appendChild(overlay);
         
+        // Animación de entrada
+        setTimeout(() => {
+            overlay.classList.add('active');
+            modal.classList.add('active');
+        }, 10);
+        
         // Función para cerrar el modal
         const closeModal = (confirmed) => {
-            overlay.classList.add('closing');
+            overlay.classList.remove('active');
+            modal.classList.remove('active');
             setTimeout(() => {
                 overlay.remove();
                 resolve(confirmed);
