@@ -97,8 +97,8 @@ function mostrarProductos() {
         <tr>
             <td>${producto.nombre}</td>
             <td>${producto.descripcion || 'N/A'}</td>
-            <td>$${producto.precio.toFixed(2)}</td>
-            <td>${producto.stock}</td>
+            <td>$${producto.precio.toFixed(2)}/lb</td>
+            <td>${parseFloat(producto.stock).toFixed(2)} lbs</td>
             <td>${producto.proveedor_nombre}</td>
             <td>
                 <button class="btn btn-info btn-sm" onclick="verDetalleProducto('${producto._id}')">
@@ -168,7 +168,7 @@ async function guardarProducto() {
         nombre,
         descripcion,
         precio: parseFloat(precio),
-        stock: parseInt(stock),
+        stock: parseFloat(stock),
         proveedor_id
     };
     
@@ -242,7 +242,7 @@ async function verDetalleProducto(id) {
             document.getElementById('detalleNombre').textContent = producto.nombre;
             document.getElementById('detalleDescripcion').textContent = producto.descripcion || 'N/A';
             document.getElementById('detallePrecio').textContent = producto.precio.toFixed(2);
-            document.getElementById('detalleStock').textContent = producto.stock;
+            document.getElementById('detalleStock').textContent = parseFloat(producto.stock).toFixed(2);
             
             document.getElementById('detalleProveedorNombre').textContent = producto.proveedor.nombre;
             document.getElementById('detalleProveedorContacto').textContent = producto.proveedor.contacto || 'N/A';

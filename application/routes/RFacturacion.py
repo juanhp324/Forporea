@@ -228,11 +228,11 @@ def descargar_factura(factura_id):
         elements.append(Paragraph("DETALLE DE PRODUCTOS", section_style))
         
         # Tabla de productos con mejor diseño
-        productos_data = [['Producto', 'Cantidad', 'Precio Unit.', 'Subtotal']]
+        productos_data = [['Producto', 'Libras', 'Precio/Lb', 'Subtotal']]
         for prod in factura['productos']:
             productos_data.append([
                 Paragraph(prod['nombre'], styles['Normal']),
-                str(prod['cantidad']),
+                f"{prod['cantidad']:.2f}",
                 f"${prod['precio_unitario']:.2f}",
                 f"${prod['subtotal']:.2f}"
             ])

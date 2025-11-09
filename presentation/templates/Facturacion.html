@@ -80,6 +80,183 @@
         box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
     }
     
+    /* Contenedor de búsqueda */
+    .search-container {
+        background: #f8f9fa;
+        padding: 1.25rem;
+        border-radius: 12px;
+        border: 1px solid #e9ecef;
+    }
+    
+    .search-box {
+        position: relative;
+    }
+    
+    .search-label {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .search-label i {
+        color: #0d6efd;
+        margin-right: 0.25rem;
+    }
+    
+    .search-input {
+        border: 2px solid #dee2e6;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+        color: #212529;
+        transition: all 0.3s ease;
+        background: white;
+    }
+    
+    .search-input:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1);
+        outline: none;
+        background: white;
+    }
+    
+    .search-input::placeholder {
+        color: #adb5bd;
+        font-size: 0.875rem;
+    }
+    
+    /* Estilos para los selects de resultados */
+    #productoSelect,
+    #productoSelectId {
+        background: white;
+        border: 2px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 0.5rem;
+        font-size: 0.875rem;
+        color: #1f2937;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        max-height: 200px;
+        overflow-y: auto;
+    }
+    
+    #productoSelect option,
+    #productoSelectId option {
+        padding: 0.75rem;
+        border-radius: 6px;
+        margin: 2px 0;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    #productoSelect option:hover,
+    #productoSelectId option:hover {
+        background: #f3f4f6;
+    }
+    
+    #productoSelect option:checked,
+    #productoSelect option:focus,
+    #productoSelectId option:checked,
+    #productoSelectId option:focus {
+        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        color: white;
+        font-weight: 600;
+    }
+    
+    /* Tarjeta de información del producto */
+    .producto-info-card {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border: 2px solid #dee2e6;
+        border-radius: 12px;
+        padding: 1.25rem;
+        margin-top: 1rem;
+        animation: slideDown 0.3s ease;
+    }
+    
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .info-badge {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        background: white;
+        padding: 1rem;
+        border-radius: 10px;
+        border: 2px solid;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+    
+    .info-badge:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .info-badge-green {
+        border-color: #d1fae5;
+        background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+    }
+    
+    .info-badge-blue {
+        border-color: #dbeafe;
+        background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
+    }
+    
+    .info-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        flex-shrink: 0;
+    }
+    
+    .info-badge-green .info-icon {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+    }
+    
+    .info-badge-blue .info-icon {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        color: white;
+    }
+    
+    .info-content {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        flex: 1;
+    }
+    
+    .info-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .info-value {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #1f2937;
+    }
+    
     .btn-add-product {
         background: #198754;
         color: white;
@@ -219,19 +396,69 @@
                         <div class="form-section-title">
                             <i class="fas fa-box me-2"></i>Agregar Productos
                         </div>
-                        <div class="row g-2">
-                            <div class="col-md-6">
-                                <select class="form-select" id="productoSelect">
-                                    <option value="">Seleccione un producto</option>
-                                </select>
+                        
+                        <!-- Búsqueda de Productos -->
+                        <div class="search-container mb-3">
+                            <div class="row g-3">
+                                <div class="col-md-5">
+                                    <div class="search-box">
+                                        <label class="search-label">
+                                            <i class="fas fa-search"></i> Buscar por Nombre
+                                        </label>
+                                        <input type="text" class="form-control search-input" id="buscarProducto" placeholder="Escriba el nombre del producto..." autocomplete="off">
+                                        <select class="form-select mt-2" id="productoSelect" size="5" style="display: none;">
+                                            <option value="">Seleccione un producto</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="search-box">
+                                        <label class="search-label">
+                                            <i class="fas fa-barcode"></i> Buscar por ID
+                                        </label>
+                                        <input type="text" class="form-control search-input" id="buscarProductoId" placeholder="Ingrese el ID del producto..." autocomplete="off">
+                                        <select class="form-select mt-2" id="productoSelectId" size="5" style="display: none;">
+                                            <option value="">Seleccione un producto</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="search-label">Cantidad (lbs)</label>
+                                    <input type="number" class="form-control search-input" id="productoCantidad" placeholder="1.00" min="0.01" step="0.01" value="1">
+                                </div>
                             </div>
-                            <div class="col-md-3">
-                                <input type="number" class="form-control" id="productoCantidad" placeholder="Cant." min="1" value="1">
-                            </div>
-                            <div class="col-md-3">
-                                <button type="button" class="btn btn-add-product w-100" onclick="agregarProducto()">
-                                    <i class="fas fa-plus me-1"></i>Agregar
-                                </button>
+                        </div>
+                        
+                        <!-- Información del Producto Seleccionado -->
+                        <div class="producto-info-card" id="infoProducto" style="display: none;">
+                            <div class="row g-3 align-items-center">
+                                <div class="col-md-4">
+                                    <div class="info-badge info-badge-green">
+                                        <div class="info-icon">
+                                            <i class="fas fa-dollar-sign"></i>
+                                        </div>
+                                        <div class="info-content">
+                                            <span class="info-label">Precio por Libra</span>
+                                            <span class="info-value" id="productoPrecioInfo">$0.00</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="info-badge info-badge-blue">
+                                        <div class="info-icon">
+                                            <i class="fas fa-boxes"></i>
+                                        </div>
+                                        <div class="info-content">
+                                            <span class="info-label">Stock Disponible</span>
+                                            <span class="info-value" id="productoStockInfo">0.00 lbs</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="button" class="btn btn-add-product w-100" onclick="agregarProducto()">
+                                        <i class="fas fa-cart-plus me-2"></i>Agregar al Carrito
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -246,8 +473,8 @@
                                 <thead>
                                     <tr>
                                         <th>Producto</th>
-                                        <th class="text-center">Cant.</th>
-                                        <th class="text-end">Precio</th>
+                                        <th class="text-center">Libras</th>
+                                        <th class="text-end">Precio/Lb</th>
                                         <th class="text-end">Subtotal</th>
                                         <th class="text-center">Acción</th>
                                     </tr>

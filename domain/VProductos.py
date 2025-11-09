@@ -16,7 +16,9 @@ class createProductoValidator:
         
         try:
             self.precio = float(self.precio)
-            self.stock = int(self.stock)
+            self.stock = float(self.stock)
+            if self.precio <= 0 or self.stock <= 0:
+                raise ValueError("Precio y stock deben ser mayores a 0")
         except ValueError:
             raise ValueError("Precio y stock deben ser números válidos")
         
@@ -50,7 +52,9 @@ class updateProductoValidator:
         
         try:
             self.precio = float(self.precio)
-            self.stock = int(self.stock)
+            self.stock = float(self.stock)
+            if self.precio <= 0 or self.stock <= 0:
+                raise ValueError("Precio y stock deben ser mayores a 0")
         except ValueError:
             raise ValueError("Precio y stock deben ser números válidos")
         

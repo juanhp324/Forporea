@@ -239,8 +239,8 @@
                         <tr>
                             <th><i class="fas fa-tag me-2"></i>Nombre</th>
                             <th><i class="fas fa-align-left me-2"></i>Descripción</th>
-                            <th><i class="fas fa-dollar-sign me-2"></i>Precio</th>
-                            <th><i class="fas fa-boxes me-2"></i>Stock</th>
+                            <th><i class="fas fa-dollar-sign me-2"></i>Precio/Libra</th>
+                            <th><i class="fas fa-boxes me-2"></i>Stock (lbs)</th>
                             <th><i class="fas fa-truck me-2"></i>Proveedor</th>
                             <th class="text-center"><i class="fas fa-cog me-2"></i>Acciones</th>
                         </tr>
@@ -278,12 +278,12 @@
                             <textarea class="form-control" id="productoDescripcion" rows="3"></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="productoPrecio" class="form-label">Precio *</label>
-                            <input type="number" class="form-control" id="productoPrecio" step="0.01" required>
+                            <label for="productoPrecio" class="form-label">Precio por Libra *</label>
+                            <input type="number" class="form-control" id="productoPrecio" step="0.01" min="0.01" required>
                         </div>
                         <div class="mb-3">
-                            <label for="productoStock" class="form-label">Stock *</label>
-                            <input type="number" class="form-control" id="productoStock" required>
+                            <label for="productoStock" class="form-label">Stock (Libras) *</label>
+                            <input type="number" class="form-control" id="productoStock" step="0.01" min="0.01" required>
                         </div>
                         <div class="mb-3">
                             <label for="productoProveedor" class="form-label">Proveedor *</label>
@@ -315,8 +315,8 @@
                             <h6 class="text-primary">Información del Producto</h6>
                             <p><strong>Nombre:</strong> <span id="detalleNombre"></span></p>
                             <p><strong>Descripción:</strong> <span id="detalleDescripcion"></span></p>
-                            <p><strong>Precio:</strong> $<span id="detallePrecio"></span></p>
-                            <p><strong>Stock:</strong> <span id="detalleStock"></span> unidades</p>
+                            <p><strong>Precio por Libra:</strong> $<span id="detallePrecio"></span></p>
+                            <p><strong>Stock:</strong> <span id="detalleStock"></span> libras</p>
                         </div>
                         <div class="col-md-6">
                             <h6 class="text-primary">Información del Proveedor</h6>

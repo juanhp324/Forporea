@@ -20,7 +20,9 @@ class createFacturaValidator:
                 raise ValueError("Cada producto debe tener ID y cantidad")
             
             try:
-                producto['cantidad'] = int(producto['cantidad'])
+                producto['cantidad'] = float(producto['cantidad'])
+                if producto['cantidad'] <= 0:
+                    raise ValueError("La cantidad debe ser mayor a 0")
             except ValueError:
                 raise ValueError("La cantidad debe ser un número válido")
 

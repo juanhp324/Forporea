@@ -6,6 +6,7 @@ let permisos = {};
 document.addEventListener('DOMContentLoaded', async function() {
     await cargarPermisos();
     cargarProductos();
+    configurarBusqueda();
 });
 
 async function cargarPermisos() {
@@ -50,42 +51,215 @@ async function cargarProductos() {
     }
 }
 
-function llenarSelectProductos() {
-    const select = document.getElementById('productoSelect');
-    select.innerHTML = '<option value="">Seleccione un producto</option>';
+function llenarSelectProductos(filtro = '', selectId = 'productoSelect', buscarPor = 'nombre') {
+    const select = document.getElementById(selectId);
+    select.innerHTML = '';
     
-    productos.forEach(producto => {
+    let productosFiltrados;
+    
+    if (buscarPor === 'nombre') {
+        productosFiltrados = productos.filter(producto => 
+            producto.nombre.toLowerCase().includes(filtro.toLowerCase())
+        );
+    } else {
+        // Búsqueda por ID
+        productosFiltrados = productos.filter(producto => 
+            producto._id.toLowerCase().includes(filtro.toLowerCase())
+        );
+    }
+    
+    if (productosFiltrados.length === 0) {
+        const option = document.createElement('option');
+        option.value = '';
+        option.textContent = 'No se encontraron productos';
+        option.disabled = true;
+        select.appendChild(option);
+        return;
+    }
+    
+    productosFiltrados.forEach(producto => {
         const option = document.createElement('option');
         option.value = producto._id;
-        option.textContent = `${producto.nombre} - $${producto.precio.toFixed(2)} (Stock: ${producto.stock})`;
+        
+        // Mostrar nombre o ID según el tipo de búsqueda
+        if (buscarPor === 'nombre') {
+            option.textContent = producto.nombre;
+        } else {
+            option.textContent = `${producto._id.substring(0, 8)}... - ${producto.nombre}`;
+        }
+        
         option.dataset.precio = producto.precio;
         option.dataset.stock = producto.stock;
         option.dataset.nombre = producto.nombre;
+        option.dataset.productoId = producto._id;
         select.appendChild(option);
     });
 }
 
+function configurarBusqueda() {
+    const buscarInput = document.getElementById('buscarProducto');
+    const buscarInputId = document.getElementById('buscarProductoId');
+    const select = document.getElementById('productoSelect');
+    const selectId = document.getElementById('productoSelectId');
+    const infoProducto = document.getElementById('infoProducto');
+    
+    // Evento de búsqueda por NOMBRE
+    buscarInput.addEventListener('input', function() {
+        const filtro = this.value.trim();
+        
+        if (filtro.length > 0) {
+            llenarSelectProductos(filtro, 'productoSelect', 'nombre');
+            select.style.display = 'block';
+            selectId.style.display = 'none';
+        } else {
+            select.style.display = 'none';
+            ocultarInfoProducto();
+        }
+    });
+    
+    // Evento de búsqueda por ID
+    buscarInputId.addEventListener('input', function() {
+        const filtro = this.value.trim();
+        
+        if (filtro.length > 0) {
+            llenarSelectProductos(filtro, 'productoSelectId', 'id');
+            selectId.style.display = 'block';
+            select.style.display = 'none';
+        } else {
+            selectId.style.display = 'none';
+            ocultarInfoProducto();
+        }
+    });
+    
+    // Navegación con teclado en búsqueda por nombre
+    buscarInput.addEventListener('keydown', function(e) {
+        if (select.style.display === 'block') {
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                select.focus();
+                select.selectedIndex = 0;
+            } else if (e.key === 'Enter' && select.options.length > 0) {
+                e.preventDefault();
+                select.selectedIndex = 0;
+                select.dispatchEvent(new Event('change'));
+            }
+        }
+    });
+    
+    // Navegación con teclado en búsqueda por ID
+    buscarInputId.addEventListener('keydown', function(e) {
+        if (selectId.style.display === 'block') {
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                selectId.focus();
+                selectId.selectedIndex = 0;
+            } else if (e.key === 'Enter' && selectId.options.length > 0) {
+                e.preventDefault();
+                selectId.selectedIndex = 0;
+                selectId.dispatchEvent(new Event('change'));
+            }
+        }
+    });
+    
+    // Evento al seleccionar un producto por NOMBRE
+    select.addEventListener('change', function() {
+        if (this.value) {
+            const option = this.options[this.selectedIndex];
+            mostrarInfoProducto(option);
+            buscarInput.value = option.dataset.nombre;
+            buscarInputId.value = option.dataset.productoId; // Sincronizar con ID
+            select.style.display = 'none';
+        }
+    });
+    
+    // Evento al seleccionar un producto por ID
+    selectId.addEventListener('change', function() {
+        if (this.value) {
+            const option = this.options[this.selectedIndex];
+            mostrarInfoProducto(option);
+            buscarInput.value = option.dataset.nombre; // Sincronizar con nombre
+            buscarInputId.value = option.dataset.productoId;
+            selectId.style.display = 'none';
+        }
+    });
+    
+    // Navegación con Enter en los selects
+    select.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && this.value) {
+            e.preventDefault();
+            this.dispatchEvent(new Event('change'));
+        }
+    });
+    
+    selectId.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && this.value) {
+            e.preventDefault();
+            this.dispatchEvent(new Event('change'));
+        }
+    });
+    
+    // Cerrar los selects al hacer clic fuera
+    document.addEventListener('click', function(e) {
+        if (!buscarInput.contains(e.target) && !select.contains(e.target)) {
+            select.style.display = 'none';
+        }
+        if (!buscarInputId.contains(e.target) && !selectId.contains(e.target)) {
+            selectId.style.display = 'none';
+        }
+    });
+}
+
+function mostrarInfoProducto(option) {
+    const precio = parseFloat(option.dataset.precio);
+    const stock = parseFloat(option.dataset.stock);
+    
+    document.getElementById('productoPrecioInfo').textContent = `$${precio.toFixed(2)}`;
+    document.getElementById('productoStockInfo').textContent = `${stock.toFixed(2)} lbs`;
+    document.getElementById('infoProducto').style.display = 'block';
+    
+    // Enfocar el campo de cantidad
+    document.getElementById('productoCantidad').focus();
+}
+
+function ocultarInfoProducto() {
+    document.getElementById('infoProducto').style.display = 'none';
+    document.getElementById('productoPrecioInfo').textContent = '$0.00';
+    document.getElementById('productoStockInfo').textContent = '0.00 lbs';
+    document.getElementById('buscarProducto').value = '';
+    document.getElementById('buscarProductoId').value = '';
+}
+
 function agregarProducto() {
     const select = document.getElementById('productoSelect');
-    const cantidad = parseInt(document.getElementById('productoCantidad').value);
+    const selectId = document.getElementById('productoSelectId');
+    const cantidad = parseFloat(document.getElementById('productoCantidad').value);
+    const buscarInput = document.getElementById('buscarProducto');
     
-    if (!select.value || !cantidad || cantidad <= 0) {
-        showNotification('Selecciona un producto y una cantidad válida', 'warning');
+    // Determinar cuál select tiene un valor seleccionado
+    const selectActivo = select.value ? select : (selectId.value ? selectId : null);
+    
+    if (!selectActivo || !selectActivo.value || !cantidad || cantidad <= 0) {
+        showNotification('Selecciona un producto y una cantidad válida (en libras)', 'warning');
         return;
     }
     
-    const option = select.options[select.selectedIndex];
-    const productoId = select.value;
+    const option = selectActivo.options[selectActivo.selectedIndex];
+    const productoId = selectActivo.value;
     const nombre = option.dataset.nombre;
     const precio = parseFloat(option.dataset.precio);
-    const stock = parseInt(option.dataset.stock);
+    const stock = parseFloat(option.dataset.stock);
     
-    if (cantidad > stock) {
-        showNotification('No hay suficiente stock disponible', 'error');
+    // Verificar stock considerando lo que ya está en el carrito
+    const productoExistente = productosAgregados.find(p => p.producto_id === productoId);
+    const cantidadEnCarrito = productoExistente ? productoExistente.cantidad : 0;
+    const cantidadTotal = cantidadEnCarrito + cantidad;
+    
+    if (cantidadTotal > stock) {
+        const disponible = stock - cantidadEnCarrito;
+        showNotification(`Stock insuficiente. Solo hay ${disponible.toFixed(2)} lbs disponibles (ya tienes ${cantidadEnCarrito.toFixed(2)} lbs en el carrito)`, 'error');
         return;
     }
     
-    const productoExistente = productosAgregados.find(p => p.producto_id === productoId);
     if (productoExistente) {
         productoExistente.cantidad += cantidad;
     } else {
@@ -100,8 +274,14 @@ function agregarProducto() {
     mostrarProductosAgregados();
     calcularTotal();
     
+    // Limpiar campos
     select.value = '';
+    selectId.value = '';
     document.getElementById('productoCantidad').value = 1;
+    ocultarInfoProducto();
+    buscarInput.focus();
+    
+    showNotification(`${nombre} agregado al carrito (${cantidad.toFixed(2)} lbs)`, 'success');
 }
 
 function mostrarProductosAgregados() {
@@ -115,10 +295,10 @@ function mostrarProductosAgregados() {
     tbody.innerHTML = productosAgregados.map((producto, index) => `
         <tr>
             <td>${producto.nombre}</td>
-            <td>${producto.cantidad}</td>
-            <td>$${producto.precio.toFixed(2)}</td>
-            <td>$${(producto.precio * producto.cantidad).toFixed(2)}</td>
-            <td>
+            <td class="text-center">${producto.cantidad.toFixed(2)} lbs</td>
+            <td class="text-end">$${producto.precio.toFixed(2)}</td>
+            <td class="text-end">$${(producto.precio * producto.cantidad).toFixed(2)}</td>
+            <td class="text-center">
                 <button class="btn btn-danger btn-sm" onclick="eliminarProductoAgregado(${index})">
                     <i class="fas fa-trash"></i>
                 </button>
