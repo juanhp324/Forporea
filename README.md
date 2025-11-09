@@ -14,7 +14,7 @@ Sistema integral para la gestión de productos, proveedores y facturación de em
 ## Estructura del Proyecto
 
 ```
-Aplicacion/
+Forporea/
 ├── presentation/          # Capa de presentación
 │   ├── templates/        # Plantillas HTML
 │   │   ├── Auth/        # Login
