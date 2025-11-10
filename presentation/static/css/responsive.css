@@ -5,12 +5,18 @@
 /* Tablas Responsive */
 @media (max-width: 768px) {
     /* Ocultar tabla normal en móvil */
-    .table-professional {
-        display: none;
+    .table-professional,
+    table.table-professional,
+    .table-container table.table-professional {
+        display: none !important;
     }
     
     /* Mostrar versión mobile */
     .table-mobile {
+        display: block !important;
+    }
+    
+    .table-container .table-mobile {
         display: block !important;
     }
     

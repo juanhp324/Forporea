@@ -14,11 +14,15 @@ async function cargarInformacionUsuario() {
             document.getElementById('userEmail').textContent = result.email;
             document.getElementById('userRol').textContent = result.rol;
             
-            // Actualizar versión en el navbar
+            // Actualizar versión en el navbar y dashboard
             if (result.version && result.version.version) {
                 const versionElement = document.getElementById('appVersion');
                 if (versionElement) {
                     versionElement.textContent = 'v' + result.version.version;
+                }
+                const dashboardVersionElement = document.getElementById('dashboardVersion');
+                if (dashboardVersionElement) {
+                    dashboardVersionElement.textContent = result.version.version;
                 }
             }
         }
