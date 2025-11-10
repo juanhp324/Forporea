@@ -8,8 +8,6 @@ async function cargarInformacionUsuario() {
         const response = await fetch('/get_user_info');
         const result = await response.json();
         
-        console.log('Inicio.js - Respuesta completa:', result);
-        
         if (result.success) {
             document.getElementById('userName').textContent = result.nombre;
             document.getElementById('userEmail').textContent = result.user;
@@ -20,12 +18,11 @@ async function cargarInformacionUsuario() {
                 const versionElement = document.getElementById('appVersion');
                 if (versionElement) {
                     versionElement.textContent = 'v' + result.version.version;
-                    console.log('Inicio.js - Versión actualizada a:', result.version.version);
                 }
             }
         }
     } catch (error) {
-        console.error('Inicio.js - Error:', error);
+        // Error al cargar información del usuario
     }
 }
 
@@ -57,8 +54,6 @@ async function cargarEstadisticas() {
             let facturasHoy = 0;
             let ventasHoy = 0;
             
-            console.log('Fecha de hoy:', hoyStr);
-            
             facturasData.facturas.forEach(factura => {
                 // Extraer solo la fecha (YYYY-MM-DD) de la factura
                 let facturaFecha = '';
@@ -67,18 +62,12 @@ async function cargarEstadisticas() {
                     facturaFecha = factura.fecha.split(' ')[0];
                 }
                 
-                console.log('Comparando:', facturaFecha, 'con', hoyStr, '| Total:', factura.total);
-                
                 if (facturaFecha === hoyStr) {
                     facturasHoy++;
                     const total = parseFloat(factura.total || 0);
                     ventasHoy += total;
-                    console.log('✓ Factura de hoy encontrada! Total:', total);
                 }
             });
-            
-            console.log('Facturas de hoy:', facturasHoy);
-            console.log('Total ventas de hoy:', ventasHoy);
             
             // Actualizar facturas de hoy
             document.getElementById('statsFacturas').textContent = facturasHoy;
@@ -88,6 +77,6 @@ async function cargarEstadisticas() {
                 '$' + ventasHoy.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
         }
     } catch (error) {
-        console.error('Error al cargar estadísticas:', error);
+        // Error al cargar estadísticas
     }
 }

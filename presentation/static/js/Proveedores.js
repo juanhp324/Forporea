@@ -2,10 +2,12 @@ let proveedores = [];
 let modoEdicion = false;
 let proveedorIdEditar = null;
 let permisos = {};
+let proveedoresFiltrados = [];
 
 document.addEventListener('DOMContentLoaded', async function() {
     await cargarPermisos();
     await cargarProveedores();
+    configurarBusqueda();
 });
 
 async function cargarPermisos() {
@@ -228,4 +230,109 @@ async function verDetalleProveedor(id) {
 
 function mostrarMensaje(mensaje, tipo) {
     showNotification(mensaje, tipo);
+}
+
+// ============================================
+// FUNCIONALIDAD DE BÚSQUEDA
+// ============================================
+
+function configurarBusqueda() {
+    const inputNombre = document.getElementById('buscarProveedorNombre');
+    const inputId = document.getElementById('buscarProveedorId');
+    
+    if (inputNombre) {
+        inputNombre.addEventListener('input', function() {
+            if (this.value.trim()) {
+                document.getElementById('buscarProveedorId').value = '';
+            }
+            buscarProveedoresFunc();
+        });
+    }
+    
+    if (inputId) {
+        inputId.addEventListener('input', function() {
+            if (this.value.trim()) {
+                document.getElementById('buscarProveedorNombre').value = '';
+            }
+            buscarProveedoresFunc();
+        });
+    }
+}
+
+function buscarProveedoresFunc() {
+    const busquedaNombre = document.getElementById('buscarProveedorNombre').value.trim().toLowerCase();
+    const busquedaId = document.getElementById('buscarProveedorId').value.trim().toLowerCase();
+    
+    if (!busquedaNombre && !busquedaId) {
+        proveedoresFiltrados = proveedores;
+        mostrarProveedoresFiltrados();
+        return;
+    }
+    
+    proveedoresFiltrados = proveedores.filter(proveedor => {
+        if (busquedaNombre) {
+            return proveedor.nombre.toLowerCase().includes(busquedaNombre);
+        }
+        if (busquedaId) {
+            return proveedor._id.toLowerCase().includes(busquedaId);
+        }
+        return false;
+    });
+    
+    mostrarProveedoresFiltrados();
+}
+
+function mostrarProveedoresFiltrados() {
+    const tbody = document.getElementById('tablaProveedores');
+    const proveedoresAMostrar = proveedoresFiltrados.length > 0 || 
+                                document.getElementById('buscarProveedorNombre').value.trim() || 
+                                document.getElementById('buscarProveedorId').value.trim() 
+                                ? proveedoresFiltrados : proveedores;
+    
+    if (proveedoresAMostrar.length === 0) {
+        const busquedaNombre = document.getElementById('buscarProveedorNombre').value.trim();
+        const busquedaId = document.getElementById('buscarProveedorId').value.trim();
+        
+        if (busquedaNombre || busquedaId) {
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4"><i class="fas fa-search fa-2x text-muted mb-2 d-block"></i><p class="text-muted">No se encontraron proveedores con ese criterio de búsqueda</p></td></tr>';
+        } else {
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center">No hay proveedores registrados</td></tr>';
+        }
+        return;
+    }
+    
+    const puedeEditar = permisos.includes('editar');
+    const puedeEliminar = permisos.includes('eliminar');
+    
+    tbody.innerHTML = proveedoresAMostrar.map(proveedor => `
+        <tr>
+            <td><strong>${proveedor.nombre}</strong></td>
+            <td><span class="badge-contacto">${proveedor.contacto}</span></td>
+            <td><span class="badge-telefono">${proveedor.telefono || 'N/A'}</span></td>
+            <td><span class="badge-email">${proveedor.email || 'N/A'}</span></td>
+            <td><span class="badge-direccion">${proveedor.direccion || 'N/A'}</span></td>
+            <td class="text-center">
+                <button class="btn-action-clean btn-info" onclick="verDetalleProveedor('${proveedor._id}')" title="Ver detalle">
+                    <i class="fas fa-eye"></i>
+                </button>
+                ${puedeEditar ? `
+                <button class="btn-action-clean btn-warning" onclick="editarProveedor('${proveedor._id}')" title="Editar">
+                    <i class="fas fa-edit"></i>
+                </button>
+                ` : ''}
+                ${puedeEliminar ? `
+                <button class="btn-action-clean btn-danger" onclick="eliminarProveedor('${proveedor._id}')" title="Eliminar">
+                    <i class="fas fa-trash"></i>
+                </button>
+                ` : ''}
+            </td>
+        </tr>
+    `).join('');
+}
+
+function limpiarBusquedaProveedor() {
+    document.getElementById('buscarProveedorNombre').value = '';
+    document.getElementById('buscarProveedorId').value = '';
+    proveedoresFiltrados = proveedores;
+    mostrarProveedores();
 }

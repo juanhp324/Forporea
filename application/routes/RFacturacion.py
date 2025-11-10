@@ -40,10 +40,18 @@ def get_facturas():
                     'subtotal': prod.get('subtotal', 0)
                 })
             
+            # Formatear fecha de manera segura
+            fecha_str = ''
+            try:
+                if factura.get('fecha'):
+                    fecha_str = factura.get('fecha').strftime('%d/%m/%Y %H:%M')
+            except:
+                fecha_str = str(factura.get('fecha', ''))
+            
             facturas_list.append({
                 '_id': str(factura['_id']),
                 'cliente': factura.get('cliente', ''),
-                'fecha': factura.get('fecha').strftime('%Y-%m-%d %H:%M') if factura.get('fecha') else '',
+                'fecha': fecha_str,
                 'total': factura.get('total', 0),
                 'productos': productos_serializables
             })

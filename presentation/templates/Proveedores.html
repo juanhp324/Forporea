@@ -274,6 +274,29 @@
                 </button>
             </div>
             
+            <!-- Barra de búsqueda -->
+            <div style="padding: 1rem; background: #f8f9fa; border-bottom: 1px solid #e5e7eb;">
+                <div class="row g-2">
+                    <div class="col-md-5">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white"><i class="fas fa-search"></i></span>
+                            <input type="text" class="form-control" id="buscarProveedorNombre" placeholder="Buscar por nombre..." autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white"><i class="fas fa-barcode"></i></span>
+                            <input type="text" class="form-control" id="buscarProveedorId" placeholder="Buscar por ID..." autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-secondary w-100" onclick="limpiarBusquedaProveedor()">
+                            <i class="fas fa-times me-1"></i>Limpiar
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Tabla con scroll -->
             <div class="table-container">
                 <table class="table table-professional">

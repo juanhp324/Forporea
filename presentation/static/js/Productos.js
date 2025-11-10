@@ -3,11 +3,13 @@ let proveedores = [];
 let modoEdicion = false;
 let productoIdEditar = null;
 let permisos = {};
+let productosFiltrados = [];
 
 document.addEventListener('DOMContentLoaded', async function() {
     await cargarPermisos();
     await cargarProductos();
     await cargarProveedores();
+    configurarBusqueda();
 });
 
 async function cargarPermisos() {
@@ -260,4 +262,109 @@ async function verDetalleProducto(id) {
 
 function mostrarMensaje(mensaje, tipo) {
     showNotification(mensaje, tipo);
+}
+
+// ============================================
+// FUNCIONALIDAD DE BÚSQUEDA
+// ============================================
+
+function configurarBusqueda() {
+    const inputNombre = document.getElementById('buscarProductoNombre');
+    const inputId = document.getElementById('buscarProductoId');
+    
+    if (inputNombre) {
+        inputNombre.addEventListener('input', function() {
+            if (this.value.trim()) {
+                document.getElementById('buscarProductoId').value = '';
+            }
+            buscarProductos();
+        });
+    }
+    
+    if (inputId) {
+        inputId.addEventListener('input', function() {
+            if (this.value.trim()) {
+                document.getElementById('buscarProductoNombre').value = '';
+            }
+            buscarProductos();
+        });
+    }
+}
+
+function buscarProductos() {
+    const busquedaNombre = document.getElementById('buscarProductoNombre').value.trim().toLowerCase();
+    const busquedaId = document.getElementById('buscarProductoId').value.trim().toLowerCase();
+    
+    if (!busquedaNombre && !busquedaId) {
+        productosFiltrados = productos;
+        mostrarProductosFiltrados();
+        return;
+    }
+    
+    productosFiltrados = productos.filter(producto => {
+        if (busquedaNombre) {
+            return producto.nombre.toLowerCase().includes(busquedaNombre);
+        }
+        if (busquedaId) {
+            return producto._id.toLowerCase().includes(busquedaId);
+        }
+        return false;
+    });
+    
+    mostrarProductosFiltrados();
+}
+
+function mostrarProductosFiltrados() {
+    const tbody = document.getElementById('tablaProductos');
+    const productosAMostrar = productosFiltrados.length > 0 || 
+                              document.getElementById('buscarProductoNombre').value.trim() || 
+                              document.getElementById('buscarProductoId').value.trim() 
+                              ? productosFiltrados : productos;
+    
+    if (productosAMostrar.length === 0) {
+        const busquedaNombre = document.getElementById('buscarProductoNombre').value.trim();
+        const busquedaId = document.getElementById('buscarProductoId').value.trim();
+        
+        if (busquedaNombre || busquedaId) {
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4"><i class="fas fa-search fa-2x text-muted mb-2 d-block"></i><p class="text-muted">No se encontraron productos con ese criterio de búsqueda</p></td></tr>';
+        } else {
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center">No hay productos registrados</td></tr>';
+        }
+        return;
+    }
+    
+    const puedeEditar = permisos.includes('editar');
+    const puedeEliminar = permisos.includes('eliminar');
+    
+    tbody.innerHTML = productosAMostrar.map(producto => `
+        <tr>
+            <td><strong>${producto.nombre}</strong></td>
+            <td>${producto.descripcion || 'N/A'}</td>
+            <td><span class="badge-precio">$${producto.precio.toFixed(2)}/lb</span></td>
+            <td><span class="badge-stock-display">${parseFloat(producto.stock).toFixed(2)} lbs</span></td>
+            <td><span class="badge-proveedor">${producto.proveedor_nombre}</span></td>
+            <td class="text-center">
+                <button class="btn-action-clean btn-info" onclick="verDetalleProducto('${producto._id}')" title="Ver detalle">
+                    <i class="fas fa-eye"></i>
+                </button>
+                ${puedeEditar ? `
+                <button class="btn-action-clean btn-warning" onclick="editarProducto('${producto._id}')" title="Editar">
+                    <i class="fas fa-edit"></i>
+                </button>
+                ` : ''}
+                ${puedeEliminar ? `
+                <button class="btn-action-clean btn-danger" onclick="eliminarProducto('${producto._id}')" title="Eliminar">
+                    <i class="fas fa-trash"></i>
+                </button>
+                ` : ''}
+            </td>
+        </tr>
+    `).join('');
+}
+
+function limpiarBusqueda() {
+    document.getElementById('buscarProductoNombre').value = '';
+    document.getElementById('buscarProductoId').value = '';
+    productosFiltrados = productos;
+    mostrarProductos();
 }
