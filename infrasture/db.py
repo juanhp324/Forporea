@@ -1,10 +1,6 @@
 from pymongo import MongoClient
 import threading
 import os
-from dotenv import load_dotenv
-
-# Cargar variables de entorno
-load_dotenv()
 
 # Configuración de la conexión
 MONGODB_URI = os.getenv("MONGODB_URI", "mongodb://localhost:27017/")
