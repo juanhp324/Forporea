@@ -58,15 +58,18 @@ async function cargarProveedores() {
 
 function mostrarProveedores() {
     const tbody = document.getElementById('tablaProveedores');
+    const mobileContainer = document.getElementById('tablaProveedoresMobile');
     
     if (proveedores.length === 0) {
         tbody.innerHTML = '<tr><td colspan="6" class="text-center">No hay proveedores registrados</td></tr>';
+        mobileContainer.innerHTML = '<div class="text-center py-5"><p class="text-muted">No hay proveedores registrados</p></div>';
         return;
     }
     
     const puedeEditar = permisos.includes('editar');
     const puedeEliminar = permisos.includes('eliminar');
     
+    // Versión Desktop (Tabla)
     tbody.innerHTML = proveedores.map(proveedor => `
         <tr>
             <td><strong>${proveedor.nombre}</strong></td>
@@ -90,6 +93,49 @@ function mostrarProveedores() {
                 ` : ''}
             </td>
         </tr>
+    `).join('');
+    
+    // Versión Móvil (Cards)
+    mobileContainer.innerHTML = proveedores.map(proveedor => `
+        <div class="mobile-card">
+            <div class="mobile-card-header">
+                <div class="mobile-card-title">${proveedor.nombre}</div>
+                <span class="badge bg-success"><i class="fas fa-truck"></i></span>
+            </div>
+            <div class="mobile-card-body">
+                <div class="mobile-card-row">
+                    <span class="mobile-card-label"><i class="fas fa-user me-1"></i>Contacto</span>
+                    <span class="mobile-card-value">${proveedor.contacto}</span>
+                </div>
+                <div class="mobile-card-row">
+                    <span class="mobile-card-label"><i class="fas fa-phone me-1"></i>Teléfono</span>
+                    <span class="mobile-card-value">${proveedor.telefono || 'N/A'}</span>
+                </div>
+                <div class="mobile-card-row">
+                    <span class="mobile-card-label"><i class="fas fa-envelope me-1"></i>Email</span>
+                    <span class="mobile-card-value">${proveedor.email || 'N/A'}</span>
+                </div>
+                <div class="mobile-card-row">
+                    <span class="mobile-card-label"><i class="fas fa-map-marker-alt me-1"></i>Dirección</span>
+                    <span class="mobile-card-value">${proveedor.direccion || 'N/A'}</span>
+                </div>
+            </div>
+            <div class="mobile-card-actions">
+                <button class="btn btn-sm btn-info" onclick="verDetalleProveedor('${proveedor._id}')">
+                    <i class="fas fa-eye me-1"></i>Ver
+                </button>
+                ${puedeEditar ? `
+                <button class="btn btn-sm btn-warning" onclick="editarProveedor('${proveedor._id}')">
+                    <i class="fas fa-edit me-1"></i>Editar
+                </button>
+                ` : ''}
+                ${puedeEliminar ? `
+                <button class="btn btn-sm btn-danger" onclick="eliminarProveedor('${proveedor._id}')">
+                    <i class="fas fa-trash me-1"></i>Eliminar
+                </button>
+                ` : ''}
+            </div>
+        </div>
     `).join('');
     
     // Ocultar botón de nuevo proveedor si no tiene permiso de crear

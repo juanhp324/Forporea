@@ -5,259 +5,269 @@
 {% block extra_css %}
 <style>
     .dashboard-container {
-        padding: 2rem;
+        padding: 1rem 1.5rem;
         max-width: 1400px;
         margin: 0 auto;
+        height: calc(100vh - 80px);
+        overflow: hidden;
     }
     
-    .welcome-section {
+    /* Welcome Card Compacto */
+    .welcome-card-compact {
         background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
         color: white;
-        padding: 2.5rem;
-        border-radius: 16px;
-        margin-bottom: 2rem;
-        box-shadow: 0 4px 20px rgba(13, 110, 253, 0.2);
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(13, 110, 253, 0.2);
     }
     
-    .welcome-section h1 {
-        font-size: 2rem;
+    .welcome-card-compact h3 {
+        font-size: 1.5rem;
         font-weight: 700;
-        margin-bottom: 0.5rem;
     }
     
-    .welcome-section p {
-        font-size: 1rem;
-        opacity: 0.95;
-        margin: 0;
+    .version-badge {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 600;
     }
     
-    .stats-card {
+    /* Stats Cards Compacto */
+    .stats-card-compact {
         background: white;
         border: 1px solid #e5e7eb;
-        border-radius: 12px;
-        padding: 1.5rem;
-        transition: all 0.3s ease;
-        height: 100%;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    }
-    
-    .stats-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    }
-    
-    .stats-card-header {
+        border-radius: 10px;
+        padding: 0.875rem;
         display: flex;
         align-items: center;
-        gap: 1rem;
-        margin-bottom: 1rem;
+        gap: 0.75rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        height: 100%;
     }
     
-    .stats-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: 12px;
+    .stats-card-compact:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .stats-icon-compact {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.5rem;
+        font-size: 1.25rem;
         color: white;
+        flex-shrink: 0;
     }
     
-    .stats-icon.blue { background: #0d6efd; }
-    .stats-icon.green { background: #198754; }
-    .stats-icon.orange { background: #fd7e14; }
-    .stats-icon.purple { background: #6f42c1; }
+    .stats-icon-compact.blue { background: #0d6efd; }
+    .stats-icon-compact.green { background: #198754; }
+    .stats-icon-compact.orange { background: #fd7e14; }
+    .stats-icon-compact.purple { background: #6f42c1; }
     
-    .stats-card h6 {
-        font-size: 0.875rem;
+    .stats-content-compact h6 {
+        font-size: 0.7rem;
         color: #6b7280;
         font-weight: 600;
-        margin: 0;
-        text-transform: uppercase;
         letter-spacing: 0.5px;
     }
     
-    .stats-card .value {
-        font-size: 1.75rem;
+    .value-compact {
+        font-size: 1.5rem;
         font-weight: 700;
         color: #111827;
-        margin: 0;
     }
     
-    .quick-actions {
+    /* Quick Actions Compacto */
+    .quick-actions-compact {
         background: white;
         border: 1px solid #e5e7eb;
-        border-radius: 12px;
-        padding: 1.5rem;
+        border-radius: 10px;
+        padding: 1rem;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        height: 100%;
     }
     
-    .quick-actions h5 {
-        font-size: 1.125rem;
+    .section-title {
+        font-size: 0.95rem;
         font-weight: 700;
         color: #111827;
-        margin-bottom: 1.5rem;
-    }
-    
-    .action-btn {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 1rem 1.25rem;
-        background: white;
-        border: 2px solid #e5e7eb;
-        border-radius: 10px;
-        text-decoration: none;
-        color: #374151;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        width: 100%;
         margin-bottom: 0.75rem;
     }
     
-    .action-btn:hover {
+    .action-btn-compact {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 0.75rem;
+        background: white;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        text-decoration: none;
+        color: #374151;
+        font-weight: 600;
+        font-size: 0.875rem;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+    
+    .action-btn-compact:hover {
         border-color: #0d6efd;
         background: #f0f7ff;
         color: #0d6efd;
-        transform: translateX(4px);
+        transform: scale(1.02);
     }
     
-    .action-btn i {
-        font-size: 1.25rem;
-        width: 24px;
-        text-align: center;
+    .action-btn-compact i {
+        font-size: 1.1rem;
     }
     
-    .info-section {
+    /* Info Section Compacto */
+    .info-section-compact {
         background: white;
         border: 1px solid #e5e7eb;
-        border-radius: 12px;
-        padding: 1.5rem;
+        border-radius: 10px;
+        padding: 1rem;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        height: 100%;
     }
     
-    .info-section h5 {
-        font-size: 1.125rem;
-        font-weight: 700;
-        color: #111827;
-        margin-bottom: 1.25rem;
+    .info-grid {
+        display: grid;
+        gap: 0.5rem;
     }
     
-    .info-item {
+    .info-item-compact {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0.875rem 0;
+        padding: 0.5rem 0;
         border-bottom: 1px solid #f3f4f6;
     }
     
-    .info-item:last-child {
+    .info-item-compact:last-child {
         border-bottom: none;
     }
     
-    .info-label {
+    .info-label-compact {
         font-weight: 600;
         color: #6b7280;
-        font-size: 0.875rem;
+        font-size: 0.8rem;
     }
     
-    .info-value {
+    .info-value-compact {
         color: #111827;
         font-weight: 600;
-        font-size: 0.875rem;
+        font-size: 0.8rem;
+        text-align: right;
+    }
+    
+    /* Responsive */
+    @media (max-width: 992px) {
+        .dashboard-container {
+            height: auto;
+            overflow: visible;
+        }
     }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="dashboard-container">
-    <!-- Welcome Section -->
-    <div class="welcome-section">
-        <h1>
-            <i class="fas fa-home me-2"></i>
-            Bienvenido, <span id="userName">Usuario</span>
-        </h1>
-        <p>Panel de Control - Sistema de Gestión Forporea</p>
-    </div>
-    
-    <!-- Stats Cards -->
-    <div class="row mb-4">
-        <div class="col-md-6 col-lg-3 mb-3">
-            <div class="stats-card">
-                <div class="stats-card-header">
-                    <div class="stats-icon blue">
-                        <i class="fas fa-box"></i>
-                    </div>
-                    <h6>Productos</h6>
-                </div>
-                <p class="value" id="statsProductos">0</p>
+    <!-- Welcome Section - Compacto -->
+    <div class="welcome-card-compact mb-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h3 class="mb-1">Bienvenido, <span id="userName">Usuario</span></h3>
+                <p class="text-muted mb-0 small">Sistema de Gestión de Embutidos</p>
             </div>
-        </div>
-        
-        <div class="col-md-6 col-lg-3 mb-3">
-            <div class="stats-card">
-                <div class="stats-card-header">
-                    <div class="stats-icon green">
-                        <i class="fas fa-truck"></i>
-                    </div>
-                    <h6>Proveedores</h6>
-                </div>
-                <p class="value" id="statsProveedores">0</p>
-            </div>
-        </div>
-        
-        <div class="col-md-6 col-lg-3 mb-3">
-            <div class="stats-card">
-                <div class="stats-card-header">
-                    <div class="stats-icon orange">
-                        <i class="fas fa-file-invoice"></i>
-                    </div>
-                    <h6>Facturas Hoy</h6>
-                </div>
-                <p class="value" id="statsFacturas">0</p>
-            </div>
-        </div>
-        
-        <div class="col-md-6 col-lg-3 mb-3">
-            <div class="stats-card">
-                <div class="stats-card-header">
-                    <div class="stats-icon purple">
-                        <i class="fas fa-dollar-sign"></i>
-                    </div>
-                    <h6>Ventas Hoy</h6>
-                </div>
-                <p class="value" id="statsVentas">$0</p>
-            </div>
+            <div class="version-badge">v<span id="navbarVersion">1.0.0</span></div>
         </div>
     </div>
     
-    <!-- Quick Actions & User Info -->
+    <!-- Stats Cards - Compacto -->
+    <div class="row mb-3">
+        <div class="col-md-6 col-lg-3 mb-2">
+            <div class="stats-card-compact">
+                <div class="stats-icon-compact blue">
+                    <i class="fas fa-box"></i>
+                </div>
+                <div class="stats-content-compact">
+                    <h6 class="mb-0">PRODUCTOS</h6>
+                    <p class="value-compact mb-0" id="statsProductos">0</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3 mb-2">
+            <div class="stats-card-compact">
+                <div class="stats-icon-compact green">
+                    <i class="fas fa-truck"></i>
+                </div>
+                <div class="stats-content-compact">
+                    <h6 class="mb-0">PROVEEDORES</h6>
+                    <p class="value-compact mb-0" id="statsProveedores">0</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3 mb-2">
+            <div class="stats-card-compact">
+                <div class="stats-icon-compact orange">
+                    <i class="fas fa-file-invoice"></i>
+                </div>
+                <div class="stats-content-compact">
+                    <h6 class="mb-0">FACTURAS HOY</h6>
+                    <p class="value-compact mb-0" id="statsFacturas">0</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3 mb-2">
+            <div class="stats-card-compact">
+                <div class="stats-icon-compact purple">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="stats-content-compact">
+                    <h6 class="mb-0">VENTAS HOY</h6>
+                    <p class="value-compact mb-0" id="statsVentas">$0</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quick Actions & User Info - Rediseñado -->
     <div class="row">
-        <div class="col-lg-8 mb-4">
-            <div class="quick-actions">
-                <h5><i class="fas fa-bolt me-2"></i>Acciones Rápidas</h5>
-                <div class="row">
-                    <div class="col-md-6">
-                        <a href="/facturacion" class="action-btn">
+        <div class="col-lg-8 mb-2">
+            <div class="quick-actions-compact">
+                <h6 class="section-title"><i class="fas fa-bolt me-2"></i>Acciones Rápidas</h6>
+                <div class="row g-2">
+                    <div class="col-6">
+                        <a href="/facturacion" class="action-btn-compact">
                             <i class="fas fa-plus-circle"></i>
                             <span>Nueva Factura</span>
                         </a>
                     </div>
-                    <div class="col-md-6">
-                        <a href="/productos" class="action-btn">
+                    <div class="col-6">
+                        <a href="/productos" class="action-btn-compact">
                             <i class="fas fa-box"></i>
                             <span>Ver Productos</span>
                         </a>
                     </div>
-                    <div class="col-md-6">
-                        <a href="/proveedores" class="action-btn">
+                    <div class="col-6">
+                        <a href="/proveedores" class="action-btn-compact">
                             <i class="fas fa-truck"></i>
                             <span>Ver Proveedores</span>
                         </a>
                     </div>
-                    <div class="col-md-6">
-                        <a href="/facturas" class="action-btn">
+                    <div class="col-6">
+                        <a href="/facturas" class="action-btn-compact">
                             <i class="fas fa-receipt"></i>
                             <span>Ver Facturas</span>
                         </a>
@@ -266,24 +276,26 @@
             </div>
         </div>
         
-        <div class="col-lg-4 mb-4">
-            <div class="info-section">
-                <h5><i class="fas fa-user-circle me-2"></i>Mi Información</h5>
-                <div class="info-item">
-                    <span class="info-label">User</span>
-                    <span class="info-value" id="user">-</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Email</span>
-                    <span class="info-value" id="userEmail">-</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Rol</span>
-                    <span class="info-value" id="userRol">-</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Estado</span>
-                    <span class="info-value text-success">Activo</span>
+        <div class="col-lg-4 mb-2">
+            <div class="info-section-compact">
+                <h6 class="section-title"><i class="fas fa-user-circle me-2"></i>Mi Información</h6>
+                <div class="info-grid">
+                    <div class="info-item-compact">
+                        <span class="info-label-compact">User</span>
+                        <span class="info-value-compact" id="user">-</span>
+                    </div>
+                    <div class="info-item-compact">
+                        <span class="info-label-compact">Email</span>
+                        <span class="info-value-compact" id="userEmail">-</span>
+                    </div>
+                    <div class="info-item-compact">
+                        <span class="info-label-compact">Rol</span>
+                        <span class="info-value-compact" id="userRol">-</span>
+                    </div>
+                    <div class="info-item-compact">
+                        <span class="info-label-compact">Estado</span>
+                        <span class="info-value-compact text-success">Activo</span>
+                    </div>
                 </div>
             </div>
         </div>

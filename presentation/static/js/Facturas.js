@@ -226,6 +226,11 @@ function mostrarFacturasFiltradas() {
                         <p class="text-muted">No se encontraron facturas en el rango de fechas seleccionado</p>
                     </td>
                 </tr>`;
+            mobileContainer.innerHTML = `
+                <div class="text-center py-5">
+                    <i class="fas fa-calendar-times fa-2x text-muted mb-3"></i>
+                    <p class="text-muted">No se encontraron facturas en el rango de fechas seleccionado</p>
+                </div>`;
         } else {
             tbody.innerHTML = `
                 <tr>
@@ -234,10 +239,16 @@ function mostrarFacturasFiltradas() {
                         <p class="text-muted">No hay facturas registradas</p>
                     </td>
                 </tr>`;
+            mobileContainer.innerHTML = `
+                <div class="text-center py-5">
+                    <i class="fas fa-inbox fa-2x text-muted mb-3"></i>
+                    <p class="text-muted">No hay facturas registradas</p>
+                </div>`;
         }
         return;
     }
     
+    // Versión Desktop (Tabla)
     tbody.innerHTML = facturasAMostrar.map(factura => `
         <tr>
             <td><strong>${factura.cliente}</strong></td>
@@ -253,6 +264,38 @@ function mostrarFacturasFiltradas() {
                 </button>
             </td>
         </tr>
+    `).join('');
+    
+    // Versión Móvil (Cards)
+    mobileContainer.innerHTML = facturasAMostrar.map(factura => `
+        <div class="mobile-card">
+            <div class="mobile-card-header">
+                <div class="mobile-card-title">${factura.cliente}</div>
+                <span class="badge bg-success">$${factura.total.toFixed(2)}</span>
+            </div>
+            <div class="mobile-card-body">
+                <div class="mobile-card-row">
+                    <span class="mobile-card-label"><i class="fas fa-calendar me-1"></i>Fecha</span>
+                    <span class="mobile-card-value">${factura.fecha}</span>
+                </div>
+                <div class="mobile-card-row">
+                    <span class="mobile-card-label"><i class="fas fa-box me-1"></i>Productos</span>
+                    <span class="mobile-card-value">${factura.productos.length} producto(s)</span>
+                </div>
+                <div class="mobile-card-row">
+                    <span class="mobile-card-label"><i class="fas fa-dollar-sign me-1"></i>Total</span>
+                    <span class="mobile-card-value text-success fw-bold">$${factura.total.toFixed(2)}</span>
+                </div>
+            </div>
+            <div class="mobile-card-actions">
+                <button class="btn btn-sm btn-info" onclick="verDetalleFactura('${factura._id}')">
+                    <i class="fas fa-eye me-1"></i>Ver Detalle
+                </button>
+                <button class="btn btn-sm btn-success" onclick="descargarFacturaPDF('${factura._id}')">
+                    <i class="fas fa-download me-1"></i>PDF
+                </button>
+            </div>
+        </div>
     `).join('');
 }
 
