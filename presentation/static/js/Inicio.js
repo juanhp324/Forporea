@@ -10,7 +10,8 @@ async function cargarInformacionUsuario() {
         
         if (result.success) {
             document.getElementById('userName').textContent = result.nombre;
-            document.getElementById('userEmail').textContent = result.user;
+            document.getElementById('user').textContent = result.user;
+            document.getElementById('userEmail').textContent = result.email;
             document.getElementById('userRol').textContent = result.rol;
             
             // Actualizar versión en el navbar
