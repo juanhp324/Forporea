@@ -27,14 +27,7 @@ db.usuarios.insert_many([
         "email": "maria@forporea.com",
         "user": "maria",
         "password": "maria123",
-        "rol": "vendedor"
-    },
-    {
-        "nombre": "Carlos Usuario",
-        "email": "carlos@forporea.com",
-        "user": "carlos",
-        "password": "carlos123",
-        "rol": "usuario"
+        "rol": "user"
     }
 ])
 
@@ -84,84 +77,84 @@ proveedor4 = db.proveedores.find_one({"nombre": "Productos Cárnicos del Sur"})[
 db.productos.insert_many([
     {
         "nombre": "Chorizo Parrillero Premium",
-        "descripcion": "Chorizo de cerdo premium especial para parrilla, 500g",
+        "descripcion": "Chorizo de cerdo premium especial para parrilla",
         "precio": 15.50,
         "stock": 150,
         "proveedor_id": proveedor1
     },
     {
         "nombre": "Salchichón Español",
-        "descripcion": "Salchichón tipo español curado, 300g",
+        "descripcion": "Salchichón tipo español curado",
         "precio": 22.00,
         "stock": 80,
         "proveedor_id": proveedor3
     },
     {
         "nombre": "Jamón Serrano",
-        "descripcion": "Jamón serrano curado 12 meses, 200g",
+        "descripcion": "Jamón serrano curado 12 meses",
         "precio": 35.00,
         "stock": 45,
         "proveedor_id": proveedor3
     },
     {
         "nombre": "Salchicha Frankfurt",
-        "descripcion": "Salchicha tipo Frankfurt, paquete de 8 unidades",
+        "descripcion": "Salchicha tipo Frankfurt",
         "precio": 8.50,
         "stock": 200,
         "proveedor_id": proveedor2
     },
     {
         "nombre": "Mortadela Italiana",
-        "descripcion": "Mortadela italiana con pistachos, 400g",
+        "descripcion": "Mortadela italiana con pistachos",
         "precio": 12.00,
         "stock": 120,
         "proveedor_id": proveedor2
     },
     {
         "nombre": "Longaniza Casera",
-        "descripcion": "Longaniza artesanal estilo casero, 600g",
+        "descripcion": "Longaniza artesanal estilo casero",
         "precio": 18.00,
         "stock": 90,
         "proveedor_id": proveedor1
     },
     {
         "nombre": "Salami Milano",
-        "descripcion": "Salami tipo Milano, 250g",
+        "descripcion": "Salami tipo Milano",
         "precio": 16.50,
         "stock": 110,
         "proveedor_id": proveedor3
     },
     {
         "nombre": "Butifarra Catalana",
-        "descripcion": "Butifarra catalana tradicional, 500g",
+        "descripcion": "Butifarra catalana tradicional",
         "precio": 14.00,
         "stock": 75,
         "proveedor_id": proveedor4
     },
     {
         "nombre": "Chorizo Español Picante",
-        "descripcion": "Chorizo español picante curado, 400g",
+        "descripcion": "Chorizo español picante curado",
         "precio": 19.00,
         "stock": 95,
         "proveedor_id": proveedor3
     },
     {
         "nombre": "Morcilla de Burgos",
-        "descripcion": "Morcilla de Burgos con arroz, 350g",
+        "descripcion": "Morcilla de Burgos con arroz",
         "precio": 11.50,
         "stock": 60,
         "proveedor_id": proveedor4
     },
     {
         "nombre": "Pepperoni Premium",
-        "descripcion": "Pepperoni premium para pizza, 300g",
+        "descripcion": "Pepperoni premium para pizza",
         "precio": 13.00,
         "stock": 140,
         "proveedor_id": proveedor2
     },
     {
         "nombre": "Salchicha Bratwurst",
-        "descripcion": "Salchicha alemana Bratwurst, 500g",
+        "descripcion": "Salchicha alemana Bratwurst",
         "precio": 17.50,
         "stock": 85,
         "proveedor_id": proveedor1

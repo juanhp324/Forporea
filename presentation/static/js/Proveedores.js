@@ -330,6 +330,7 @@ function buscarProveedoresFunc() {
 
 function mostrarProveedoresFiltrados() {
     const tbody = document.getElementById('tablaProveedores');
+    const mobileContainer = document.getElementById('tablaProveedoresMobile');
     const proveedoresAMostrar = proveedoresFiltrados.length > 0 || 
                                 document.getElementById('buscarProveedorNombre').value.trim() || 
                                 document.getElementById('buscarProveedorId').value.trim() 
@@ -341,8 +342,10 @@ function mostrarProveedoresFiltrados() {
         
         if (busquedaNombre || busquedaId) {
             tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4"><i class="fas fa-search fa-2x text-muted mb-2 d-block"></i><p class="text-muted">No se encontraron proveedores con ese criterio de búsqueda</p></td></tr>';
+            mobileContainer.innerHTML = '<div class="text-center py-5"><i class="fas fa-search fa-2x text-muted mb-3"></i><p class="text-muted">No se encontraron proveedores con ese criterio de búsqueda</p></div>';
         } else {
             tbody.innerHTML = '<tr><td colspan="6" class="text-center">No hay proveedores registrados</td></tr>';
+            mobileContainer.innerHTML = '<div class="text-center py-5"><p class="text-muted">No hay proveedores registrados</p></div>';
         }
         return;
     }
@@ -350,6 +353,7 @@ function mostrarProveedoresFiltrados() {
     const puedeEditar = permisos.includes('editar');
     const puedeEliminar = permisos.includes('eliminar');
     
+    // Versión Desktop (Tabla)
     tbody.innerHTML = proveedoresAMostrar.map(proveedor => `
         <tr>
             <td><strong>${proveedor.nombre}</strong></td>
@@ -373,6 +377,49 @@ function mostrarProveedoresFiltrados() {
                 ` : ''}
             </td>
         </tr>
+    `).join('');
+    
+    // Versión Móvil (Cards)
+    mobileContainer.innerHTML = proveedoresAMostrar.map(proveedor => `
+        <div class="mobile-card">
+            <div class="mobile-card-header">
+                <div class="mobile-card-title">${proveedor.nombre}</div>
+                <span class="badge bg-success"><i class="fas fa-truck"></i></span>
+            </div>
+            <div class="mobile-card-body">
+                <div class="mobile-card-row">
+                    <span class="mobile-card-label"><i class="fas fa-user me-1"></i>Contacto</span>
+                    <span class="mobile-card-value">${proveedor.contacto}</span>
+                </div>
+                <div class="mobile-card-row">
+                    <span class="mobile-card-label"><i class="fas fa-phone me-1"></i>Teléfono</span>
+                    <span class="mobile-card-value">${proveedor.telefono || 'N/A'}</span>
+                </div>
+                <div class="mobile-card-row">
+                    <span class="mobile-card-label"><i class="fas fa-envelope me-1"></i>Email</span>
+                    <span class="mobile-card-value">${proveedor.email || 'N/A'}</span>
+                </div>
+                <div class="mobile-card-row">
+                    <span class="mobile-card-label"><i class="fas fa-map-marker-alt me-1"></i>Dirección</span>
+                    <span class="mobile-card-value">${proveedor.direccion || 'N/A'}</span>
+                </div>
+            </div>
+            <div class="mobile-card-actions">
+                <button class="btn btn-sm btn-info" onclick="verDetalleProveedor('${proveedor._id}')">
+                    <i class="fas fa-eye me-1"></i>Ver
+                </button>
+                ${puedeEditar ? `
+                <button class="btn btn-sm btn-warning" onclick="editarProveedor('${proveedor._id}')">
+                    <i class="fas fa-edit me-1"></i>Editar
+                </button>
+                ` : ''}
+                ${puedeEliminar ? `
+                <button class="btn btn-sm btn-danger" onclick="eliminarProveedor('${proveedor._id}')">
+                    <i class="fas fa-trash me-1"></i>Eliminar
+                </button>
+                ` : ''}
+            </div>
+        </div>
     `).join('');
 }
 

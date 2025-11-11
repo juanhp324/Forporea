@@ -358,6 +358,7 @@ function buscarProductos() {
 
 function mostrarProductosFiltrados() {
     const tbody = document.getElementById('tablaProductos');
+    const mobileContainer = document.getElementById('tablaProductosMobile');
     const productosAMostrar = productosFiltrados.length > 0 || 
                               document.getElementById('buscarProductoNombre').value.trim() || 
                               document.getElementById('buscarProductoId').value.trim() 
@@ -369,8 +370,10 @@ function mostrarProductosFiltrados() {
         
         if (busquedaNombre || busquedaId) {
             tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4"><i class="fas fa-search fa-2x text-muted mb-2 d-block"></i><p class="text-muted">No se encontraron productos con ese criterio de búsqueda</p></td></tr>';
+            mobileContainer.innerHTML = '<div class="text-center py-5"><i class="fas fa-search fa-2x text-muted mb-3"></i><p class="text-muted">No se encontraron productos con ese criterio de búsqueda</p></div>';
         } else {
             tbody.innerHTML = '<tr><td colspan="6" class="text-center">No hay productos registrados</td></tr>';
+            mobileContainer.innerHTML = '<div class="text-center py-5"><p class="text-muted">No hay productos registrados</p></div>';
         }
         return;
     }
@@ -378,6 +381,7 @@ function mostrarProductosFiltrados() {
     const puedeEditar = permisos.includes('editar');
     const puedeEliminar = permisos.includes('eliminar');
     
+    // Versión Desktop (Tabla)
     tbody.innerHTML = productosAMostrar.map(producto => `
         <tr>
             <td><strong>${producto.nombre}</strong></td>
@@ -401,6 +405,45 @@ function mostrarProductosFiltrados() {
                 ` : ''}
             </td>
         </tr>
+    `).join('');
+    
+    // Versión Móvil (Cards)
+    mobileContainer.innerHTML = productosAMostrar.map(producto => `
+        <div class="mobile-card">
+            <div class="mobile-card-header">
+                <div class="mobile-card-title">${producto.nombre}</div>
+                <span class="badge bg-primary">${parseFloat(producto.stock).toFixed(2)} lbs</span>
+            </div>
+            <div class="mobile-card-body">
+                <div class="mobile-card-row">
+                    <span class="mobile-card-label"><i class="fas fa-align-left me-1"></i>Descripción</span>
+                    <span class="mobile-card-value">${producto.descripcion || 'N/A'}</span>
+                </div>
+                <div class="mobile-card-row">
+                    <span class="mobile-card-label"><i class="fas fa-dollar-sign me-1"></i>Precio/Libra</span>
+                    <span class="mobile-card-value text-success fw-bold">$${producto.precio.toFixed(2)}</span>
+                </div>
+                <div class="mobile-card-row">
+                    <span class="mobile-card-label"><i class="fas fa-truck me-1"></i>Proveedor</span>
+                    <span class="mobile-card-value">${producto.proveedor_nombre}</span>
+                </div>
+            </div>
+            <div class="mobile-card-actions">
+                <button class="btn btn-sm btn-info" onclick="verDetalleProducto('${producto._id}')">
+                    <i class="fas fa-eye me-1"></i>Ver
+                </button>
+                ${puedeEditar ? `
+                <button class="btn btn-sm btn-warning" onclick="editarProducto('${producto._id}')">
+                    <i class="fas fa-edit me-1"></i>Editar
+                </button>
+                ` : ''}
+                ${puedeEliminar ? `
+                <button class="btn btn-sm btn-danger" onclick="eliminarProducto('${producto._id}')">
+                    <i class="fas fa-trash me-1"></i>Eliminar
+                </button>
+                ` : ''}
+            </div>
+        </div>
     `).join('');
 }
 
