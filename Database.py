@@ -3,7 +3,7 @@ from bson import ObjectId
 from datetime import datetime
 
 # Conexión a la base de datos
-cluster = MongoClient("mongodb://localhost:27017/")
+cluster = MongoClient("mongodb://root:Servextex5252-@192.168.0.104:27017/?directConnection=true&replicaSet=rs0")
 db = cluster["Forporea"]
 
 # ============================================
