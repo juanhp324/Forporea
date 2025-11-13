@@ -1,5 +1,6 @@
 from flask import render_template, request, Blueprint, jsonify, session, send_file
 from datetime import datetime
+import pytz
 import infrasture.model.MFacturacion as MFacturacion
 import domain.VFacturacion as VFacturacion
 from domain.VPermisos import requiere_permiso
@@ -116,7 +117,9 @@ def create_factura():
         factura_data['productos'] = productos_detalle
         factura_data['total'] = total
         factura_data['usuario_id'] = session.get('user_id')
-        factura_data['fecha'] = datetime.now()
+        # Usar zona horaria de República Dominicana (UTC-4)
+        tz_rd = pytz.timezone('America/Santo_Domingo')
+        factura_data['fecha'] = datetime.now(tz_rd)
         
         result = MFacturacion.createFactura(factura_data)
         

@@ -1,5 +1,4 @@
 from bson import ObjectId
-from datetime import datetime
 
 class createFacturaValidator:
     def __init__(self, *, isJson: bool, payLoad: dict):
@@ -31,6 +30,5 @@ class createFacturaValidator:
         return {
             "cliente": self.cliente,
             "productos": self.productos,
-            "fecha": datetime.now(),
             "usuario_id": None  # Se asignará en la ruta
         }
