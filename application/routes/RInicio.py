@@ -1,18 +1,17 @@
-from flask import render_template, Blueprint, session, jsonify
+from flask import Blueprint, jsonify
 import infrasture.model.MInicio as MInicio
 import infrasture.model.MVersiones as MVersiones
 from domain.VPermisos import obtener_permisos_usuario
+from infrasture.jwt_utils import token_required, get_current_user
 
 bp = Blueprint('RInicio', __name__)
 
-@bp.route('/inicio')
-def inicio():
-    return render_template('Inicio.html', active_page='inicio')
-
-@bp.route('/get_user_info', methods=['GET'])
+@bp.route('/user-info', methods=['GET'])
+@token_required
 def get_user_info():
     try:
-        user_id = session.get('user_id')
+        current_user = get_current_user()
+        user_id = current_user.get('user_id')
         user_data = MInicio.getUserData(user_id)
         
         if not user_data:
