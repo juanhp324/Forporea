@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Configuración de la conexión
-MONGODB_URI = os.getenv("MONGODB_URI", "mongo")
+MONGODB_URI = os.getenv("MONGODB_URI", "mongodb://localhost:27017/")
 DATABASE_NAME = os.getenv("DATABASE_NAME", "Forporea")
 
 # Configuración optimizada para evitar timeouts
