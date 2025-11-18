@@ -3,7 +3,7 @@ import threading
 import os
 
 # Configuración de la conexión
-MONGODB_URI = os.getenv("MONGODB_URI", "mongodb+srv://juanhp324_db_user:93J4a48Ex1Q0DW7O@forporeacluster.n0etmfd.mongodb.net/?retryWrites=true&w=majority&appName=ForporeaCluster")
+MONGODB_URI = os.getenv("MONGODB_URI", "mongodb://localhost:27017/")
 DATABASE_NAME = os.getenv("DATABASE_NAME", "Forporea")
 
 # Configuración optimizada para evitar timeouts
