@@ -12,5 +12,5 @@ class Config:
     CORS_ORIGINS = os.getenv('CORS_ORIGINS', '*').split(',')
     
     # MongoDB
-    MONGO_URI = os.getenv('MONGO_URI', 'mongodb://localhost:27017/')
-    DATABASE_NAME = os.getenv('DATABASE_NAME', 'forporea')
+    MONGODB_URI = os.getenv('MONGODB_URI', 'mongodb://localhost:27017/')
+    DATABASE_NAME = os.getenv('DATABASE_NAME', 'Forporea')
