@@ -263,134 +263,198 @@
     <!-- Contenedor de notificaciones -->
     <div id="notification-container" class="notification-container"></div>
     
-    <!-- Navbar (solo si no es login) -->
+    <!-- Layout con Sidebar (solo si no es login) -->
     {% if not is_login %}
-    <nav class="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm animate__animated animate__fadeInDown">
-        <div class="container-fluid px-6 py-3">
-            <div class="flex items-center justify-between">
+    <div class="flex h-screen bg-gray-50">
+        <!-- Sidebar -->
+        <nav class="fixed left-0 top-0 h-full w-64 bg-white border-r border-gray-200 shadow-lg z-50 animate__animated animate__slideInLeft">
+            <div class="flex flex-col h-full">
                 <!-- Logo y Brand -->
-                <a href="/inicio" class="flex items-center space-x-3 group no-underline">
-                    <div class="relative">
-                        <div class="w-12 h-12 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 rounded-2xl flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-lg group-hover:shadow-xl">
-                            <i class="fas fa-drumstick-bite text-white text-2xl"></i>
+                <div class="p-6 border-b border-gray-200">
+                    <a href="/inicio" class="flex items-center space-x-3 group no-underline">
+                        <div class="relative">
+                            <div class="w-12 h-12 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 rounded-2xl flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-lg group-hover:shadow-xl">
+                                <i class="fas fa-drumstick-bite text-white text-2xl"></i>
+                            </div>
+                            <!-- Efecto de brillo -->
+                            <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 rounded-2xl transition-opacity duration-300"></div>
                         </div>
-                        <!-- Efecto de brillo -->
-                        <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 rounded-2xl transition-opacity duration-300"></div>
-                    </div>
-                    <div class="flex flex-col -space-y-1">
-                        <div class="flex items-center gap-2">
-                            <span class="text-2xl font-extrabold bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 bg-clip-text text-transparent tracking-tight">Forporea</span>
-                            <span class="px-2 py-0.5 bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 text-xs font-bold rounded-md border border-blue-300" id="appVersion">v1.4.0</span>
+                        <div class="flex flex-col -space-y-1">
+                            <div class="flex items-center gap-2">
+                                <span class="text-2xl font-extrabold bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 bg-clip-text text-transparent tracking-tight">Forporea</span>
+                                <span class="px-2 py-0.5 bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 text-xs font-bold rounded-md border border-blue-300" id="appVersion">v1.4.0</span>
+                            </div>
+                            <span class="text-xs text-gray-500 font-medium">Sistema de Gestión</span>
                         </div>
-                        <span class="text-xs text-gray-500 font-medium">Sistema de Gestión</span>
-                    </div>
-                </a>
-                
-                <!-- Desktop Menu -->
-                <div class="hidden lg:flex items-center space-x-2">
-                    <a href="/inicio" class="nav-link px-4 py-2.5 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 flex items-center space-x-2 font-medium {% if active_page == 'inicio' %}active-nav-link{% endif %}">
-                        <i class="fas fa-home text-lg"></i>
-                        <span>Inicio</span>
-                    </a>
-                    <a href="/productos" class="nav-link px-4 py-2.5 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 flex items-center space-x-2 font-medium {% if active_page == 'productos' %}active-nav-link{% endif %}">
-                        <i class="fas fa-box text-lg"></i>
-                        <span>Productos</span>
-                    </a>
-                    <a href="/proveedores" class="nav-link px-4 py-2.5 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 flex items-center space-x-2 font-medium {% if active_page == 'proveedores' %}active-nav-link{% endif %}">
-                        <i class="fas fa-truck text-lg"></i>
-                        <span>Proveedores</span>
-                    </a>
-                    <a href="/facturacion" class="nav-link px-4 py-2.5 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 flex items-center space-x-2 font-medium {% if active_page == 'facturacion' %}active-nav-link{% endif %}">
-                        <i class="fas fa-file-invoice text-lg"></i>
-                        <span>Facturación</span>
-                    </a>
-                    <a href="/facturas" class="nav-link px-4 py-2.5 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 flex items-center space-x-2 font-medium {% if active_page == 'facturas' %}active-nav-link{% endif %}">
-                        <i class="fas fa-receipt text-lg"></i>
-                        <span>Facturas</span>
-                    </a>
-                    
-                    <!-- Separador -->
-                    <div class="h-8 w-px bg-gray-300 mx-2"></div>
-                    
-                    <!-- Botón de Cerrar Sesión -->
-                    <a href="/logout" class="px-5 py-2.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all duration-300 flex items-center space-x-2 font-medium shadow-sm hover:shadow-md transform hover:scale-105">
-                        <i class="fas fa-sign-out-alt"></i>
-                        <span>Cerrar Sesión</span>
                     </a>
                 </div>
                 
-                <!-- Mobile Menu Button -->
-                <button class="lg:hidden p-2.5 rounded-lg hover:bg-gray-100 transition-colors duration-200" onclick="toggleMobileMenu()">
-                    <i class="fas fa-bars text-2xl text-gray-700"></i>
+                <!-- Navigation Menu -->
+                <div class="flex-1 px-4 py-6 space-y-2">
+                    <a href="/inicio" class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 font-medium {% if active_page == 'inicio' %}active-sidebar-link{% endif %}">
+                        <i class="fas fa-home text-lg w-5"></i>
+                        <span>Inicio</span>
+                    </a>
+                    <a href="/productos" class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 font-medium {% if active_page == 'productos' %}active-sidebar-link{% endif %}">
+                        <i class="fas fa-box text-lg w-5"></i>
+                        <span>Productos</span>
+                    </a>
+                    <a href="/proveedores" class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 font-medium {% if active_page == 'proveedores' %}active-sidebar-link{% endif %}">
+                        <i class="fas fa-truck text-lg w-5"></i>
+                        <span>Proveedores</span>
+                    </a>
+                    <a href="/facturacion" class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 font-medium {% if active_page == 'facturacion' %}active-sidebar-link{% endif %}">
+                        <i class="fas fa-file-invoice text-lg w-5"></i>
+                        <span>Facturación</span>
+                    </a>
+                    <a href="/facturas" class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 font-medium {% if active_page == 'facturas' %}active-sidebar-link{% endif %}">
+                        <i class="fas fa-receipt text-lg w-5"></i>
+                        <span>Facturas</span>
+                    </a>
+                </div>
+                
+                <!-- Logout Button -->
+                <div class="p-4 border-t border-gray-200">
+                    <a href="/logout" class="flex items-center space-x-3 px-4 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all duration-300 font-medium shadow-sm hover:shadow-md transform hover:scale-105">
+                        <i class="fas fa-sign-out-alt w-5"></i>
+                        <span>Cerrar Sesión</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Mobile Sidebar Overlay -->
+        <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden hidden" onclick="toggleMobileSidebar()"></div>
+        
+        <!-- Mobile Sidebar -->
+        <nav id="mobileSidebar" class="fixed left-0 top-0 h-full w-64 bg-white border-r border-gray-200 shadow-lg z-50 lg:hidden transform -translate-x-full transition-transform duration-300">
+            <div class="flex flex-col h-full">
+                <!-- Mobile Header -->
+                <div class="p-4 border-b border-gray-200 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-drumstick-bite text-white text-lg"></i>
+                        </div>
+                        <div>
+                            <span class="text-lg font-bold text-gray-800">Forporea</span>
+                            <p class="text-xs text-gray-500">Sistema de Gestión</p>
+                        </div>
+                    </div>
+                    <button onclick="toggleMobileSidebar()" class="p-2 rounded-lg hover:bg-gray-100">
+                        <i class="fas fa-times text-gray-600"></i>
+                    </button>
+                </div>
+                
+                <!-- Mobile Navigation -->
+                <div class="flex-1 px-4 py-6 space-y-2">
+                    <a href="/inicio" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 font-medium {% if active_page == 'inicio' %}bg-blue-50 text-blue-600{% endif %}">
+                        <i class="fas fa-home w-5"></i>
+                        <span>Inicio</span>
+                    </a>
+                    <a href="/productos" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 font-medium {% if active_page == 'productos' %}bg-blue-50 text-blue-600{% endif %}">
+                        <i class="fas fa-box w-5"></i>
+                        <span>Productos</span>
+                    </a>
+                    <a href="/proveedores" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 font-medium {% if active_page == 'proveedores' %}bg-blue-50 text-blue-600{% endif %}">
+                        <i class="fas fa-truck w-5"></i>
+                        <span>Proveedores</span>
+                    </a>
+                    <a href="/facturacion" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 font-medium {% if active_page == 'facturacion' %}bg-blue-50 text-blue-600{% endif %}">
+                        <i class="fas fa-file-invoice w-5"></i>
+                        <span>Facturación</span>
+                    </a>
+                    <a href="/facturas" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 font-medium {% if active_page == 'facturas' %}bg-blue-50 text-blue-600{% endif %}">
+                        <i class="fas fa-receipt w-5"></i>
+                        <span>Facturas</span>
+                    </a>
+                </div>
+                
+                <!-- Mobile Logout -->
+                <div class="p-4 border-t border-gray-200">
+                    <a href="/logout" class="flex items-center space-x-3 px-4 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all duration-300 font-medium">
+                        <i class="fas fa-sign-out-alt w-5"></i>
+                        <span>Cerrar Sesión</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Main Content Area -->
+        <div class="flex-1 ml-64 lg:ml-64 flex flex-col">
+            <!-- Top Bar for Mobile -->
+            <div class="lg:hidden bg-white border-b border-gray-200 p-4 flex items-center justify-between">
+                <button onclick="toggleMobileSidebar()" class="p-2 rounded-lg hover:bg-gray-100">
+                    <i class="fas fa-bars text-gray-600"></i>
                 </button>
+                <div class="flex items-center space-x-2">
+                    <span class="font-bold text-gray-800">Forporea</span>
+                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded">v1.4.0</span>
+                </div>
             </div>
             
-            <!-- Mobile Menu -->
-            <div id="mobileMenu" class="hidden lg:hidden mt-4 pb-2 space-y-1 animate__animated animate__fadeIn">
-                <a href="/inicio" class="block px-4 py-3 rounded-lg text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 font-medium {% if active_page == 'inicio' %}bg-blue-50 text-blue-600{% endif %}">
-                    <i class="fas fa-home mr-3"></i>Inicio
-                </a>
-                <a href="/productos" class="block px-4 py-3 rounded-lg text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 font-medium {% if active_page == 'productos' %}bg-blue-50 text-blue-600{% endif %}">
-                    <i class="fas fa-box mr-3"></i>Productos
-                </a>
-                <a href="/proveedores" class="block px-4 py-3 rounded-lg text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 font-medium {% if active_page == 'proveedores' %}bg-blue-50 text-blue-600{% endif %}">
-                    <i class="fas fa-truck mr-3"></i>Proveedores
-                </a>
-                <a href="/facturacion" class="block px-4 py-3 rounded-lg text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 font-medium {% if active_page == 'facturacion' %}bg-blue-50 text-blue-600{% endif %}">
-                    <i class="fas fa-file-invoice mr-3"></i>Facturación
-                </a>
-                <a href="/facturas" class="block px-4 py-3 rounded-lg text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 font-medium {% if active_page == 'facturas' %}bg-blue-50 text-blue-600{% endif %}">
-                    <i class="fas fa-receipt mr-3"></i>Facturas
-                </a>
-                <a href="/logout" class="block px-4 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all duration-300 font-medium mt-2">
-                    <i class="fas fa-sign-out-alt mr-3"></i>Cerrar Sesión
-                </a>
-            </div>
+            <!-- Page Content -->
+            <main class="flex-1 overflow-auto">
+                {% block content %}{% endblock %}
+            </main>
         </div>
-    </nav>
+    </div>
     
     <style>
-        /* Estilos para el navbar activo */
-        .active-nav-link {
+        /* Estilos para el sidebar activo */
+        .active-sidebar-link {
             background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
             color: white !important;
             box-shadow: 0 2px 8px rgba(13, 110, 253, 0.3);
         }
         
-        .active-nav-link:hover {
+        .active-sidebar-link:hover {
             background: linear-gradient(135deg, #0a58ca 0%, #084298 100%);
             color: white !important;
         }
         
-        /* Efecto de hover mejorado */
-        .nav-link {
+        /* Efecto de hover mejorado para sidebar */
+        .sidebar-link {
             position: relative;
         }
         
-        .nav-link::before {
+        .sidebar-link::before {
             content: '';
             position: absolute;
-            bottom: 0;
-            left: 50%;
+            left: 0;
+            top: 50%;
             width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #0d6efd, #0dcaf0);
-            transform: translateX(-50%);
+            height: 60%;
+            background: linear-gradient(180deg, #0d6efd, #0dcaf0);
+            transform: translateY(-50%);
             transition: width 0.3s ease;
+            border-radius: 0 4px 4px 0;
         }
         
-        .nav-link:hover::before {
-            width: 80%;
+        .sidebar-link:hover::before {
+            width: 4px;
         }
         
-        .active-nav-link::before {
-            display: none;
+        .active-sidebar-link::before {
+            width: 4px;
+            background: linear-gradient(180deg, #ffffff, #ffffff);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+            .ml-64 {
+                margin-left: 0 !important;
+            }
+        }
+        
+        /* Mobile sidebar animations */
+        .sidebar-open {
+            transform: translateX(0) !important;
         }
     </style>
-    {% endif %}
-    
-    <!-- Contenido principal -->
+    {% else %}
+    <!-- Login page content -->
     {% block content %}{% endblock %}
+    {% endif %}
     
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -419,10 +483,13 @@
             lucide.createIcons();
         }
         
-        // Toggle mobile menu
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('hidden');
+        // Toggle mobile sidebar
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('mobileSidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            sidebar.classList.toggle('sidebar-open');
+            overlay.classList.toggle('hidden');
         }
         
         // Smooth scroll para enlaces internos
