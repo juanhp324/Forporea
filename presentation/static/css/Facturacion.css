@@ -1,0 +1,103 @@
+:root {
+    --primary-color: #d35400;
+    --secondary-color: #2c3e50;
+    --success-color: #27ae60;
+}
+
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border: none;
+}
+
+.card-header {
+    border-radius: 12px 12px 0 0 !important;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.table-sm {
+    font-size: 0.9rem;
+}
+
+.factura-item {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.factura-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.factura-item h6 {
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.factura-item small {
+    color: #6c757d;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+#totalFactura {
+    color: var(--success-color);
+    font-weight: 700;
+}
+
+/* Botón de cerrar sesión */
+.btn-logout {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+    color: white !important;
+    border-radius: 8px !important;
+    padding: 0.5rem 1rem !important;
+    margin-left: 10px !important;
+    transition: all 0.3s ease !important;
+    font-weight: 500 !important;
+}
+
+.btn-logout:hover {
+    background: linear-gradient(135deg, #c82333 0%, #bd2130 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4) !important;
+}
+
+/* Mejorar inputs */
+.form-control-sm, .form-select-sm {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
+}
+
+.form-label {
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+    color: #495057;
+}
+
+.fw-bold {
+    font-weight: 600 !important;
+}
+
+/* Botón agregar */
+.btn-agregar {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}

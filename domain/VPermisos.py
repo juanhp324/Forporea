@@ -1,6 +1,5 @@
-from flask import jsonify
+from flask import session, jsonify
 from functools import wraps
-from infrasture.jwt_utils import get_current_user
 
 # Definición de permisos por rol
 PERMISOS = {
@@ -17,18 +16,18 @@ PERMISOS = {
 }
 
 def tiene_permiso(modulo, accion):
-
-    current_user = get_current_user()
-
-    if not current_user:
-        return False
-    
-    rol = current_user.get('rol', 'user')
+    """
+    Verifica si el usuario actual tiene permiso para realizar una acción en un módulo
+    """
+    rol = session.get('rol', 'user')
     permisos_rol = PERMISOS.get(rol, {})
     permisos_modulo = permisos_rol.get(modulo, [])
     return accion in permisos_modulo
 
 def requiere_permiso(modulo, accion):
+    """
+    Decorador para proteger rutas que requieren permisos específicos
+    """
     def decorator(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
@@ -42,10 +41,8 @@ def requiere_permiso(modulo, accion):
     return decorator
 
 def obtener_permisos_usuario():
-    current_user = get_current_user()
-    
-    if not current_user:
-        return {}
-    
-    rol = current_user.get('rol', 'user')
+    """
+    Obtiene todos los permisos del usuario actual
+    """
+    rol = session.get('rol', 'user')
     return PERMISOS.get(rol, {})

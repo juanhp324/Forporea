@@ -1,14 +1,16 @@
-from flask import request, Blueprint, jsonify
+from flask import render_template, request, Blueprint, jsonify
 from bson import ObjectId
 import infrasture.model.MProductos as MProductos
 import domain.VProductos as VProductos
 from domain.VPermisos import requiere_permiso
-from infrasture.jwt_utils import token_required
 
 bp = Blueprint('RProductos', __name__)
 
-@bp.route('/productos', methods=['GET'])
-@token_required
+@bp.route('/productos')
+def productos():
+    return render_template('Productos.html', active_page='productos')
+
+@bp.route('/get_productos', methods=['GET'])
 def get_productos():
     try:
         productos_cursor = MProductos.getAllProductos()
@@ -30,8 +32,7 @@ def get_productos():
     except Exception as exc:
         return jsonify({"success": False, "message": str(exc)}), 500
 
-@bp.route('/productos/<producto_id>', methods=['GET'])
-@token_required
+@bp.route('/get_producto/<producto_id>', methods=['GET'])
 def get_producto(producto_id):
     try:
         producto_data = MProductos.getProductoById(producto_id)
@@ -63,8 +64,7 @@ def get_producto(producto_id):
     except Exception as exc:
         return jsonify({"success": False, "message": str(exc)}), 500
 
-@bp.route('/productos', methods=['POST'])
-@token_required
+@bp.route('/create_producto', methods=['POST'])
 @requiere_permiso('productos', 'crear')
 def create_producto():
     try:
@@ -84,8 +84,7 @@ def create_producto():
     except Exception as exc:
         return jsonify({"success": False, "message": str(exc)}), 500
 
-@bp.route('/productos/<producto_id>', methods=['PUT'])
-@token_required
+@bp.route('/update_producto/<producto_id>', methods=['PUT'])
 @requiere_permiso('productos', 'editar')
 def update_producto(producto_id):
     try:
@@ -103,8 +102,7 @@ def update_producto(producto_id):
     except Exception as exc:
         return jsonify({"success": False, "message": str(exc)}), 500
 
-@bp.route('/productos/<producto_id>', methods=['DELETE'])
-@token_required
+@bp.route('/delete_producto/<producto_id>', methods=['DELETE'])
 @requiere_permiso('productos', 'eliminar')
 def delete_producto(producto_id):
     try:

@@ -1,10 +1,9 @@
-from flask import request, Blueprint, jsonify, send_file
+from flask import render_template, request, Blueprint, jsonify, session, send_file
 from datetime import datetime
 import pytz
 import infrasture.model.MFacturacion as MFacturacion
 import domain.VFacturacion as VFacturacion
 from domain.VPermisos import requiere_permiso
-from infrasture.jwt_utils import token_required, get_current_user
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.lib.units import inch
@@ -16,8 +15,15 @@ from bson import ObjectId
 
 bp = Blueprint('RFacturacion', __name__)
 
-@bp.route('/facturas', methods=['GET'])
-@token_required
+@bp.route('/facturacion')
+def facturacion():
+    return render_template('Facturacion.html', active_page='facturacion')
+
+@bp.route('/facturas')
+def facturas():
+    return render_template('Facturas.html', active_page='facturas')
+
+@bp.route('/get_facturas', methods=['GET'])
 def get_facturas():
     try:
         facturas_cursor = MFacturacion.getAllFacturas()
@@ -55,8 +61,7 @@ def get_facturas():
     except Exception as exc:
         return jsonify({"success": False, "message": str(exc)}), 500
 
-@bp.route('/productos-factura', methods=['GET'])
-@token_required
+@bp.route('/get_productos_factura', methods=['GET'])
 def get_productos_factura():
     try:
         productos_cursor = MFacturacion.getAllProductos()
@@ -74,8 +79,7 @@ def get_productos_factura():
     except Exception as exc:
         return jsonify({"success": False, "message": str(exc)}), 500
 
-@bp.route('/facturas', methods=['POST'])
-@token_required
+@bp.route('/create_factura', methods=['POST'])
 @requiere_permiso('facturacion', 'crear')
 def create_factura():
     try:
@@ -112,8 +116,7 @@ def create_factura():
         
         factura_data['productos'] = productos_detalle
         factura_data['total'] = total
-        current_user = get_current_user()
-        factura_data['usuario_id'] = current_user.get('user_id')
+        factura_data['usuario_id'] = session.get('user_id')
         # Usar zona horaria de República Dominicana (UTC-4)
         tz_rd = pytz.timezone('America/Santo_Domingo')
         factura_data['fecha'] = datetime.now(tz_rd)
@@ -131,8 +134,7 @@ def create_factura():
     except Exception as exc:
         return jsonify({"success": False, "message": str(exc)}), 500
 
-@bp.route('/facturas/<factura_id>/descargar', methods=['GET'])
-@token_required
+@bp.route('/descargar_factura/<factura_id>', methods=['GET'])
 def descargar_factura(factura_id):
     try:
         factura = MFacturacion.getFacturaById(factura_id)
@@ -140,8 +142,7 @@ def descargar_factura(factura_id):
             return jsonify({"success": False, "message": "Factura no encontrada"}), 404
         
         # Obtener información del usuario que facturó
-        current_user = get_current_user()
-        usuario_nombre = current_user.get('nombre', 'Usuario')
+        usuario_nombre = session.get('nombre', 'Usuario')
         
         # Crear PDF en memoria
         buffer = io.BytesIO()
@@ -153,7 +154,6 @@ def descargar_factura(factura_id):
             topMargin=50,
             bottomMargin=50
         )
-        
         elements = []
         styles = getSampleStyleSheet()
         

@@ -1,15 +1,15 @@
-from flask import request, Blueprint, jsonify
+from flask import render_template, request, Blueprint, jsonify
 import infrasture.model.MProveedores as MProveedores
 import domain.VProveedores as VProveedores
 from domain.VPermisos import requiere_permiso
-from infrasture.jwt_utils import token_required
 
 bp = Blueprint('RProveedores', __name__)
 
+@bp.route('/proveedores')
+def proveedores():
+    return render_template('Proveedores.html', active_page='proveedores')
 
-
-@bp.route('/proveedores', methods=['GET'])
-@token_required
+@bp.route('/get_proveedores', methods=['GET'])
 def get_proveedores():
     try:
         proveedores_cursor = MProveedores.getAllProveedores()
@@ -34,8 +34,7 @@ def get_proveedores():
         print(f"Error en get_proveedores: {exc}")
         return jsonify({"success": False, "message": "Error al cargar proveedores"}), 500
 
-@bp.route('/proveedores/<proveedor_id>', methods=['GET'])
-@token_required
+@bp.route('/get_proveedor/<proveedor_id>', methods=['GET'])
 def get_proveedor(proveedor_id):
     try:
         proveedor_data = MProveedores.getProveedorById(proveedor_id)
@@ -58,8 +57,7 @@ def get_proveedor(proveedor_id):
     except Exception as exc:
         return jsonify({"success": False, "message": str(exc)}), 500
 
-@bp.route('/proveedores', methods=['POST'])
-@token_required
+@bp.route('/create_proveedor', methods=['POST'])
 @requiere_permiso('proveedores', 'crear')
 def create_proveedor():
     try:
@@ -79,8 +77,7 @@ def create_proveedor():
     except Exception as exc:
         return jsonify({"success": False, "message": str(exc)}), 500
 
-@bp.route('/proveedores/<proveedor_id>', methods=['PUT'])
-@token_required
+@bp.route('/update_proveedor/<proveedor_id>', methods=['PUT'])
 @requiere_permiso('proveedores', 'editar')
 def update_proveedor(proveedor_id):
     try:
@@ -98,8 +95,7 @@ def update_proveedor(proveedor_id):
     except Exception as exc:
         return jsonify({"success": False, "message": str(exc)}), 500
 
-@bp.route('/proveedores/<proveedor_id>', methods=['DELETE'])
-@token_required
+@bp.route('/delete_proveedor/<proveedor_id>', methods=['DELETE'])
 @requiere_permiso('proveedores', 'eliminar')
 def delete_proveedor(proveedor_id):
     try:

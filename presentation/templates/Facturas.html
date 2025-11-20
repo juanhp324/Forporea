@@ -1,0 +1,760 @@
+{% extends "base.html" %}
+
+{% block title %}Facturas - Forporea{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Contenedor principal sin scroll */
+    .main-container {
+        height: calc(100vh - 140px);
+        overflow: hidden;
+        padding: 1.5rem;
+    }
+    
+    .card-header-custom {
+        background: #198754;
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 12px 12px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .card-header-custom h5 {
+        margin: 0;
+        font-weight: 700;
+        font-size: 1.125rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .card-clean {
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        background: white;
+        overflow: hidden;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* Tabla con scroll interno */
+    .table-container {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: auto;
+    }
+    
+    .table-professional {
+        margin: 0;
+    }
+    
+    .table-professional thead {
+        background: #f9fafb;
+        border-bottom: 2px solid #e5e7eb;
+    }
+    
+    .table-professional thead th {
+        border: none;
+        padding: 1rem;
+        font-weight: 600;
+        color: #374151;
+        font-size: 0.875rem;
+        position: sticky;
+        top: 0;
+        background: #f9fafb;
+        z-index: 10;
+        box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .table-professional thead th i {
+        color: #6b7280;
+        font-size: 0.875rem;
+    }
+    
+    .table-professional tbody tr {
+        border-bottom: 1px solid #f3f4f6;
+        transition: background 0.2s ease;
+    }
+    
+    .table-professional tbody tr:hover {
+        background: #f9fafb;
+    }
+    
+    .table-professional tbody td {
+        padding: 1rem;
+        vertical-align: middle;
+        border: none;
+        color: #374151;
+        font-size: 0.875rem;
+    }
+    
+    .btn-action-clean {
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        transition: all 0.2s ease;
+        margin: 0 2px;
+        font-size: 0.875rem;
+    }
+    
+    .btn-action-clean:hover {
+        transform: translateY(-1px);
+    }
+    
+    .btn-action-clean.btn-info {
+        background: #0dcaf0;
+        color: white;
+    }
+    
+    .btn-action-clean.btn-info:hover {
+        background: #0aa2c0;
+    }
+    
+    .btn-action-clean.btn-success {
+        background: #198754;
+        color: white;
+    }
+    
+    .btn-action-clean.btn-success:hover {
+        background: #157347;
+    }
+    
+    .btn-action-clean.btn-danger {
+        background: #dc3545;
+        color: white;
+    }
+    
+    .btn-action-clean.btn-danger:hover {
+        background: #bb2d3b;
+    }
+    
+    .badge-total {
+        padding: 0.375rem 0.75rem;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.75rem;
+        background: #d1fae5;
+        color: #065f46;
+    }
+    
+    .badge.bg-info {
+        background: #cfe2ff !important;
+        color: #084298;
+        padding: 0.375rem 0.75rem;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.75rem;
+    }
+    
+    .modal-content {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    }
+    
+    .modal-header {
+        background: #f9fafb;
+        border-bottom: 1px solid #e5e7eb;
+        border-radius: 12px 12px 0 0;
+        padding: 1.25rem 1.5rem;
+    }
+    
+    .modal-title {
+        color: #111827;
+        font-weight: 700;
+        font-size: 1.125rem;
+    }
+    
+    .modal-body {
+        padding: 1.5rem;
+    }
+    
+    .form-label {
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+    }
+    
+    .table-hover tbody tr:hover {
+        background-color: #f9fafb;
+    }
+    
+    /* Estilos mejorados para inputs de fecha con Flatpickr */
+    #fechaDesde, #fechaHasta {
+        position: relative;
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid #d1d5db;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        color: #374151;
+        background-color: white;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        font-weight: 500;
+        height: 45px;
+    }
+    
+    #fechaDesde:hover, #fechaHasta:hover {
+        border-color: #198754;
+        background-color: #f8f9fa;
+    }
+    
+    #fechaDesde:focus, #fechaHasta:focus {
+        outline: none;
+        border-color: #198754;
+        box-shadow: 0 0 0 4px rgba(25, 135, 84, 0.15);
+        background-color: white;
+    }
+    
+    #fechaDesde::placeholder, #fechaHasta::placeholder {
+        color: #9ca3af;
+        font-weight: 400;
+    }
+    
+    /* Estilos para el contenedor de búsqueda */
+    .search-date-container {
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        padding: 1.25rem;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+    
+    .date-label {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .date-label i {
+        color: #198754;
+        margin-right: 0.25rem;
+    }
+    
+    .btn-search-custom {
+        background: linear-gradient(135deg, #198754 0%, #157347 100%);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.25rem;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(25, 135, 84, 0.2);
+        height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .btn-search-custom:hover {
+        background: linear-gradient(135deg, #157347 0%, #146c43 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(25, 135, 84, 0.3);
+    }
+    
+    .btn-clear-custom {
+        background: #6c757d;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.25rem;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .btn-clear-custom:hover {
+        background: #5c636a;
+        transform: translateY(-2px);
+        box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
+    }
+    
+    /* ============================================ */
+    /* AIR DATEPICKER - ESTILOS PERSONALIZADOS */
+    /* ============================================ */
+    
+    .air-datepicker {
+        border-radius: 12px !important;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
+        border: 1px solid #e5e7eb !important;
+        font-family: 'Inter', sans-serif !important;
+    }
+    
+    .air-datepicker-nav {
+        background: linear-gradient(135deg, #198754 0%, #146c43 100%) !important;
+        padding: 1rem !important;
+        border-radius: 12px 12px 0 0 !important;
+    }
+    
+    .air-datepicker-nav--title {
+        color: white !important;
+        font-weight: 700 !important;
+        cursor: default !important;
+    }
+    
+    .air-datepicker-nav--title:hover {
+        background: transparent !important;
+    }
+    
+    .air-datepicker-nav--action {
+        color: white !important;
+    }
+    
+    .air-datepicker-nav--action:hover {
+        background: rgba(255, 255, 255, 0.2) !important;
+        border-radius: 6px !important;
+    }
+    
+    .air-datepicker-body--day-name {
+        color: #198754 !important;
+        font-weight: 600 !important;
+        text-transform: uppercase !important;
+    }
+    
+    .air-datepicker-cell.-day-.-current- {
+        background: rgba(25, 135, 84, 0.1) !important;
+        color: #198754 !important;
+        font-weight: 700 !important;
+    }
+    
+    .air-datepicker-cell.-day-.-selected- {
+        background: #198754 !important;
+        color: white !important;
+    }
+    
+    .air-datepicker-cell.-day-:hover {
+        background: #e8f5e9 !important;
+        color: #198754 !important;
+    }
+    
+    /* Ocultar elementos de Flatpickr si existen */
+    .flatpickr-calendar {
+        display: none !important;
+        color: white !important;
+        padding: 0 !important;
+        height: auto !important;
+        line-height: 1.5 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        position: static !important;
+        width: auto !important;
+        left: auto !important;
+        transform: none !important;
+        gap: 0.5rem !important;
+    }
+    
+    .flatpickr-current-month span.cur-month {
+        display: none !important;
+    }
+    
+    /* Dropdown del mes mejorado */
+    .flatpickr-current-month .flatpickr-monthDropdown-months {
+        background: rgba(255, 255, 255, 0.2) !important;
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        color: white !important;
+        font-weight: 600 !important;
+        cursor: pointer !important;
+        padding: 0.4rem 0.6rem !important;
+        margin: 0 !important;
+        font-size: 0.9rem !important;
+        border-radius: 8px !important;
+        outline: none !important;
+        width: 110px !important;
+        text-align: center !important;
+        transition: all 0.2s ease !important;
+        appearance: menulist !important;
+        -webkit-appearance: menulist !important;
+    }
+    
+    .flatpickr-current-month .flatpickr-monthDropdown-months:hover {
+        background: rgba(255, 255, 255, 0.3) !important;
+        border-color: rgba(255, 255, 255, 0.5) !important;
+    }
+    
+    .flatpickr-current-month .flatpickr-monthDropdown-months:focus {
+        background: rgba(255, 255, 255, 0.35) !important;
+        border-color: rgba(255, 255, 255, 0.6) !important;
+    }
+    
+    /* Wrapper del año */
+    .flatpickr-current-month .numInputWrapper {
+        display: inline-flex !important;
+        align-items: center !important;
+        background: rgba(255, 255, 255, 0.2) !important;
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        border-radius: 8px !important;
+        padding: 0.4rem 0.5rem !important;
+        transition: all 0.2s ease !important;
+        width: 90px !important;
+    }
+    
+    .flatpickr-current-month .numInputWrapper:hover {
+        background: rgba(255, 255, 255, 0.3) !important;
+        border-color: rgba(255, 255, 255, 0.5) !important;
+    }
+    
+    /* Input del año */
+    .flatpickr-current-month input.cur-year {
+        font-weight: 600 !important;
+        color: white !important;
+        background: transparent !important;
+        border: none !important;
+        padding: 0 0.35rem !important;
+        margin: 0 !important;
+        font-size: 0.95rem !important;
+        height: auto !important;
+        line-height: 1.5 !important;
+        width: 4ch !important;
+        text-align: center !important;
+        outline: none !important;
+    }
+    
+    /* Flechas del año mejoradas */
+    .flatpickr-current-month .numInputWrapper span.arrowUp,
+    .flatpickr-current-month .numInputWrapper span.arrowDown {
+        width: 16px !important;
+        height: 16px !important;
+        padding: 0 !important;
+        border: none !important;
+        background: transparent !important;
+        opacity: 0.8 !important;
+        transition: opacity 0.2s ease !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    .flatpickr-current-month .numInputWrapper span.arrowUp:hover,
+    .flatpickr-current-month .numInputWrapper span.arrowDown:hover {
+        opacity: 1 !important;
+        background: rgba(255, 255, 255, 0.15) !important;
+        border-radius: 4px !important;
+    }
+    
+    .flatpickr-current-month .numInputWrapper span.arrowUp:after {
+        border-bottom-color: white !important;
+        border-width: 4px !important;
+    }
+    
+    .flatpickr-current-month .numInputWrapper span.arrowDown:after {
+        border-top-color: white !important;
+        border-width: 4px !important;
+    }
+    
+    /* Flechas de navegación mejoradas */
+    .flatpickr-prev-month,
+    .flatpickr-next-month {
+        fill: white !important;
+        padding: 0 !important;
+        height: 32px !important;
+        width: 32px !important;
+        line-height: 1 !important;
+        position: static !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        top: auto !important;
+        border-radius: 8px !important;
+        transition: all 0.2s ease !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    }
+    
+    .flatpickr-prev-month:hover,
+    .flatpickr-next-month:hover {
+        color: white !important;
+        background: rgba(255, 255, 255, 0.25) !important;
+        border-color: rgba(255, 255, 255, 0.4) !important;
+        transform: scale(1.05) !important;
+    }
+    
+    .flatpickr-prev-month svg,
+    .flatpickr-next-month svg {
+        fill: white !important;
+        width: 14px !important;
+        height: 14px !important;
+    }
+    
+    /* Días de la semana */
+    .flatpickr-weekdays {
+        background: #f8f9fa !important;
+        padding: 0.5rem 0 !important;
+        height: 28px !important;
+    }
+    
+    .flatpickr-weekdaycontainer {
+        display: flex !important;
+    }
+    
+    span.flatpickr-weekday {
+        color: #198754 !important;
+        font-weight: 600 !important;
+        font-size: 0.75rem !important;
+        text-transform: uppercase !important;
+        flex: 1 !important;
+        text-align: center !important;
+    }
+    
+    /* Contenedor de días */
+    .flatpickr-days {
+        width: 308px !important;
+    }
+    
+    .dayContainer {
+        width: 308px !important;
+        min-width: 308px !important;
+        max-width: 308px !important;
+        padding: 0 !important;
+        display: grid !important;
+        grid-template-columns: repeat(7, 44px) !important;
+    }
+    
+    /* Días individuales */
+    .flatpickr-day {
+        color: #374151 !important;
+        border-radius: 8px !important;
+        border: 1px solid transparent !important;
+        font-weight: 500 !important;
+        font-size: 0.875rem !important;
+        height: 44px !important;
+        line-height: 44px !important;
+        width: 44px !important;
+        max-width: 44px !important;
+        margin: 0 !important;
+        transition: all 0.15s ease !important;
+        flex-basis: auto !important;
+    }
+    
+    .flatpickr-day:hover {
+        background: #e8f5e9 !important;
+        border-color: #198754 !important;
+        color: #198754 !important;
+    }
+    
+    /* Día actual */
+    .flatpickr-day.today {
+        border-color: #198754 !important;
+        background: rgba(25, 135, 84, 0.08) !important;
+        color: #198754 !important;
+        font-weight: 700 !important;
+    }
+    
+    .flatpickr-day.today:hover {
+        background: #e8f5e9 !important;
+        border-color: #198754 !important;
+    }
+    
+    /* Día seleccionado */
+    .flatpickr-day.selected,
+    .flatpickr-day.startRange,
+    .flatpickr-day.endRange,
+    .flatpickr-day.selected.inRange,
+    .flatpickr-day.startRange.inRange,
+    .flatpickr-day.endRange.inRange,
+    .flatpickr-day.selected:focus,
+    .flatpickr-day.startRange:focus,
+    .flatpickr-day.endRange:focus,
+    .flatpickr-day.selected:hover,
+    .flatpickr-day.startRange:hover,
+    .flatpickr-day.endRange:hover,
+    .flatpickr-day.selected.prevMonthDay,
+    .flatpickr-day.startRange.prevMonthDay,
+    .flatpickr-day.endRange.prevMonthDay,
+    .flatpickr-day.selected.nextMonthDay,
+    .flatpickr-day.startRange.nextMonthDay,
+    .flatpickr-day.endRange.nextMonthDay {
+        background: #198754 !important;
+        border-color: #198754 !important;
+        color: white !important;
+        font-weight: 700 !important;
+    }
+    
+    /* Días deshabilitados */
+    .flatpickr-day.flatpickr-disabled,
+    .flatpickr-day.flatpickr-disabled:hover {
+        color: #d1d5db !important;
+        background: transparent !important;
+        border-color: transparent !important;
+        cursor: not-allowed !important;
+    }
+    
+    /* Días de otros meses */
+    .flatpickr-day.prevMonthDay,
+    .flatpickr-day.nextMonthDay {
+        color: #9ca3af !important;
+    }
+    
+    .flatpickr-day.prevMonthDay:hover,
+    .flatpickr-day.nextMonthDay:hover {
+        background: #f3f4f6 !important;
+        border-color: #e5e7eb !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+    <!-- Contenedor principal sin scroll -->
+    <div class="main-container">
+        <!-- Card con header y tabla -->
+        <div class="card-clean">
+            <!-- Header del card -->
+            <div class="card-header-custom">
+                <h5>
+                    <i class="fas fa-file-invoice"></i>
+                    Facturas
+                </h5>
+            </div>
+            
+            <!-- Barra de búsqueda por fecha -->
+            <div class="search-date-container" style="margin: 1rem; border-bottom: none;">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-4">
+                        <label for="fechaDesde" class="date-label">
+                            <i class="fas fa-calendar-alt"></i>Fecha Desde
+                        </label>
+                        <input type="text" id="fechaDesde" placeholder="Seleccione fecha..." readonly>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="fechaHasta" class="date-label">
+                            <i class="fas fa-calendar-check"></i>Fecha Hasta
+                        </label>
+                        <input type="text" id="fechaHasta" placeholder="Seleccione fecha..." readonly>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn-search-custom w-100" onclick="buscarPorFecha()">
+                            <i class="fas fa-search me-2"></i>Buscar
+                        </button>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn-clear-custom w-100" onclick="limpiarBusquedaFecha()">
+                            <i class="fas fa-times me-2"></i>Limpiar
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tabla con scroll (Desktop) -->
+            <div class="table-container">
+                <table class="table table-professional">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-user me-2"></i>Cliente</th>
+                            <th><i class="fas fa-calendar me-2"></i>Fecha</th>
+                            <th><i class="fas fa-dollar-sign me-2"></i>Total</th>
+                            <th><i class="fas fa-box me-2"></i>Productos</th>
+                            <th class="text-center"><i class="fas fa-cog me-2"></i>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaFacturas">
+                        <tr>
+                            <td colspan="5" class="text-center py-5">
+                                <i class="fas fa-spinner fa-spin fa-2x text-muted mb-3"></i>
+                                <p class="text-muted">Cargando facturas...</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <!-- Versión Móvil (Cards) -->
+                <div class="table-mobile" id="tablaFacturasMobile" style="display: none;">
+                    <div class="text-center py-5">
+                        <i class="fas fa-spinner fa-spin fa-2x text-muted mb-3"></i>
+                        <p class="text-muted">Cargando facturas...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Detalle Factura -->
+    <div class="modal fade" id="modalDetalleFactura" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title"><i class="fas fa-file-invoice-dollar me-2"></i>Detalle de la Factura</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" style="background: #f8f9fa;">
+                    <!-- Card de Información General -->
+                    <div class="card mb-3 border-0 shadow-sm">
+                        <div class="card-body">
+                            <h6 class="text-success mb-3 fw-bold">
+                                <i class="fas fa-info-circle me-2"></i>Información General
+                            </h6>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="text-muted small mb-1">Cliente</label>
+                                    <div class="fw-bold" id="detalleCliente"></div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="text-muted small mb-1">Fecha</label>
+                                    <div class="fw-bold" id="detalleFecha"></div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="text-muted small mb-1">Total</label>
+                                    <div><span class="badge-total fs-6">$<span id="detalleTotal"></span></span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card de Productos -->
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h6 class="text-success mb-3 fw-bold">
+                                <i class="fas fa-box-open me-2"></i>Productos
+                            </h6>
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead style="background: #f8f9fa;">
+                                        <tr>
+                                            <th class="border-0">Producto</th>
+                                            <th class="border-0">Cantidad</th>
+                                            <th class="border-0">Precio Unit.</th>
+                                            <th class="border-0">Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="detalleProductos">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-white">
+                    <button type="button" class="btn btn-success" onclick="descargarFacturaPDF(currentFacturaId)">
+                        <i class="fas fa-download me-2"></i>Descargar PDF
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/Facturas.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,471 @@
+{% extends "base.html" %}
+
+{% block title %}Productos - Forporea{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Contenedor principal sin scroll */
+    .main-container {
+        height: calc(100vh - 140px);
+        overflow: hidden;
+        padding: 1.5rem;
+    }
+    
+    .card-header-custom {
+        background: #0d6efd;
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 12px 12px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .card-header-custom h5 {
+        margin: 0;
+        font-weight: 700;
+        font-size: 1.125rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .btn-primary-custom {
+        background: white;
+        color: #0d6efd;
+        padding: 8px 18px;
+        border-radius: 8px;
+        font-weight: 600;
+        border: none;
+        transition: all 0.3s ease;
+        font-size: 0.875rem;
+    }
+    
+    .btn-primary-custom:hover {
+        background: #f8f9fa;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .card-clean {
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        background: white;
+        overflow: hidden;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* Tabla con scroll interno */
+    .table-container {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: auto;
+    }
+    
+    .table-professional {
+        margin: 0;
+    }
+    
+    .table-professional thead {
+        background: #f9fafb;
+        border-bottom: 2px solid #e5e7eb;
+    }
+    
+    .table-professional thead th {
+        border: none;
+        padding: 1rem;
+        font-weight: 600;
+        color: #374151;
+        font-size: 0.875rem;
+        position: sticky;
+        top: 0;
+        background: #f9fafb;
+        z-index: 10;
+        box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .table-professional thead th i {
+        color: #6b7280;
+        font-size: 0.875rem;
+    }
+    
+    .table-professional tbody tr {
+        border-bottom: 1px solid #f3f4f6;
+        transition: background 0.2s ease;
+    }
+    
+    .table-professional tbody tr:hover {
+        background: #f9fafb;
+    }
+    
+    .table-professional tbody td {
+        padding: 1rem;
+        vertical-align: middle;
+        border: none;
+        color: #374151;
+        font-size: 0.875rem;
+    }
+    
+    .btn-action-clean {
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        transition: all 0.2s ease;
+        margin: 0 2px;
+        font-size: 0.875rem;
+    }
+    
+    .btn-action-clean:hover {
+        transform: translateY(-1px);
+    }
+    
+    .btn-action-clean.btn-info {
+        background: #0dcaf0;
+        color: white;
+    }
+    
+    .btn-action-clean.btn-info:hover {
+        background: #0aa2c0;
+    }
+    
+    .btn-action-clean.btn-warning {
+        background: #ffc107;
+        color: #000;
+    }
+    
+    .btn-action-clean.btn-warning:hover {
+        background: #e0a800;
+        color: #000;
+    }
+    
+    .btn-action-clean.btn-danger {
+        background: #dc3545;
+        color: white;
+    }
+    
+    .btn-action-clean.btn-danger:hover {
+        background: #bb2d3b;
+    }
+    
+    .badge-stock {
+        padding: 0.375rem 0.75rem;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.75rem;
+    }
+    
+    .badge-stock.low {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+    
+    .badge-stock.medium {
+        background: #fef3c7;
+        color: #92400e;
+    }
+    
+    .badge-stock.high {
+        background: #d1fae5;
+        color: #065f46;
+    }
+    
+    .badge-precio {
+        padding: 0.375rem 0.75rem;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.75rem;
+        background: #d1fae5;
+        color: #065f46;
+    }
+    
+    .badge-stock-display {
+        padding: 0.375rem 0.75rem;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.75rem;
+        background: #cfe2ff;
+        color: #084298;
+    }
+    
+    .badge-proveedor {
+        padding: 0.375rem 0.75rem;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.75rem;
+        background: #fff3cd;
+        color: #856404;
+    }
+    
+    .modal-content {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    }
+    
+    .modal-header {
+        background: #f9fafb;
+        border-bottom: 1px solid #e5e7eb;
+        border-radius: 12px 12px 0 0;
+        padding: 1.25rem 1.5rem;
+    }
+    
+    .modal-title {
+        color: #111827;
+        font-weight: 700;
+        font-size: 1.125rem;
+    }
+    
+    .modal-body {
+        padding: 1.5rem;
+    }
+    
+    .form-label {
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+    }
+    
+    .form-control, .form-select {
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        padding: 0.625rem 0.875rem;
+        transition: all 0.2s ease;
+        font-size: 0.875rem;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+    <!-- Contenedor principal sin scroll -->
+    <div class="main-container">
+        <!-- Card con header y tabla -->
+        <div class="card-clean">
+            <!-- Header del card -->
+            <div class="card-header-custom">
+                <h5>
+                    <i class="fas fa-box"></i>
+                    Productos
+                </h5>
+                <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#modalProducto" onclick="abrirModalNuevo()">
+                    <i class="fas fa-plus me-2"></i>Nuevo Producto
+                </button>
+            </div>
+            
+            <!-- Barra de búsqueda -->
+            <div style="padding: 1rem; background: #f8f9fa; border-bottom: 1px solid #e5e7eb;">
+                <div class="row g-2">
+                    <div class="col-md-5">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white"><i class="fas fa-search"></i></span>
+                            <input type="text" class="form-control" id="buscarProductoNombre" placeholder="Buscar por nombre..." autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white"><i class="fas fa-barcode"></i></span>
+                            <input type="text" class="form-control" id="buscarProductoId" placeholder="Buscar por ID..." autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-secondary w-100" onclick="limpiarBusqueda()">
+                            <i class="fas fa-times me-1"></i>Limpiar
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tabla con scroll (Desktop) -->
+            <div class="table-container">
+                <table class="table table-professional">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-tag me-2"></i>Nombre</th>
+                            <th><i class="fas fa-align-left me-2"></i>Descripción</th>
+                            <th><i class="fas fa-dollar-sign me-2"></i>Precio/Libra</th>
+                            <th><i class="fas fa-boxes me-2"></i>Stock (lbs)</th>
+                            <th><i class="fas fa-truck me-2"></i>Proveedor</th>
+                            <th class="text-center"><i class="fas fa-cog me-2"></i>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaProductos">
+                        <tr>
+                            <td colspan="6" class="text-center py-5">
+                                <i class="fas fa-spinner fa-spin fa-2x text-muted mb-3"></i>
+                                <p class="text-muted">Cargando productos...</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <!-- Versión Móvil (Cards) -->
+                <div class="table-mobile" id="tablaProductosMobile" style="display: none;">
+                    <div class="text-center py-5">
+                        <i class="fas fa-spinner fa-spin fa-2x text-muted mb-3"></i>
+                        <p class="text-muted">Cargando productos...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Producto -->
+    <div class="modal fade" id="modalProducto" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title fw-bold" id="modalProductoTitle">
+                        <i class="fas fa-box me-2"></i>Nuevo Producto
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="formProducto">
+                        <input type="hidden" id="productoId">
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="productoNombre" class="form-label fw-semibold">
+                                    <i class="fas fa-tag text-primary me-1"></i>Nombre *
+                                </label>
+                                <input type="text" class="form-control" id="productoNombre" required>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="productoProveedor" class="form-label fw-semibold">
+                                    <i class="fas fa-truck text-primary me-1"></i>Proveedor *
+                                </label>
+                                <select class="form-select" id="productoProveedor" required>
+                                    <option value="">Seleccione un proveedor</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="productoDescripcion" class="form-label fw-semibold">
+                                <i class="fas fa-align-left text-primary me-1"></i>Descripción
+                            </label>
+                            <textarea class="form-control" id="productoDescripcion" rows="2"></textarea>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="productoPrecio" class="form-label fw-semibold">
+                                    <i class="fas fa-dollar-sign text-success me-1"></i>Precio por Libra *
+                                </label>
+                                <input type="number" class="form-control" id="productoPrecio" step="0.01" min="0.01" required>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="productoStock" class="form-label fw-semibold">
+                                    <i class="fas fa-boxes text-info me-1"></i>Stock (Libras) *
+                                </label>
+                                <input type="number" class="form-control" id="productoStock" step="0.01" min="0.01" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancelar
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="guardarProducto()">
+                        <i class="fas fa-save me-2"></i>Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Detalle Producto -->
+    <div class="modal fade" id="modalDetalleProducto" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title"><i class="fas fa-box-open me-2"></i>Detalle del Producto</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" style="background: #f8f9fa;">
+                    <!-- Card de Información del Producto -->
+                    <div class="card mb-3 border-0 shadow-sm">
+                        <div class="card-body">
+                            <h6 class="text-primary mb-3 fw-bold">
+                                <i class="fas fa-tag me-2"></i>Información del Producto
+                            </h6>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="text-muted small mb-1">Nombre</label>
+                                    <div class="fw-bold" id="detalleNombre"></div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="text-muted small mb-1">Descripción</label>
+                                    <div class="fw-bold" id="detalleDescripcion"></div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="text-muted small mb-1">Precio por Libra</label>
+                                    <div><span class="badge-precio fs-6">$<span id="detallePrecio"></span></span></div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="text-muted small mb-1">Stock Disponible</label>
+                                    <div><span class="badge-stock-display fs-6"><span id="detalleStock"></span> lbs</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card de Información del Proveedor -->
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h6 class="text-primary mb-3 fw-bold">
+                                <i class="fas fa-truck me-2"></i>Información del Proveedor
+                            </h6>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="text-muted small mb-1">Empresa</label>
+                                    <div class="fw-bold" id="detalleProveedorNombre"></div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="text-muted small mb-1">Contacto</label>
+                                    <div class="fw-bold" id="detalleProveedorContacto"></div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="text-muted small mb-1"><i class="fas fa-phone me-1"></i>Teléfono</label>
+                                    <div class="fw-bold" id="detalleProveedorTelefono"></div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="text-muted small mb-1"><i class="fas fa-envelope me-1"></i>Email</label>
+                                    <div class="fw-bold" id="detalleProveedorEmail"></div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="text-muted small mb-1"><i class="fas fa-map-marker-alt me-1"></i>Dirección</label>
+                                    <div class="fw-bold" id="detalleProveedorDireccion"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-white">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/Productos.js') }}"></script>
+{% endblock %}
