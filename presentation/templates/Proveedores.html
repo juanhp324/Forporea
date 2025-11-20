@@ -6,15 +6,16 @@
 <style>
     /* Contenedor principal sin scroll */
     .main-container {
-        height: calc(100vh - 140px);
+        height: 100%;
         overflow: hidden;
-        padding: 1.5rem;
+        padding: 2rem;
+        background: transparent;
     }
     
     .card-header-custom {
-        background: #0d6efd;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
         color: white;
-        padding: 1rem 1.5rem;
+        padding: 1.25rem 1.75rem;
         border-radius: 12px 12px 0 0;
         display: flex;
         justify-content: space-between;
@@ -23,26 +24,31 @@
     
     .card-header-custom h5 {
         margin: 0;
-        font-weight: 700;
+        font-weight: 600;
         font-size: 1.125rem;
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 12px;
     }
     
     .btn-primary-custom {
         background: white;
-        color: #0d6efd;
-        padding: 8px 18px;
+        color: #10b981;
+        padding: 0.5rem 1.25rem;
         border-radius: 8px;
         font-weight: 600;
-        border: none;
-        transition: all 0.3s ease;
+        border: 2px solid white;
+        transition: all 0.2s ease;
         font-size: 0.875rem;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
     }
     
     .btn-primary-custom:hover {
-        background: #f8f9fa;
+        background: rgba(255, 255, 255, 0.9);
+        color: #059669;
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
@@ -51,10 +57,10 @@
     .card-clean {
         border: 1px solid #e5e7eb;
         border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         background: white;
         overflow: hidden;
-        height: 100%;
+        height: calc(100vh - 140px);
         display: flex;
         flex-direction: column;
     }
@@ -130,31 +136,30 @@
     }
     
     .btn-action-clean.btn-info {
-        background: #0dcaf0;
+        background: #06b6d4;
         color: white;
     }
     
     .btn-action-clean.btn-info:hover {
-        background: #0aa2c0;
+        background: #0891b2;
     }
     
     .btn-action-clean.btn-warning {
-        background: #ffc107;
-        color: #000;
+        background: #f59e0b;
+        color: white;
     }
     
     .btn-action-clean.btn-warning:hover {
-        background: #e0a800;
-        color: #000;
+        background: #d97706;
     }
     
     .btn-action-clean.btn-danger {
-        background: #dc3545;
+        background: #ef4444;
         color: white;
     }
     
     .btn-action-clean.btn-danger:hover {
-        background: #bb2d3b;
+        background: #dc2626;
     }
     
     /* Modal limpio */
@@ -254,10 +259,71 @@
         background: #f8d7da;
         color: #842029;
     }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .main-container {
+            padding: 1rem;
+        }
+        
+        .card-header-custom {
+            flex-direction: column;
+            gap: 1rem;
+            align-items: stretch;
+            padding: 1rem;
+        }
+        
+        .card-header-custom h5 {
+            font-size: 1rem;
+        }
+        
+        .btn-primary-custom {
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        .table-professional {
+            font-size: 0.8rem;
+        }
+        
+        .table-professional thead th,
+        .table-professional tbody td {
+            padding: 0.75rem 0.5rem;
+        }
+        
+        .btn-action-clean {
+            width: 28px;
+            height: 28px;
+            font-size: 0.75rem;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .main-container {
+            padding: 0.75rem;
+        }
+        
+        .card-header-custom {
+            padding: 0.75rem;
+        }
+        
+        .table-professional {
+            font-size: 0.75rem;
+        }
+        
+        .table-professional thead th,
+        .table-professional tbody td {
+            padding: 0.5rem 0.25rem;
+        }
+    }
 </style>
 {% endblock %}
 
-{% block content %}
+{% block sidebar_content %}
 
     <!-- Contenedor principal sin scroll -->
     <div class="main-container">

@@ -1,13 +1,13 @@
 from pymongo import MongoClient
 import threading
 import os
-
+"""
 from dotenv import load_dotenv
 # Cargar variables de entorno
 load_dotenv()
-
+"""
 # Configuración de la conexión
-MONGODB_URI = os.getenv("MONGODB_URI", "mongodb://localhost:27017/")
+MONGODB_URI = os.getenv("MONGODB_URI", "mongodb+srv://juanhp324_db_user:VOF1HE1HYN3RpHde@forporeacluster.n0etmfd.mongodb.net/?retryWrites=true&w=majority&appName=ForporeaCluster")
 DATABASE_NAME = os.getenv("DATABASE_NAME", "Forporea")
 
 # Configuración optimizada para evitar timeouts

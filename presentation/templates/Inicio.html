@@ -14,11 +14,12 @@
     
     /* Welcome Card Compacto */
     .welcome-card-compact {
-        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
         color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 12px;
-        box-shadow: 0 2px 10px rgba(13, 110, 253, 0.2);
+        padding: 1.25rem 1.75rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.2);
     }
     
     .welcome-card-compact h3 {
@@ -65,10 +66,10 @@
         flex-shrink: 0;
     }
     
-    .stats-icon-compact.blue { background: #0d6efd; }
-    .stats-icon-compact.green { background: #198754; }
-    .stats-icon-compact.orange { background: #fd7e14; }
-    .stats-icon-compact.purple { background: #6f42c1; }
+    .stats-icon-compact.blue { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+    .stats-icon-compact.green { background: linear-gradient(135deg, #10b981, #059669); }
+    .stats-icon-compact.orange { background: linear-gradient(135deg, #f59e0b, #d97706); }
+    .stats-icon-compact.purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
     
     .stats-content-compact h6 {
         font-size: 0.7rem;
@@ -87,9 +88,9 @@
     .quick-actions-compact {
         background: white;
         border: 1px solid #e5e7eb;
-        border-radius: 10px;
-        padding: 1rem;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        border-radius: 12px;
+        padding: 1.25rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         height: 100%;
     }
     
@@ -105,23 +106,24 @@
         align-items: center;
         justify-content: center;
         gap: 8px;
-        padding: 0.75rem;
-        background: white;
-        border: 2px solid #e5e7eb;
-        border-radius: 8px;
+        padding: 0.875rem;
+        background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
         text-decoration: none;
-        color: #374151;
+        color: #475569;
         font-weight: 600;
         font-size: 0.875rem;
-        transition: all 0.3s ease;
+        transition: all 0.2s ease;
         width: 100%;
     }
     
     .action-btn-compact:hover {
-        border-color: #0d6efd;
-        background: #f0f7ff;
-        color: #0d6efd;
-        transform: scale(1.02);
+        border-color: #10b981;
+        background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+        color: #059669;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
     }
     
     .action-btn-compact i {
@@ -132,9 +134,9 @@
     .info-section-compact {
         background: white;
         border: 1px solid #e5e7eb;
-        border-radius: 10px;
-        padding: 1rem;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        border-radius: 12px;
+        padding: 1.25rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         height: 100%;
     }
     
@@ -178,21 +180,91 @@
     
     @media (max-width: 768px) {
         .dashboard-container {
-            padding: 0.75rem;
+            padding: 1rem;
         }
         
         .welcome-card-compact {
-            padding: 0.75rem 1rem;
+            padding: 1rem;
         }
         
         .welcome-card-compact h3 {
             font-size: 1.25rem;
         }
+        
+        .stats-card-compact {
+            padding: 0.75rem;
+        }
+        
+        .stats-icon-compact {
+            width: 36px;
+            height: 36px;
+            font-size: 1.1rem;
+        }
+        
+        .value-compact {
+            font-size: 1.25rem;
+        }
+        
+        .quick-actions-compact,
+        .info-section-compact {
+            padding: 1rem;
+        }
+        
+        .action-btn-compact {
+            padding: 0.75rem;
+            font-size: 0.8rem;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .dashboard-container {
+            padding: 0.75rem;
+        }
+        
+        .welcome-card-compact {
+            padding: 0.75rem;
+        }
+        
+        .welcome-card-compact h3 {
+            font-size: 1.1rem;
+        }
+        
+        .stats-card-compact {
+            padding: 0.625rem;
+        }
+        
+        .stats-icon-compact {
+            width: 32px;
+            height: 32px;
+            font-size: 1rem;
+        }
+        
+        .value-compact {
+            font-size: 1.1rem;
+        }
+        
+        .stats-content-compact h6 {
+            font-size: 0.65rem;
+        }
+        
+        .section-title {
+            font-size: 0.85rem;
+        }
+        
+        .action-btn-compact {
+            padding: 0.625rem;
+            font-size: 0.75rem;
+        }
+        
+        .info-label-compact,
+        .info-value-compact {
+            font-size: 0.75rem;
+        }
     }
 </style>
 {% endblock %}
 
-{% block content %}
+{% block sidebar_content %}
 <div class="dashboard-container">
     <!-- Welcome Section - Compacto -->
     <div class="welcome-card-compact mb-3">

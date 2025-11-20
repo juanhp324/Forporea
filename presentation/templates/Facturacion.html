@@ -4,37 +4,42 @@
 
 {% block extra_css %}
 <style>
+    /* Contenedor principal sin scroll */
     .main-container {
-        height: calc(100vh - 140px);
+        height: 100%;
         overflow: hidden;
-        padding: 1.5rem;
+        padding: 2rem;
+        background: transparent;
     }
     
     .facturacion-card {
         border: 1px solid #e5e7eb;
         border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         background: white;
         overflow: hidden;
-        height: 100%;
+        height: calc(100vh - 140px);
         display: flex;
         flex-direction: column;
     }
     
     .card-header-custom {
-        background: #0d6efd;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
         color: white;
-        padding: 1rem 1.5rem;
+        padding: 1.25rem 1.75rem;
         border-radius: 12px 12px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
     
     .card-header-custom h5 {
         margin: 0;
-        font-weight: 700;
+        font-weight: 600;
         font-size: 1.125rem;
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 12px;
     }
     
     .card-body-scroll {
@@ -358,10 +363,74 @@
     .btn-remove:hover {
         background: #bb2d3b;
     }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .main-container {
+            padding: 1rem;
+        }
+        
+        .card-header-custom {
+            padding: 1rem;
+        }
+        
+        .card-header-custom h5 {
+            font-size: 1rem;
+        }
+        
+        .form-section {
+            padding: 1rem;
+        }
+        
+        .section-title {
+            font-size: 0.9rem;
+        }
+        
+        .form-label {
+            font-size: 0.8rem;
+        }
+        
+        .form-control, .form-select {
+            font-size: 0.85rem;
+            padding: 0.5rem;
+        }
+        
+        .btn-add-product, .btn-remove {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.8rem;
+        }
+        
+        .table-productos {
+            font-size: 0.75rem;
+        }
+        
+        .table-productos th,
+        .table-productos td {
+            padding: 0.5rem 0.25rem;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .main-container {
+            padding: 0.75rem;
+        }
+        
+        .card-header-custom {
+            padding: 0.75rem;
+        }
+        
+        .form-section {
+            padding: 0.75rem;
+        }
+        
+        .col-md-6 {
+            width: 100%;
+        }
+    }
 </style>
 {% endblock %}
 
-{% block content %}
+{% block sidebar_content %}
 
     <!-- Contenedor principal sin scroll -->
     <div class="main-container">

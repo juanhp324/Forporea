@@ -23,7 +23,7 @@
         
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -111,40 +111,34 @@
         
         /* Header del card */
         .login-header {
-            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             padding: 40px 30px;
             text-align: center;
             position: relative;
         }
         
         .logo-container {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             background: white;
-            border-radius: 20px;
+            border-radius: 16px;
             margin: 0 auto 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            animation: bounce 2s infinite;
-        }
-        
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
         }
         
         .logo-container i {
-            font-size: 40px;
-            color: #0d6efd;
+            font-size: 36px;
+            color: #10b981;
         }
         
         .login-header h1 {
             color: white;
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         
         .login-header p {
@@ -186,7 +180,7 @@
         
         .form-label i {
             margin-right: 6px;
-            color: #0d6efd;
+            color: #10b981;
         }
         
         .input-wrapper {
@@ -206,9 +200,9 @@
         
         .form-control:focus {
             outline: none;
-            border-color: #0d6efd;
+            border-color: #10b981;
             background: white;
-            box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1);
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
         }
         
         .input-icon {
@@ -234,27 +228,26 @@
         }
         
         .toggle-password:hover {
-            color: #0d6efd;
+            color: #10b981;
         }
         
         .btn-login {
             width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+            padding: 14px;
+            background: #10b981;
             color: white;
             border: none;
-            border-radius: 12px;
-            font-size: 16px;
+            border-radius: 10px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+            transition: all 0.2s ease;
             margin-top: 10px;
         }
         
         .btn-login:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(13, 110, 253, 0.4);
+            background: #059669;
+            transform: translateY(-1px);
         }
         
         .btn-login:active {
@@ -269,7 +262,7 @@
         }
         
         .login-footer i {
-            color: #0d6efd;
+            color: #10b981;
             margin-right: 6px;
         }
         
@@ -295,6 +288,97 @@
         .loading-spinner i {
             font-size: 48px;
             margin-bottom: 16px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .login-container {
+                padding: 15px;
+            }
+            
+            .login-header {
+                padding: 30px 20px;
+            }
+            
+            .login-header h1 {
+                font-size: 24px;
+            }
+            
+            .login-header p {
+                font-size: 13px;
+            }
+            
+            .logo-container {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .logo-container i {
+                font-size: 30px;
+            }
+            
+            .login-body {
+                padding: 30px 20px;
+            }
+            
+            .form-control {
+                padding: 12px 14px;
+                padding-left: 40px;
+                font-size: 14px;
+            }
+            
+            .btn-login {
+                padding: 14px;
+                font-size: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 10px;
+            }
+            
+            .login-header {
+                padding: 25px 15px;
+            }
+            
+            .login-header h1 {
+                font-size: 22px;
+            }
+            
+            .logo-container {
+                width: 55px;
+                height: 55px;
+                margin-bottom: 15px;
+            }
+            
+            .logo-container i {
+                font-size: 28px;
+            }
+            
+            .login-body {
+                padding: 25px 15px;
+            }
+            
+            .form-group {
+                margin-bottom: 20px;
+            }
+            
+            .form-control {
+                padding: 11px 12px;
+                padding-left: 38px;
+                font-size: 14px;
+            }
+            
+            .btn-login {
+                padding: 13px;
+                font-size: 14px;
+            }
+            
+            .version-badge {
+                font-size: 11px;
+                padding: 5px 12px;
+            }
         }
     </style>
 </head>
